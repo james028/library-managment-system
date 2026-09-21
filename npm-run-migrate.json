@@ -1,0 +1,6 @@
+{
+  "databaseUrl": "postgres://james09:lib123@localhost:5432/library_db",
+  "migrationsTable": "pgmigrations",
+  "dir": "src/database/migrations",
+  "language": "sql"
+}
