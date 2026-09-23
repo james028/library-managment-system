@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersRepository } from '../users/users.repository.js';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -39,6 +39,24 @@ export class AuthService {
 
   async login(dto: LoginDto) {
     console.log(dto, "dto w login");
+    const user = await this.usersRepository.findByEmail(dto.email);
+
+    // Celowo ten sam komunikat błędu dla "nie ma takiego usera" i "złe hasło" —
+    // inaczej atakujący mógłby sprawdzać, które adresy email są zarejestrowane.
+    if (!user) {
+      throw new UnauthorizedException('Nieprawidłowy email lub hasło');
+    }
+
+    const passwordMatches = await bcrypt.compare(dto.password, user.password_hash);
+    if (!passwordMatches) {
+      throw new UnauthorizedException('Nieprawidłowy email lub hasło');
+    }
+
+    if (!user.is_active) {
+      throw new UnauthorizedException('Konto zostało zablokowane');
+    }
+
+    return this.buildAuthResponse(user.id, user.email, user.role, user.first_name, user.last_name);
   }
 
   private buildAuthResponse(

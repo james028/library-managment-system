@@ -16,6 +16,15 @@ export declare class AuthService {
             lastName: string;
         };
     }>;
-    login(dto: LoginDto): Promise<void>;
+    login(dto: LoginDto): Promise<{
+        accessToken: string;
+        user: {
+            id: string;
+            email: string;
+            role: string;
+            firstName: string;
+            lastName: string;
+        };
+    }>;
     private buildAuthResponse;
 }

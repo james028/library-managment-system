@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersRepository } from '../users/users.repository.js';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -36,6 +36,18 @@ let AuthService = class AuthService {
     }
     async login(dto) {
         console.log(dto, "dto w login");
+        const user = await this.usersRepository.findByEmail(dto.email);
+        if (!user) {
+            throw new UnauthorizedException('Nieprawidłowy email lub hasło');
+        }
+        const passwordMatches = await bcrypt.compare(dto.password, user.password_hash);
+        if (!passwordMatches) {
+            throw new UnauthorizedException('Nieprawidłowy email lub hasło');
+        }
+        if (!user.is_active) {
+            throw new UnauthorizedException('Konto zostało zablokowane');
+        }
+        return this.buildAuthResponse(user.id, user.email, user.role, user.first_name, user.last_name);
     }
     buildAuthResponse(id, email, role, firstName, lastName) {
         const payload = { sub: id, email, role };

@@ -7,6 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import { Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 let JwtAuthGuard = class JwtAuthGuard extends AuthGuard('jwt') {
+    canActivate(context) {
+        const request = context.switchToHttp().getRequest();
+        console.log('Authorization:', request.headers.authorization);
+        return super.canActivate(context);
+    }
+    handleRequest(err, user, info) {
+        console.log('JWT error:', err);
+        console.log('JWT user:', user);
+        console.log('JWT info:', info);
+        return super.handleRequest(err, user, info, info);
+    }
 };
 JwtAuthGuard = __decorate([
     Injectable()

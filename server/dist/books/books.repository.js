@@ -20,21 +20,69 @@ let BooksRepository = class BooksRepository {
         const values = search
             ? [limit, offset, `%${search}%`]
             : [limit, offset];
-        const dataResult = await this.databaseService.query(`SELECT * FROM books ${whereClause}
-       ORDER BY created_at DESC
-       LIMIT $1 OFFSET $2`, values);
-        const countResult = await this.databaseService.query(`SELECT COUNT(*) FROM books ${whereClause}`, search ? [`%${search}%`] : []);
+        const dataResult = await this.databaseService.query(`SELECT *
+                                                                     FROM books ${whereClause}
+                                                                     ORDER BY created_at DESC
+                                                                         LIMIT $1
+                                                                     OFFSET $2`, values);
+        const countResult = await this.databaseService.query(`SELECT COUNT(*)
+                                                                             FROM books ${whereClause}`, search ? [`%${search}%`] : []);
         return {
             items: dataResult.rows,
             total: parseInt(countResult.rows[0].count, 10),
         };
     }
+    async create(dto) {
+        const result = await this.databaseService.query(`INSERT INTO books (title, author, isbn, publisher, published_year, description)
+                                                      VALUES ($1, $2, $3, $4, $5,
+                                                              $6) RETURNING *`, [
+            dto.title,
+            dto.author,
+            dto.isbn ?? null,
+            dto.publisher ?? null,
+            dto.publishedYear ?? null,
+            dto.description ?? null,
+        ]);
+        return result.rows[0];
+    }
     async findById(id) {
-        const result = await this.databaseService.query(`SELECT * FROM books WHERE id = $1`, [id]);
+        const result = await this.databaseService.query(`SELECT *
+                                                                 FROM books
+                                                                 WHERE id = $1`, [id]);
+        return result.rows[0] ?? null;
+    }
+    async update(id, dto) {
+        const fields = [];
+        const values = [];
+        let paramIndex = 1;
+        const fieldMap = {
+            title: dto.title,
+            author: dto.author,
+            isbn: dto.isbn,
+            publisher: dto.publisher,
+            published_year: dto.publishedYear,
+            description: dto.description,
+        };
+        for (const [column, value] of Object.entries(fieldMap)) {
+            if (value !== undefined) {
+                fields.push(`${column} = $${paramIndex}`);
+                values.push(value);
+                paramIndex++;
+            }
+        }
+        console.log(fields, values);
+        if (fields.length === 0) {
+            return this.findById(id);
+        }
+        fields.push(`updated_at = now()`);
+        values.push(id);
+        const result = await this.databaseService.query(`UPDATE books SET ${fields.join(', ')} WHERE id = $${paramIndex} RETURNING *`, values);
         return result.rows[0] ?? null;
     }
     async delete(id) {
-        const result = await this.databaseService.query(`DELETE FROM books WHERE id = $1`, [id]);
+        const result = await this.databaseService.query(`DELETE
+                                                     FROM books
+                                                     WHERE id = $1`, [id]);
         return (result.rowCount ?? 0) > 0;
     }
 };

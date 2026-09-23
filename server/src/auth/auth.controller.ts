@@ -17,6 +17,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK) // domyślnie POST zwraca 201, a logowanie semantycznie to 200
   login(@Body() dto: LoginDto) {
+    console.log(dto);
     return this.authService.login(dto);
   }
 }

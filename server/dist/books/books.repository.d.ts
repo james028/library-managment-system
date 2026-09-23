@@ -1,4 +1,6 @@
 import { DatabaseService } from '../database/database.service.js';
+import { CreateBookDto } from './dto/createbook.dto.js';
+import { UpdateBookDto } from './dto/updatebook.dto.js';
 export interface BookRecord {
     id: string;
     title: string;
@@ -21,6 +23,8 @@ export declare class BooksRepository {
         items: BookRecord[];
         total: number;
     }>;
+    create(dto: CreateBookDto): Promise<BookRecord>;
     findById(id: string): Promise<BookRecord | null>;
+    update(id: string, dto: UpdateBookDto): Promise<BookRecord | null>;
     delete(id: string): Promise<boolean>;
 }
