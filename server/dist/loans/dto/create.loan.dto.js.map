@@ -1,0 +1,1 @@
+{"version":3,"file":"create.loan.dto.js","sourceRoot":"","sources":["../../../src/loans/dto/create.loan.dto.ts"],"names":[],"mappings":";;;;;;;;;AAAA,OAAO,EAAE,MAAM,EAAE,UAAU,EAAE,YAAY,EAAE,MAAM,iBAAiB,CAAC;AAEnE,MAAM,OAAO,aAAa;IAExB,UAAU,CAAS;IAGnB,MAAM,CAAS;IAIf,KAAK,CAAU;CAChB;AARC;IADC,MAAM,EAAE;;iDACU;AAGnB;IADC,MAAM,EAAE;;6CACM;AAIf;IAFC,UAAU,EAAE;IACZ,YAAY,EAAE;;4CACA"}
