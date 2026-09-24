@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { BooksService } from './books.service.js';
 import { CreateBookDto } from './dto/createbook.dto.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 let BooksController = class BooksController {
     booksService;
     constructor(booksService) {
@@ -31,6 +32,36 @@ let BooksController = class BooksController {
 };
 __decorate([
     Get(),
+    ApiOperation({
+        summary: 'Get all books',
+        description: 'Returns paginated list of books',
+    }),
+    ApiQuery({
+        name: 'page',
+        required: false,
+        example: 1,
+        description: 'Page number',
+    }),
+    ApiQuery({
+        name: 'limit',
+        required: false,
+        example: 10,
+        description: 'Number of books per page',
+    }),
+    ApiQuery({
+        name: 'search',
+        required: false,
+        example: 'Clean Code',
+        description: 'Search by book title',
+    }),
+    ApiResponse({
+        status: 200,
+        description: 'Books returned successfully.',
+    }),
+    ApiResponse({
+        status: 401,
+        description: 'JWT token is missing or invalid.',
+    }),
     __param(0, Query('page')),
     __param(1, Query('limit')),
     __param(2, Query('search')),
@@ -41,6 +72,26 @@ __decorate([
 __decorate([
     Post(),
     Roles('member'),
+    ApiOperation({
+        summary: 'Create a book',
+        description: 'Creates a new book. Requires librarian role.',
+    }),
+    ApiResponse({
+        status: 201,
+        description: 'Book created successfully.',
+    }),
+    ApiResponse({
+        status: 401,
+        description: 'JWT token is missing or invalid.',
+    }),
+    ApiResponse({
+        status: 403,
+        description: 'User does not have librarian role.',
+    }),
+    ApiResponse({
+        status: 409,
+        description: 'Book with this ISBN already exists.',
+    }),
     __param(0, Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateBookDto]),
@@ -48,6 +99,8 @@ __decorate([
 ], BooksController.prototype, "create", null);
 BooksController = __decorate([
     Controller('books'),
+    ApiTags('Books'),
+    ApiBearerAuth(),
     UseGuards(JwtAuthGuard, RolesGuard),
     __metadata("design:paramtypes", [BooksService])
 ], BooksController);

@@ -13,10 +13,12 @@ import { Roles } from '../auth/decorators/roles.decorator.js';
 import { CreateBookCopyDto } from './dto/create-book-copy.dto.js';
 import { BookCopiesService } from './book-copies.service.js';
 import { UpdateBookCopyDto } from './dto/update-book-copy.dto.js';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('book')
 // Cały moduł tylko dla librarian — zarządzanie egzemplarzami to praca przy ladzie, nie coś,
 // co member kiedykolwiek wywołuje bezpośrednio.
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('member')
 export class BookCopiesController {

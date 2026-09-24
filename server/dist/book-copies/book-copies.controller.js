@@ -17,6 +17,7 @@ import { Roles } from '../auth/decorators/roles.decorator.js';
 import { CreateBookCopyDto } from './dto/create-book-copy.dto.js';
 import { BookCopiesService } from './book-copies.service.js';
 import { UpdateBookCopyDto } from './dto/update-book-copy.dto.js';
+import { ApiBearerAuth } from '@nestjs/swagger';
 let BookCopiesController = class BookCopiesController {
     bookCopiesService;
     constructor(bookCopiesService) {
@@ -68,6 +69,7 @@ __decorate([
 ], BookCopiesController.prototype, "remove", null);
 BookCopiesController = __decorate([
     Controller('book'),
+    ApiBearerAuth(),
     UseGuards(JwtAuthGuard, RolesGuard),
     Roles('member'),
     __metadata("design:paramtypes", [BookCopiesService])
