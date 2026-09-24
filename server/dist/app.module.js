@@ -12,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 import { BooksModule } from './books/books.module.js';
+import { BookCopiesModule } from './book-copies/book-copies.module.js';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -24,6 +25,7 @@ AppModule = __decorate([
             AuthModule,
             UsersModule,
             BooksModule,
+            BookCopiesModule,
         ],
         controllers: [AppController],
         providers: [AppService],
