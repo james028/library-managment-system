@@ -15,6 +15,37 @@ let LoansRepository = class LoansRepository {
         this.databaseService = databaseService;
     }
     async borrow(params) {
+        const client = await this.databaseService.getClient();
+        try {
+            client.query('BEGIN');
+            const copyUpdate = await client.query(`UPDATE book_copies
+                                             SET status     = 'checked_out',
+                                                 updated_at = now()
+                                             WHERE id = $1
+                                               AND status = 'available' RETURNING id`, [params.bookCopyId]);
+            if (copyUpdate.rowCount === 0) {
+                await client.query('ROLLBACK');
+                return null;
+            }
+            const loanInsert = await client.query(`INSERT INTO loans (book_copy_id, user_id, due_at)
+                                                         VALUES ($1, $2,
+                                                                 $3) RETURNING *`, [params.bookCopyId, params.userId, params.dueAt]);
+            await client.query('COMMIT');
+            return loanInsert.rows[0];
+        }
+        catch (error) {
+            client.query('ROLLBACK');
+            throw error;
+        }
+        finally {
+            client.release();
+        }
+    }
+    async findById(id) {
+        const result = await this.databaseService.query(`SELECT *
+                                                                 FROM loans
+                                                                 WHERE id = $1`, [id]);
+        return result.rows[0] ?? null;
     }
 };
 LoansRepository = __decorate([
