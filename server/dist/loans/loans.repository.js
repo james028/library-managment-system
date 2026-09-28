@@ -47,6 +47,43 @@ let LoansRepository = class LoansRepository {
                                                                  WHERE id = $1`, [id]);
         return result.rows[0] ?? null;
     }
+    async returnLoan(id) {
+        const client = await this.databaseService.getClient();
+        try {
+            client.query('BEGIN');
+            const loanUpdate = await client.query(`UPDATE loans
+                                             SET returned_at = now()
+                                             WHERE id = $1
+                                               AND returned_at IS NULL RETURNING *`, [id]);
+            if (loanUpdate.rowCount === 0) {
+                await client.query('ROLLBACK');
+                return null;
+            }
+            const loan = loanUpdate.rows[0];
+            await client.query(`UPDATE book_copies
+                          SET status     = 'available',
+                              updated_at = now()
+                          WHERE id = $1`, [loan.book_copy_id]);
+            await client.query('COMMIT');
+            return loan;
+        }
+        catch (error) {
+            client.query('ROLLBACK');
+            throw error;
+        }
+        finally {
+            client.release();
+        }
+    }
+    async findAllForUser(userId) {
+        const result = await this.databaseService.query(`SELECT l.*, b.title AS book_title, bc.inventory_number
+       FROM loans l
+       JOIN book_copies bc ON bc.id = l.book_copy_id
+       JOIN books b ON b.id = bc.book_id
+       WHERE l.user_id = $1
+       ORDER BY l.borrowed_at DESC`, [userId]);
+        return result.rows;
+    }
 };
 LoansRepository = __decorate([
     Injectable(),

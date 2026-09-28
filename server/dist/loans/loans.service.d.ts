@@ -4,4 +4,6 @@ export declare class LoansService {
     private readonly loansRepository;
     constructor(loansRepository: LoansRepository);
     borrow(dto: CreateLoanDto): Promise<LoanRecord | null>;
+    returnLoan(id: string): Promise<LoanRecord>;
+    findMyLoans(userId: string): Promise<import("./loans.repository.js").LoanWithDetails[]>;
 }

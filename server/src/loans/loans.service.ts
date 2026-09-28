@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { LoanRecord, LoansRepository } from './loans.repository.js';
 import { CreateLoanDto } from './dto/create.loan.dto.js';
 
@@ -29,5 +33,21 @@ export class LoansService {
     }
 
     return loan;
+  }
+
+  async returnLoan(id: string) {
+    const loan = await this.loansRepository.returnLoan(id);
+
+    if (!loan) {
+      throw new NotFoundException(
+        'Wypożyczenie nie istnieje albo zostało już wcześniej zwrócone',
+      );
+    }
+
+    return loan;
+  }
+
+  findMyLoans(userId: string) {
+    return this.loansRepository.findAllForUser(userId);
   }
 }

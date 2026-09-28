@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, } from '@nestjs/common';
 import { LoansRepository } from './loans.repository.js';
 const DEFAULT_LOAN_DAYS = 14;
 let LoansService = class LoansService {
@@ -28,6 +28,16 @@ let LoansService = class LoansService {
             throw new ConflictException('Egzemplarz jest niedostępny do wypożyczenia (nie istnieje albo jest już wypożyczony)');
         }
         return loan;
+    }
+    async returnLoan(id) {
+        const loan = await this.loansRepository.returnLoan(id);
+        if (!loan) {
+            throw new NotFoundException('Wypożyczenie nie istnieje albo zostało już wcześniej zwrócone');
+        }
+        return loan;
+    }
+    findMyLoans(userId) {
+        return this.loansRepository.findAllForUser(userId);
     }
 };
 LoansService = __decorate([
