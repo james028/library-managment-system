@@ -7,6 +7,9 @@ export interface ReservationRecord {
     expires_at: Date;
     status: string;
 }
+export interface ReservationWithTitle extends ReservationRecord {
+    book_title: string;
+}
 export declare class ReservationsRepository {
     private readonly databaseService;
     constructor(databaseService: DatabaseService);
@@ -15,4 +18,7 @@ export declare class ReservationsRepository {
         userId: string;
         expiresAt: Date;
     }): Promise<ReservationRecord>;
+    findReservationsForUser(userId: string): Promise<ReservationWithTitle[]>;
+    findById(id: string): Promise<ReservationRecord | null>;
+    updateStatus(id: string, newStatus: string): Promise<ReservationRecord | null>;
 }
