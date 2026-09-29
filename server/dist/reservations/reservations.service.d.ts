@@ -6,4 +6,10 @@ export declare class ReservationsService {
     private readonly booksService;
     constructor(reservationsRepository: ReservationsRepository, booksService: BooksService);
     create(userId: string, dto: CreateReservationDto): Promise<import("./reservations.repository.js").ReservationRecord>;
+    findMyReservations(userId: string): Promise<void>;
+    cancel(reservationId: string, requestingUser: {
+        userId: string;
+        role: string;
+    }): Promise<import("./reservations.repository.js").ReservationRecord>;
+    fulfill(reservationId: string): Promise<import("./reservations.repository.js").ReservationRecord>;
 }

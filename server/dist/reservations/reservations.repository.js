@@ -16,9 +16,27 @@ let ReservationsRepository = class ReservationsRepository {
     }
     async create(params) {
         const result = await this.databaseService.query(`INSERT INTO reservations (book_id, user_id, expires_at)
-       VALUES ($1, $2, $3)
-       RETURNING *`, [params.bookId, params.userId, params.expiresAt]);
+                                                                        VALUES ($1, $2,
+                                                                                $3) RETURNING *`, [params.bookId, params.userId, params.expiresAt]);
         return result.rows[0];
+    }
+    async findReservationsForUser(userId) {
+        const results = await this.databaseService.query(`SELECT r.*, b.title AS book_title
+       FROM reservations r
+       JOIN books b ON b.id = r.book_id
+       WHERE r.user_id = $1
+       ORDER BY r.reserved_at DESC`, [userId]);
+        return results.rows;
+    }
+    async findById(id) {
+        const result = await this.databaseService.query(`SELECT * FROM reservations WHERE id = $1`, [id]);
+        return result.rows[0] ?? null;
+    }
+    async updateStatus(id, newStatus) {
+        const result = await this.databaseService.query(`UPDATE reservations SET status = $1
+       WHERE id = $2 AND status = 'pending'
+       RETURNING *`, [newStatus, id]);
+        return result.rows[0] ?? null;
     }
 };
 ReservationsRepository = __decorate([

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Injectable } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException, } from '@nestjs/common';
 import { BooksService } from '../books/books.service.js';
 import { ReservationsRepository } from './reservations.repository.js';
 const RESERVATION_DAYS = 3;
@@ -26,6 +26,33 @@ let ReservationsService = class ReservationsService {
             userId,
             expiresAt,
         });
+    }
+    async findMyReservations(userId) {
+        await this.reservationsRepository.findReservationsForUser(userId);
+    }
+    async cancel(reservationId, requestingUser) {
+        const reservation = await this.reservationsRepository.findById(reservationId);
+        if (!reservation) {
+            throw new NotFoundException('Rezerwacja nie istnieje');
+        }
+        const isOwner = reservation?.user_id === requestingUser.userId &&
+            requestingUser.role === 'member';
+        const isLibrarian = requestingUser.role === 'librarian';
+        if (!isOwner && !isLibrarian) {
+            throw new ForbiddenException('Nie możesz anulować cudzej rezerwacji');
+        }
+        const updated = await this.reservationsRepository.updateStatus(reservation.id, 'cancelled');
+        if (!updated) {
+            throw new ConflictException('Tej rezerwacji nie można już anulować (zmieniła status)');
+        }
+        return updated;
+    }
+    async fulfill(reservationId) {
+        const updated = await this.reservationsRepository.updateStatus(reservationId, 'fulfilled');
+        if (!updated) {
+            throw new ConflictException('Tej rezerwacji nie można już anulować (zmieniła status)');
+        }
+        return updated;
     }
 };
 ReservationsService = __decorate([
