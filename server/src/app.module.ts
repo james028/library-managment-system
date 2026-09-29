@@ -10,6 +10,7 @@ import { BookCopiesModule } from './book-copies/book-copies.module.js';
 import { LoansModule } from './loans/loans.module.js';
 import { ReservationsService } from './reservations/reservations.service.js';
 import { ReservationsModule } from './reservations/reservations.module.js';
+import { FinesModule } from './fines/fines.module.js';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ReservationsModule } from './reservations/reservations.module.js';
     BookCopiesModule,
     LoansModule,
     ReservationsModule,
+    FinesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
