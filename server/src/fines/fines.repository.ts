@@ -27,6 +27,7 @@ export class FinesRepository {
           JOIN book_copies bc ON bc.id = l.book_copy_id
           JOIN books b ON b.id = bc.book_id
         WHERE l.user_id = $1
+          ORDER BY f.created_at DESC
     `,
       [userId],
     );
