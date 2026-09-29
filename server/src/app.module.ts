@@ -8,6 +8,8 @@ import { UsersModule } from './users/users.module.js';
 import { BooksModule } from './books/books.module.js';
 import { BookCopiesModule } from './book-copies/book-copies.module.js';
 import { LoansModule } from './loans/loans.module.js';
+import { ReservationsService } from './reservations/reservations.service.js';
+import { ReservationsModule } from './reservations/reservations.module.js';
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { LoansModule } from './loans/loans.module.js';
     BooksModule,
     BookCopiesModule,
     LoansModule,
+    ReservationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -14,6 +14,7 @@ import { UsersModule } from './users/users.module.js';
 import { BooksModule } from './books/books.module.js';
 import { BookCopiesModule } from './book-copies/book-copies.module.js';
 import { LoansModule } from './loans/loans.module.js';
+import { ReservationsModule } from './reservations/reservations.module.js';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -28,6 +29,7 @@ AppModule = __decorate([
             BooksModule,
             BookCopiesModule,
             LoansModule,
+            ReservationsModule,
         ],
         controllers: [AppController],
         providers: [AppService],

@@ -17,7 +17,7 @@ import { Roles } from '../auth/decorators/roles.decorator.js';
 import { CreateBookCopyDto } from './dto/create-book-copy.dto.js';
 import { BookCopiesService } from './book-copies.service.js';
 import { UpdateBookCopyDto } from './dto/update-book-copy.dto.js';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags, } from '@nestjs/swagger';
 let BookCopiesController = class BookCopiesController {
     bookCopiesService;
     constructor(bookCopiesService) {
@@ -37,6 +37,20 @@ let BookCopiesController = class BookCopiesController {
     }
 };
 __decorate([
+    ApiOperation({
+        summary: 'Pobierz wszystkie egzemplarze książki',
+        description: 'Zwraca wszystkie fizyczne egzemplarze przypisane do wskazanej książki.',
+    }),
+    ApiParam({
+        name: 'bookId',
+        description: 'UUID książki',
+        example: 'ca994797-88a1-4bb2-b497-d035c3bb3d61',
+    }),
+    ApiResponse({ status: 200, description: 'Lista egzemplarzy książki.' }),
+    ApiResponse({
+        status: 404,
+        description: 'Książka nie istnieje.',
+    }),
     Get('/:bookId/copies'),
     __param(0, Param('bookId')),
     __metadata("design:type", Function),
@@ -68,10 +82,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], BookCopiesController.prototype, "remove", null);
 BookCopiesController = __decorate([
+    ApiTags('Book Copies'),
     Controller('book'),
     ApiBearerAuth(),
     UseGuards(JwtAuthGuard, RolesGuard),
-    Roles('member'),
+    Roles('librarian'),
     __metadata("design:paramtypes", [BookCopiesService])
 ], BookCopiesController);
 export { BookCopiesController };
