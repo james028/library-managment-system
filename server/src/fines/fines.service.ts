@@ -7,6 +7,7 @@ export class FinesService {
   constructor(private readonly finesRepository: FinesRepository) {}
 
   findMyFines(userId: string) {
+
       return this.finesRepository.findAllForUser(userId);
   }
 }

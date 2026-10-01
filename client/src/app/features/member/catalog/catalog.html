@@ -1,1 +1,44 @@
-<p>catalog works!</p>
+<div class="catalog">
+  <input
+    type="text"
+    placeholder="Szukaj po tytule lub autorze..."
+    [formControl]="searchControl"
+  />
+
+  @if (books$ | async; as result) {
+    @if (result.items.length === 0) {
+      <p>Brak wyników.</p>
+    } @else {
+      <ul>
+        @for (book of result.items; track book.id) {
+          <li>
+            <strong>{{ book.title }}</strong> — {{ book.author }}
+            @if (book.published_year) {
+              <span>({{ book.published_year }})</span>
+            }
+          </li>
+        }
+      </ul>
+
+      <div class="pagination">
+        <button
+          [disabled]="result.meta.page <= 1"
+          (click)="goToPage(result.meta.page - 1)"
+        >
+          Poprzednia
+        </button>
+
+        <span>Strona {{ result.meta.page }} z {{ result.meta.totalPages }}</span>
+
+        <button
+          [disabled]="result.meta.page >= result.meta.totalPages"
+          (click)="goToPage(result.meta.page + 1)"
+        >
+          Następna
+        </button>
+      </div>
+    }
+  } @else {
+    <p>Ładowanie...</p>
+  }
+</div>

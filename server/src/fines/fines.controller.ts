@@ -7,11 +7,13 @@ import { FinesService } from './fines.service.js';
 
 
 @Controller('fines')
-// @UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class FinesController {
   constructor(private readonly finesService: FinesService) {}
 
   @Get('me') findMyFines(@CurrentUser() user: CurrentUserPayload) {
-    return this.finesService.findMyFines("1b5c7860-de7a-47fa-a01d-05df92862e69");
+
+    console.log(user, "us");
+    return this.finesService.findMyFines(user.userId);
   }
 }

@@ -29,6 +29,7 @@ export class BooksRepository {
     // Dwa warianty zapytania: z wyszukiwaniem po tytule/autorze i bez.
     // ILIKE = case-insensitive LIKE w Postgresie.
     const whereClause = search ? `WHERE title ILIKE $3 OR author ILIKE $3` : '';
+
     const values: (string | number)[] = search
       ? [limit, offset, `%${search}%`]
       : [limit, offset];
@@ -42,9 +43,10 @@ export class BooksRepository {
       values,
     );
 
+    const whereClauseCount = search ? `WHERE title ILIKE $1 OR author ILIKE $1` : '';
     const countResult = await this.databaseService.query<{ count: string }>(
       `SELECT COUNT(*)
-                                                                             FROM books ${whereClause}`,
+        FROM books ${whereClauseCount}`,
       search ? [`%${search}%`] : [],
     );
 
@@ -57,8 +59,8 @@ export class BooksRepository {
   async create(dto: CreateBookDto): Promise<BookRecord> {
     const result = await this.databaseService.query<BookRecord>(
       `INSERT INTO books (title, author, isbn, publisher, published_year, description)
-                                                      VALUES ($1, $2, $3, $4, $5,
-                                                              $6) RETURNING *`,
+                                                                 VALUES ($1, $2, $3, $4, $5,
+                                                                         $6) RETURNING *`,
       [
         dto.title,
         dto.author,
@@ -116,7 +118,9 @@ export class BooksRepository {
     values.push(id);
 
     const result = await this.databaseService.query<BookRecord>(
-      `UPDATE books SET ${fields.join(', ')} WHERE id = $${paramIndex} RETURNING *`,
+      `UPDATE books
+                                                                 SET ${fields.join(', ')}
+                                                                 WHERE id = $${paramIndex} RETURNING *`,
       values,
     );
 

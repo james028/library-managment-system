@@ -25,8 +25,9 @@ let BooksRepository = class BooksRepository {
                                                                      ORDER BY created_at DESC
                                                                          LIMIT $1
                                                                      OFFSET $2`, values);
+        const whereClauseCount = search ? `WHERE title ILIKE $1 OR author ILIKE $1` : '';
         const countResult = await this.databaseService.query(`SELECT COUNT(*)
-                                                                             FROM books ${whereClause}`, search ? [`%${search}%`] : []);
+        FROM books ${whereClauseCount}`, search ? [`%${search}%`] : []);
         return {
             items: dataResult.rows,
             total: parseInt(countResult.rows[0].count, 10),
@@ -34,8 +35,8 @@ let BooksRepository = class BooksRepository {
     }
     async create(dto) {
         const result = await this.databaseService.query(`INSERT INTO books (title, author, isbn, publisher, published_year, description)
-                                                      VALUES ($1, $2, $3, $4, $5,
-                                                              $6) RETURNING *`, [
+                                                                 VALUES ($1, $2, $3, $4, $5,
+                                                                         $6) RETURNING *`, [
             dto.title,
             dto.author,
             dto.isbn ?? null,
@@ -76,7 +77,9 @@ let BooksRepository = class BooksRepository {
         }
         fields.push(`updated_at = now()`);
         values.push(id);
-        const result = await this.databaseService.query(`UPDATE books SET ${fields.join(', ')} WHERE id = $${paramIndex} RETURNING *`, values);
+        const result = await this.databaseService.query(`UPDATE books
+                                                                 SET ${fields.join(', ')}
+                                                                 WHERE id = $${paramIndex} RETURNING *`, values);
         return result.rows[0] ?? null;
     }
     async delete(id) {

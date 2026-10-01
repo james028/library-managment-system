@@ -14,6 +14,12 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors({
+    origin: 'http://localhost:4200', // Adres Twojego Angulara w dev mode (lub domena produkcyjna np. 'https://mojabiblioteka.pl')
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Library Management API')
     .setDescription('API for library management system')
