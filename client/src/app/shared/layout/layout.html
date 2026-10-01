@@ -1,0 +1,30 @@
+<header class="app-header">
+  <nav>
+    <!-- Link do profilu widoczny zawsze — dokładnie ta sama logika co /users/me po stronie backendu:
+         nie zależy od roli, bo każdy zalogowany ma swój profil. -->
+    <a routerLink="/profile" routerLinkActive="active">Profil</a>
+
+    @if (authService.user()?.role === 'member') {
+      <a routerLink="/app/catalog" routerLinkActive="active">Katalog</a>
+      <a routerLink="/app/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/app/loans" routerLinkActive="active">Moje wypożyczenia</a>
+    }
+
+    @if (authService.user()?.role === 'librarian') {
+      <a routerLink="/admin/books" routerLinkActive="active">Książki</a>
+      <a routerLink="/admin/loans" routerLinkActive="active">Wypożyczenia</a>
+      <a routerLink="/admin/users" routerLinkActive="active">Użytkownicy</a>
+    }
+  </nav>
+
+  <div class="user-info">
+    <span>{{ authService.user()?.firstName }} ({{ authService.user()?.role }})</span>
+    <button (click)="logout()">Wyloguj</button>
+  </div>
+</header>
+
+<main>
+  <!-- Tu renderuje się aktywna trasa-dziecko: CatalogComponent, ManageBooksComponent itd.,
+       w zależności od tego, gdzie user aktualnie jest w routingu. -->
+  <router-outlet></router-outlet>
+</main>

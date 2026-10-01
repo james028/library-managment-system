@@ -1,0 +1,40 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label>
+    Email
+    <input type="email" formControlName="email" />
+    @if (email?.invalid && (email?.touched || email?.dirty)) {
+      <div class="error-message">
+        @if (email?.errors?.['required']) {
+          <small>Pole e-mail jest wymagane.</small>
+        }
+        @if (email?.errors?.['email']) {
+          <small>Wprowadź poprawny adres e-mail.</small>
+        }
+      </div>
+    }
+  </label>
+
+  <label>
+    Hasło
+    <input type="password" formControlName="password" />
+
+<!--    @if (password?.invalid && (password?.touched || password?.dirty)) {-->
+<!--      <div class="error-message">-->
+<!--        @if (password?.errors?.['required']) {-->
+<!--          <small>Hasło jest wymagane.</small>-->
+<!--        }-->
+<!--        @if (password?.errors?.['minlength']) {-->
+<!--          <small>Hasło musi mieć co najmniej 6 znaków.</small>-->
+<!--        }-->
+<!--      </div>-->
+<!--    }-->
+  </label>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <button type="submit" >
+    {{ isSubmitting() ? 'Logowanie...' : 'Zaloguj się' }}
+  </button>
+</form>
