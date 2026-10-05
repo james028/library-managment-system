@@ -30,7 +30,8 @@ let LoansService = class LoansService {
         return loan;
     }
     async returnLoan(id) {
-        const loan = await this.loansRepository.returnLoan(id);
+        const fineRatePerDay = 1.0;
+        const loan = await this.loansRepository.returnLoan(id, fineRatePerDay);
         if (!loan) {
             throw new NotFoundException('Wypożyczenie nie istnieje albo zostało już wcześniej zwrócone');
         }

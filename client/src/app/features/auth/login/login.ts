@@ -48,7 +48,7 @@ export class LoginComponent {
       // Po zalogowaniu kierujemy wg roli — odpowiednik tego, co dawniej robiłby
       // sam ProtectedRoute w Reakcie po pierwszym wejściu na "/".
       const user = this.authService.user();
-      this.router.navigate([user?.role === 'librarian' ? '/admin/books' : '/app/dashboard']);
+      this.router.navigate([user?.role === 'librarian' ? '/admin/dashboard' : '/app/dashboard']);
     } catch (error: any) {
       this.errorMessage.set(error.error?.message ?? 'Nieprawidłowy email lub hasło');
     } finally {

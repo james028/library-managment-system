@@ -21,6 +21,6 @@ export declare class LoansRepository {
         dueAt: Date;
     }): Promise<LoanRecord | null>;
     findById(id: string): Promise<LoanRecord | null>;
-    returnLoan(id: string): Promise<LoanRecord | null>;
+    returnLoan(id: string, fineRatePerDay: number): Promise<LoanRecord | null>;
     findAllForUser(userId: string): Promise<LoanWithDetails[]>;
 }

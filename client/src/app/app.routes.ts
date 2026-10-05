@@ -37,7 +37,12 @@ export const routes: Routes = [
           {
             path: 'dashboard',
             loadComponent: () =>
-              import('./features/dashboard/dashboard').then((m) => m.Dashboard),
+              import('./features/dashboard/member-dashboard/dashboard').then((m) => m.MemberDashboard),
+          },
+          {
+            path: 'panel',
+            loadComponent: () =>
+              import('./features/member/panel/panel').then((m) => m.Panel),
           },
           {
             path: 'catalog',
@@ -49,6 +54,21 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/member/my-loans/my-loans').then((m) => m.MyLoans),
           },
+          {
+            path: 'reservations',
+            loadComponent: () =>
+              import('./features/member/reservations/reservations').then((m) => m.Reservations),
+          },
+          {
+            path: 'fines',
+            loadComponent: () =>
+              import('./features/member/fines/fines').then((m) => m.Fines),
+          },
+          {
+            path: 'profile',
+            loadComponent: () =>
+              import('./features/member/profile/profile').then((m) => m.Profile),
+          },
         ],
       },
       {
@@ -56,6 +76,11 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['librarian'] },
         children: [
+          {
+            path: 'dashboard',
+            loadComponent: () =>
+              import('./features/dashboard/librarian-dashboard/librarian-dashboard').then((m) => m.LibrarianDashboard),
+          },
           {
             path: 'books',
             loadComponent: () =>

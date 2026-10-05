@@ -74,7 +74,7 @@ export class LoansRepository {
     return result.rows[0] ?? null;
   }
 
-  async returnLoan(id: string): Promise<LoanRecord | null> {
+  async returnLoan(id: string, fineRatePerDay: number): Promise<LoanRecord | null> {
     const client = await this.databaseService.getClient();
 
     try {
@@ -82,9 +82,9 @@ export class LoansRepository {
 
       const loanUpdate = await client.query<LoanRecord>(
         `UPDATE loans
-                                             SET returned_at = now()
-                                             WHERE id = $1
-                                               AND returned_at IS NULL RETURNING *`,
+                                                         SET returned_at = now()
+                                                         WHERE id = $1
+                                                           AND returned_at IS NULL RETURNING *`,
         [id],
       );
 
@@ -103,6 +103,19 @@ export class LoansRepository {
         [loan.book_copy_id],
       );
 
+      const msOverdue = Date.now() - new Date(loan.due_at).getTime();
+      const daysOverdue = Math.floor(msOverdue / (24 * 60 * 60 * 1000));
+
+      let fineAmount: number | null = null;
+
+      if (daysOverdue > 0) {
+        fineAmount = Math.round(daysOverdue * fineRatePerDay  * 100) / 100;
+        await client.query(
+          'INSERT INTO fines (loan_id, amount) VALUES ($1, $2, $3)',
+          [loan.id, fineAmount],
+        );
+      }
+
       await client.query('COMMIT');
       return loan;
     } catch (error) {
@@ -116,11 +129,11 @@ export class LoansRepository {
   async findAllForUser(userId: string): Promise<LoanWithDetails[]> {
     const result = await this.databaseService.query<LoanWithDetails>(
       `SELECT l.*, b.title AS book_title, bc.inventory_number
-       FROM loans l
-       JOIN book_copies bc ON bc.id = l.book_copy_id
-       JOIN books b ON b.id = bc.book_id
-       WHERE l.user_id = $1
-       ORDER BY l.borrowed_at DESC`,
+                                                                      FROM loans l
+                                                                               JOIN book_copies bc ON bc.id = l.book_copy_id
+                                                                               JOIN books b ON b.id = bc.book_id
+                                                                      WHERE l.user_id = $1
+                                                                      ORDER BY l.borrowed_at DESC`,
       [userId],
     );
     return result.rows;

@@ -36,7 +36,8 @@ export class LoansService {
   }
 
   async returnLoan(id: string) {
-    const loan = await this.loansRepository.returnLoan(id);
+    const fineRatePerDay  = 1.0;
+    const loan = await this.loansRepository.returnLoan(id, fineRatePerDay);
 
     if (!loan) {
       throw new NotFoundException(
