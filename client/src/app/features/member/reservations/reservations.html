@@ -1,1 +1,39 @@
-<p>reservations works!</p>
+<div class="reservations-view">
+  <h2>Moje Rezerwacje</h2>
+  @if (reservations$ | async; as reservations) {
+    @if (reservations.length === 0) {
+      <p>Nie masz żadnych wypożyczeń.</p>
+    } @else {
+      <ul>
+        @for (reservation of reservations; track reservation.id) {
+          <li>
+            <strong>{{ reservation.book_title }}</strong>
+
+            <div>
+              Zarezerwowano: {{ reservation.reserved_at | date: 'dd.MM.yyyy' }}
+            </div>
+            <div>
+              Wygasa: {{ reservation.expires_at | date: 'dd.MM.yyyy' }}
+            </div>
+            <div>Status: {{ getLabel(reservation.status) }}</div>
+            <div>
+              @if (reservation.status === reservationsStatus.PENDING) {
+                <button class="btn-cancel"
+                        type="button"
+                        [class.btn-cancel--loading]="loadingIds.has(reservation.id)"
+                        [disabled]="loadingIds.has(reservation.id)"
+                        (click)="cancelReservation(reservation.id)">
+                  Anuluj rezerwację
+                </button>
+              }
+
+            </div>
+
+          </li>
+        }
+      </ul>
+    }
+  } @else {
+    <p>Ładowanie...</p>
+  }
+</div>

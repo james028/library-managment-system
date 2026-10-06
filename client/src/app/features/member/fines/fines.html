@@ -1,1 +1,38 @@
-<p>fines works!</p>
+<div class="fines-view">
+  @if (fines$ | async; as fines) {
+    @for (fine of fines; track fine.id; let idx = $index, count = $count) {
+      <div class="fine-card">
+        <!-- Nagłówek z tytułem książki i rokiem wydania -->
+        <div class="fine-header">
+          <strong>{{ idx + 1 }}. {{ fine.title }}</strong>
+          <span class="year">({{ fine.published_year }})</span>
+        </div>
+
+        <!-- Szczegóły finansowe -->
+        <div class="fine-details">
+          <div class="amount-section">
+            <span class="label">Kwota kary:</span>
+            <span class="value">{{ fine.amount | number: '1.2-2' }} PLN</span>
+          </div>
+
+          <!-- Status opłacenia -->
+          <div class="status-section">
+            @if (fine.paid) {
+              <span class="badge badge-success">Opłacona</span>
+            } @else {
+              <span class="badge badge-danger">DO ZAPŁATY</span>
+            }
+          </div>
+        </div>
+
+        <!-- Data wystawienia -->
+        <div class="fine-footer">
+          <small>Wystawiono: {{ fine.created_at | date: 'dd.MM.yyyy, HH:mm' }}</small>
+        </div>
+      </div>
+    }
+  }
+  <hr/>
+  <div>Ilość kar: {{ finesCount$ | async }}</div>
+</div>
+

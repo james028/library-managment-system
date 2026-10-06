@@ -32,7 +32,7 @@ export class ReservationsService {
   }
 
   async findMyReservations(userId: string) {
-    await this.reservationsRepository.findReservationsForUser(userId);
+    return await this.reservationsRepository.findReservationsForUser(userId);
   }
 
   async cancel(

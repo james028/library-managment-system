@@ -1,0 +1,64 @@
+.loans-view {
+  padding: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #475569;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+
+      &.overdue {
+        border-left: 4px solid #dc2626;
+        background: #fffdfd;
+      }
+
+      strong {
+        color: #1e293b;
+        font-size: 1rem;
+      }
+
+      .badge-overdue {
+        background: #fee2e2;
+        color: #dc2626;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.1rem 0.4rem;
+        border-radius: 4px;
+        margin-left: 0.5rem;
+        display: inline-block;
+      }
+
+      .fine {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px dashed #f1f5f9;
+        color: #b91c1c;
+        font-weight: 500;
+      }
+    }
+  }
+
+  p {
+    color: #64748b;
+  }
+}

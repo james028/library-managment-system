@@ -1,0 +1,92 @@
+.fines-view {
+  padding: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+
+  .fine-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .fine-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 0.5rem;
+
+      strong {
+        color: #1e293b;
+        font-size: 0.95rem;
+      }
+
+      .year {
+        color: #64748b;
+        font-size: 0.85rem;
+      }
+    }
+
+    .fine-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .amount-section {
+        .label {
+          color: #64748b;
+          font-size: 0.875rem;
+          margin-right: 0.5rem;
+        }
+        .value {
+          color: #0f172a;
+          font-weight: 600;
+          font-size: 1rem;
+        }
+      }
+
+      .badge {
+        padding: 0.25rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+
+        &.badge-success {
+          background: #dcfce7;
+          color: #15803d;
+        }
+
+        &.badge-danger {
+          background: #fee2e2;
+          color: #dc2626;
+        }
+      }
+    }
+
+    .fine-footer {
+      border-top: 1px dashed #f1f5f9;
+      padding-top: 0.5rem;
+
+      small {
+        color: #94a3b8;
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 1.5rem 0;
+  }
+
+  div {
+    font-size: 0.95rem;
+    color: #334155;
+    font-weight: 500;
+  }
+}

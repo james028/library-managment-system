@@ -9,6 +9,7 @@ export interface UserRecord {
   last_name: string;
   role: 'member' | 'librarian' | 'admin';
   is_active: boolean;
+  created_at: Date;
 }
 
 @Injectable()

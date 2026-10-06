@@ -1,0 +1,92 @@
+.member-dashboard {
+  padding: 1.5rem;
+
+  .dashboard-welcome {
+    margin-bottom: 2rem;
+    h2 { font-size: 1.75rem; font-weight: 600; color: #1e293b; }
+    p { color: #64748b; }
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .dashboard-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+
+      h3 { font-size: 1rem; font-weight: 600; color: #334155; margin: 0; }
+
+      .badge {
+        background: #e2e8f0;
+        color: #475569;
+        padding: 0.15rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+
+        &.badge-danger {
+          background: #fee2e2;
+          color: #dc2626;
+        }
+      }
+    }
+
+    .card-body {
+      min-height: 100px;
+      .empty-text { color: #94a3b8; font-size: 0.875rem; font-style: italic; }
+
+      .preview-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.875rem;
+          padding: 0.5rem 0;
+          border-bottom: 1px dashed #f1f5f9;
+
+          strong { color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; }
+          span { color: #64748b; font-size: 0.75rem; }
+        }
+      }
+    }
+
+    .card-footer {
+      border-top: 1px solid #f1f5f9;
+      padding-top: 0.75rem;
+      margin-top: 1rem;
+      text-align: right;
+
+      .btn-link {
+        background: none;
+        border: none;
+        color: #2563eb;
+        font-weight: 500;
+        font-size: 0.875rem;
+        cursor: pointer;
+        padding: 0;
+
+        &:hover { text-decoration: underline; }
+      }
+    }
+  }
+}

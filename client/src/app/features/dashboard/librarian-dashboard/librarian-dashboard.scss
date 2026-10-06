@@ -1,0 +1,73 @@
+// Zmienne (możesz dostosować do swoich)
+$color-bg-container: #ffffff;
+$color-border: #e2e8f0;
+$color-bg-tab-hover: #f8fafc;
+$color-bg-tab-active: #ffffff;
+$color-text-main: #1e293b;
+$color-text-muted: #64748b;
+$color-primary: #2563eb;
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  background-color: $color-bg-container;
+  border: 1px solid $color-border;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  max-width: 1000px;
+  margin: 0 auto;
+
+  // Pasek zakładek
+  .tabs-list {
+    display: flex;
+    background-color: #f1f5f9;
+    border-bottom: 1px solid $color-border;
+    padding: 0.5rem 0.5rem 0 0.5rem;
+    gap: 0.25rem;
+    //overflow-x: auto;
+    // Zabezpieczenie na wypadek mniejszych ekranów
+
+    button {
+      background: transparent;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: $color-text-muted;
+      cursor: pointer;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+
+      &:hover {
+        background-color: $color-bg-tab-hover;
+        color: $color-text-main;
+      }
+
+      // Stan aktywnej zakładki
+      &.active {
+        background-color: $color-bg-tab-active;
+        color: $color-primary;
+        font-weight: 600;
+        box-shadow: 0 -2px 0 0 $color-primary inset, 0 1px 2px rgba(0, 0, 0, 0.02);
+        border-bottom: 1px solid $color-bg-tab-active; // Niweluje linię obramowania kontenera
+        margin-bottom: -1px; // Nakłada się na dolną krawędź paska
+      }
+
+      // Dostępność z klawiatury
+      &:focus-visible {
+        outline: 2px solid $color-primary;
+        outline-offset: -2px;
+      }
+    }
+  }
+
+  // Obszar zawartości zakładki (wyrenderowany komponent dynamiczny)
+  .tab-content {
+    padding: 1.5rem;
+    background-color: $color-bg-tab-active;
+    min-height: 300px;
+  }
+}

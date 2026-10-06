@@ -11,8 +11,9 @@ export interface Fine {
   amount: string;
   paid: boolean;
   created_at: string;
-  book_title: string;
+  title: string;
   user_id: string;
+  published_year: string;
 }
 
 @Injectable({ providedIn: 'root' })

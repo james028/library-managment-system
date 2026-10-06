@@ -1,1 +1,137 @@
-<p>panel works!</p>
+<div class="member-dashboard">
+  <!-- Powitanie użytkownika -->
+  <header class="dashboard-welcome">
+    <h2>Witaj w panelu czytelnika!</h2>
+    <p>Sprawdź status swoich wypożyczeń, aktywne kary oraz najnowsze wiadomości.</p>
+  </header>
+
+  <!-- Siatka z 4 kafelkami (Grid) -->
+  <div class="dashboard-grid">
+
+    <!-- 1. Kafel: Wypożyczenia -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3>Moje Wypożyczenia</h3>
+        @if (loans$ | async; as loans) {
+          <span class="badge">{{ loans.length }}</span>
+        }
+      </div>
+      <div class="card-body">
+        @if (loans$ | async; as loans) {
+          @if (loans.length === 0) {
+            <p class="empty-text">Brak aktywnych wypożyczeń.</p>
+          } @else {
+            <ul class="preview-list">
+              <!-- Pokazujemy np. tylko 3 pierwsze pozycje na głównym panelu -->
+              @for (loan of loans.slice(0, 3); track loan.id) {
+                <li>
+                  <strong>{{ loan.book_title }}</strong>
+                  <span class="date">Termin: {{ loan.due_at | date: 'dd.MM.yyyy' }}</span>
+                </li>
+              }
+            </ul>
+          }
+        } @else {
+          <p class="loading">Ładowanie...</p>
+        }
+      </div>
+      <div class="card-footer">
+        <button (click)="switchTab('loans')" class="btn-link">Wszystkie wypożyczenia &rarr;</button>
+      </div>
+    </div>
+
+    <!-- 2. Kafel: Zamówienia / Rezerwacje -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3>Zamówienia / Rezerwacje</h3>
+        @if (reservations$ | async; as reservations) {
+          <span class="badge">{{ reservations.length }}</span>
+        }
+      </div>
+      <div class="card-body">
+        @if (reservations$ | async; as reservations) {
+          @if (reservations.length === 0) {
+            <p class="empty-text">Brak aktywnych rezerwacji.</p>
+          } @else {
+            <ul class="preview-list">
+              @for (res of reservations.slice(0, 3); track res.id) {
+                <li>
+                  <strong>{{ res.book_title }}</strong>
+                  <span class="status">{{ getLabel(res.status) }}</span>
+                </li>
+              }
+            </ul>
+          }
+        } @else {
+          <p class="loading">Ładowanie...</p>
+        }
+      </div>
+      <div class="card-footer">
+        <button (click)="switchTab('reservations')" class="btn-link">Zarządzaj rezerwacjami &rarr;</button>
+      </div>
+    </div>
+
+    <!-- 3. Kafel: Kary -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3>Kary finansowe</h3>
+        @if (fines$ | async; as fines) {
+          <span class="badge" [class.badge-danger]="fines.length > 0">{{ fines.length }}</span>
+        }
+      </div>
+      <div class="card-body">
+        @if (fines$ | async; as fines) {
+          @if (fines.length === 0) {
+            <p class="empty-text">Brak kar. Wszystko opłacone!</p>
+          } @else {
+            <ul class="preview-list">
+              @for (fine of fines.slice(0, 3); track fine.id) {
+                <li>
+                  <strong>{{ fine.title }}</strong>
+                  <span class="amount">{{ fine.amount }} PLN</span>
+                </li>
+              }
+            </ul>
+          }
+        } @else {
+          <p class="loading">Ładowanie...</p>
+        }
+      </div>
+      <div class="card-footer">
+        <button (click)="switchTab('fines')" class="btn-link">Przejdź do kar &rarr;</button>
+      </div>
+    </div>
+
+    <!-- 4. Kafel: Wiadomości -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3>Wiadomości</h3>
+<!--        @if (messages$ | async; as messages) {-->
+<!--          <span class="badge">{{ messages.length }}</span>-->
+<!--        }-->
+      </div>
+      <div class="card-body">
+<!--        @if (messages$ | async; as messages) {-->
+<!--          @if (messages.length === 0) {-->
+<!--            <p class="empty-text">Brak nowych wiadomości.</p>-->
+<!--          } @else {-->
+<!--            <ul class="preview-list">-->
+<!--              @for (msg of messages.slice(0, 3); track msg.id) {-->
+<!--                <li>-->
+<!--                  <strong>{{ msg.subject }}</strong>-->
+<!--                  <span class="date">{{ msg.created_at | date: 'dd.MM' }}</span>-->
+<!--                </li>-->
+<!--              }-->
+<!--            </ul>-->
+<!--          }-->
+<!--        } @else {-->
+<!--          <p class="loading">Ładowanie...</p>-->
+<!--        }-->
+      </div>
+      <div class="card-footer">
+        <button (click)="switchTab('messages')" class="btn-link">Otwórz skrzynkę &rarr;</button>
+      </div>
+    </div>
+
+  </div>
+</div>
