@@ -1,5 +1,6 @@
 import { BooksService } from './books.service.js';
 import { CreateBookDto } from './dto/createbook.dto.js';
+import { UpdateBookDto } from './dto/updatebook.dto.js';
 export declare class BooksController {
     private readonly booksService;
     constructor(booksService: BooksService);
@@ -13,4 +14,6 @@ export declare class BooksController {
         };
     }>;
     create(dto: CreateBookDto): Promise<import("./books.repository.js").BookRecord>;
+    update(id: string, dto: UpdateBookDto): Promise<import("./books.repository.js").BookRecord>;
+    delete(id: string): void;
 }

@@ -10,13 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, } from '@nestjs/common';
 import { RolesGuard } from '../auth/guards/roles.guards.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { BooksService } from './books.service.js';
 import { CreateBookDto } from './dto/createbook.dto.js';
+import { UpdateBookDto } from './dto/updatebook.dto.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags, } from '@nestjs/swagger';
 let BooksController = class BooksController {
     booksService;
     constructor(booksService) {
@@ -28,6 +29,12 @@ let BooksController = class BooksController {
     create(dto) {
         console.log(dto);
         return this.booksService.create(dto);
+    }
+    update(id, dto) {
+        return this.booksService.update(id, dto);
+    }
+    delete(id) {
+        this.booksService.remove(id);
     }
 };
 __decorate([
@@ -97,6 +104,31 @@ __decorate([
     __metadata("design:paramtypes", [CreateBookDto]),
     __metadata("design:returntype", void 0)
 ], BooksController.prototype, "create", null);
+__decorate([
+    Patch(':id'),
+    Roles('librarian'),
+    ApiOperation({
+        summary: 'Update a book',
+        description: 'Updates a book. Requires librarian role.',
+    }),
+    __param(0, Param('id')),
+    __param(1, Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, UpdateBookDto]),
+    __metadata("design:returntype", void 0)
+], BooksController.prototype, "update", null);
+__decorate([
+    Delete(':id'),
+    Roles('librarian'),
+    ApiOperation({
+        summary: 'Remove a book',
+        description: 'Removes a book. Requires librarian role.',
+    }),
+    __param(0, Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], BooksController.prototype, "delete", null);
 BooksController = __decorate([
     Controller('books'),
     ApiTags('Books'),

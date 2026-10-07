@@ -1,10 +1,27 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { RolesGuard } from '../auth/guards/roles.guards.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { BooksService } from './books.service.js';
 import { CreateBookDto } from './dto/createbook.dto.js';
+import { UpdateBookDto } from './dto/updatebook.dto.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller('books')
 @ApiTags('Books')
@@ -58,7 +75,6 @@ export class BooksController {
     );
   }
 
-
   @Post()
   @Roles('member')
   @ApiOperation({
@@ -84,5 +100,25 @@ export class BooksController {
   create(@Body() dto: CreateBookDto) {
     console.log(dto);
     return this.booksService.create(dto);
+  }
+
+  @Patch(':id')
+  @Roles('librarian')
+  @ApiOperation({
+    summary: 'Update a book',
+    description: 'Updates a book. Requires librarian role.',
+  })
+  update(@Param('id') id: string, @Body() dto: UpdateBookDto) {
+    return this.booksService.update(id, dto)
+  }
+
+  @Delete(':id')
+  @Roles('librarian')
+  @ApiOperation({
+    summary: 'Remove a book',
+    description: 'Removes a book. Requires librarian role.',
+  })
+  delete(@Param('id') id: string) {
+    this.booksService.remove(id)
   }
 }

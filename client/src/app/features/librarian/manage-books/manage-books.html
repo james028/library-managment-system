@@ -1,1 +1,82 @@
-<p>manage-books works!2</p>
+<h2>Zarządzanie książkami</h2>
+
+<div class="toolbar">
+  <input type="text" placeholder="Szukaj..." [formControl]="searchControl" />
+  <button (click)="openCreateForm()">+ Dodaj książkę</button>
+</div>
+
+@if (isFormOpen()) {
+  <form [formGroup]="form" (ngSubmit)="submit()" class="book-form">
+    <h3>{{ editingBook() ? 'Edytuj książkę' : 'Nowa książka' }}</h3>
+
+    <label>
+      Tytuł
+      <input type="text" formControlName="title" />
+    </label>
+
+    <label>
+      Autor
+      <input type="text" formControlName="author" />
+    </label>
+
+    <label>
+      ISBN
+      <input type="text" formControlName="isbn" />
+    </label>
+
+    <label>
+      Wydawca
+      <input type="text" formControlName="publisher" />
+    </label>
+
+    <label>
+      Rok wydania
+      <input type="number" formControlName="publishedYear" />
+    </label>
+
+    <label>
+      Opis
+      <textarea formControlName="description"></textarea>
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="form.invalid">
+        {{ editingBook() ? 'Zapisz zmiany' : 'Dodaj' }}
+      </button>
+      <button type="button" (click)="cancelForm()">Anuluj</button>
+    </div>
+  </form>
+}
+
+
+@if (books$ | async; as result) {
+  <table>
+    <thead>
+    <tr>
+      <th>Tytuł</th>
+      <th>Autor</th>
+      <th>Rok</th>
+      <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (book of result.items; track book.id) {
+        <tr>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.published_year }}</td>
+          <td>
+            <button (click)="openEditForm(book)">Edytuj</button>
+<!--            <button (click)="openEditForm(book)">Edytuj</button>-->
+            <!-- Trasa na razie nie istnieje — dorobimy w kroku "egzemplarze" (punkt 3 z listy) -->
+<!--            <a [routerLink]="['/admin/books', book.id, 'copies']">Egzemplarze</a>-->
+<!--            <button (click)="deleteBook(book)">Usuń</button>-->
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+} @else {
+  <div>Ładowanie</div>
+}
