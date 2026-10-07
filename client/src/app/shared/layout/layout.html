@@ -1,15 +1,15 @@
-<header class="app-header">
-  <nav>
-    <!-- Link do profilu widoczny zawsze — dokładnie ta sama logika co /users/me po stronie backendu:
-         nie zależy od roli, bo każdy zalogowany ma swój profil. -->
-    <a routerLink="/profile" routerLinkActive="active">Profil</a>
-  </nav>
+<!--<header class="app-header">-->
+<!--&lt;!&ndash;  <nav>&ndash;&gt;-->
+<!--&lt;!&ndash;    &lt;!&ndash; Link do profilu widoczny zawsze — dokładnie ta sama logika co /users/me po stronie backendu:&ndash;&gt;-->
+<!--&lt;!&ndash;         nie zależy od roli, bo każdy zalogowany ma swój profil. &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <a routerLink="/profile" routerLinkActive="active">Profil</a>&ndash;&gt;-->
+<!--&lt;!&ndash;  </nav>&ndash;&gt;-->
 
-  <div class="user-info">
-    <span>{{ authService.user()?.firstName }} ({{ authService.user()?.role }})</span>
-    <button (click)="logout()">Wyloguj</button>
-  </div>
-</header>
+<!--&lt;!&ndash;  <div class="user-info">&ndash;&gt;-->
+<!--&lt;!&ndash;    <span>{{ authService.user()?.firstName }} ({{ authService.user()?.role }})</span>&ndash;&gt;-->
+<!--&lt;!&ndash;    <button (click)="logout()">Wyloguj</button>&ndash;&gt;-->
+<!--&lt;!&ndash;  </div>&ndash;&gt;-->
+<!--</header>-->
 
 <main>
   <!-- Tu renderuje się aktywna trasa-dziecko: CatalogComponent, ManageBooksComponent itd.,

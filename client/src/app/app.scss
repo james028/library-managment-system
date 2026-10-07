@@ -1,0 +1,42 @@
+@use '../styles/variables' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $color-bg-body;
+  color: $color-text-main;
+  font-family: inherit;
+}
+
+header {
+  flex-shrink: 0;
+  background-color: $color-bg-surface;
+  border-bottom: 1px solid $color-border;
+  padding: 1rem 2rem;
+
+  nav {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: $color-primary;
+  }
+}
+
+main {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+footer {
+  flex-shrink: 0;
+  background-color: $color-bg-surface;
+  border-top: 1px solid $color-border;
+  text-align: center;
+  padding: 1rem;
+  color: $color-text-muted;
+  font-size: 0.875rem;
+}

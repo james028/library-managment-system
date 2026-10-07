@@ -7,6 +7,7 @@ import { Reservations } from '../member/reservations/reservations';
 import { Profile } from '../member/profile/profile';
 import { Panel } from '../member/panel/panel';
 import { ManageBooks } from '../librarian/manage-books/manage-books';
+import { AdminPanel } from '../librarian/admin-panel/admin-panel';
 
 export type ActiveTab =
   | 'catalog'
@@ -35,6 +36,6 @@ export const MEMBER_TABS: TabConfig[] = [
 ];
 
 export const LIBRARIAN_TABS: TabConfig[] = [
-  { id: 'manage-books', label: 'Zarządzaj Katalogiem', component: ManageBooks },
-  { id: 'catalog', label: 'Zarządzaj Katalogiem', component: Catalog },
+  { id: 'panel', label: 'Panel Główny Admina', component: AdminPanel },
+  { id: 'manage-books', label: 'Zarządzaj Książkami', component: ManageBooks },
 ];
