@@ -5,7 +5,7 @@
       @for (key of statsKeys; track key) {
         <div class="stat-card">
           <span class="stat-label">{{ getLoanStatsLabel(key) }}</span>
-          <span class="stat-value text-primary">{{ loansSummary[key] ?? "-" }}</span>
+          <span class="stat-value text-primary">{{ loansSummary[key] || "-" }}</span>
         </div>
       }
     </div>
