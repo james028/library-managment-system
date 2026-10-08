@@ -16,6 +16,13 @@ export interface Loan {
   inventory_number: string;
 }
 
+export interface LoansSummary {
+  activeLoans: number;
+  overdueLoans: number;
+  toReturnToday: number;
+  returnedToday: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class LoansService {
   private readonly baseUrl = `${environment.apiUrl}/loans`;
@@ -24,5 +31,9 @@ export class LoansService {
 
   getMyLoans(): Observable<Loan[]> {
     return this.http.get<Loan[]>(`${this.baseUrl}/me`);
+  }
+
+  getSummaryLoans(): Observable<LoansSummary> {
+    return this.http.get<LoansSummary>(`${this.baseUrl}/summary`);
   }
 }

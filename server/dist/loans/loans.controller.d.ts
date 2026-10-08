@@ -7,4 +7,5 @@ export declare class LoansController {
     findMyLoans(user: CurrentUserPayload): Promise<import("./loans.repository.js").LoanWithDetails[]>;
     borrow(dto: CreateLoanDto): Promise<import("./loans.repository.js").LoanRecord | null>;
     returnLoan(id: string): Promise<import("./loans.repository.js").LoanRecord>;
+    summaryLoans(): Promise<import("./loans.repository.js").LoansSummary>;
 }

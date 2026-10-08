@@ -33,6 +33,9 @@ let LoansController = class LoansController {
     returnLoan(id) {
         return this.loansService.returnLoan(id);
     }
+    summaryLoans() {
+        return this.loansService.returnSummary();
+    }
 };
 __decorate([
     Get('me'),
@@ -85,6 +88,17 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], LoansController.prototype, "returnLoan", null);
+__decorate([
+    ApiOperation({
+        summary: 'Return a summary loans',
+        description: 'Return four values in loans summary',
+    }),
+    Get('/summary'),
+    Roles('librarian'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], LoansController.prototype, "summaryLoans", null);
 LoansController = __decorate([
     ApiTags('Loans'),
     ApiBearerAuth(),

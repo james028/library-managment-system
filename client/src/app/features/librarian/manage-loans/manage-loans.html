@@ -1,1 +1,15 @@
-<p>manage-loans works!</p>
+<div class="loans-container">
+  <h2>Zarządzanie Wypożyczeniami</h2>
+  @if (loansSummary$ | async; as loansSummary) {
+    <div class="stats-grid">
+      @for (key of statsKeys; track key) {
+        <div class="stat-card">
+          <span class="stat-label">{{ getLoanStatsLabel(key) }}</span>
+          <span class="stat-value text-primary">{{ loansSummary[key] ?? "-" }}</span>
+        </div>
+      }
+    </div>
+  } @else {
+    <p>Ładowanie profilu...</p>
+  }
+</div>

@@ -1,0 +1,70 @@
+@use '../../../../styles/variables.scss' as *;
+
+:host {
+  display: block;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  color: $color-text-main;
+  font-family: inherit;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: $color-text-main;
+}
+
+// Siatka na 4 kafelki (responsywna: automatycznie układa się w rządki lub kolumny)
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+
+  .stat-card {
+    background: $color-bg-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-base;
+    padding: 1.25rem 1.5rem;
+    box-shadow: $shadow-sm;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      box-shadow: $shadow-md;
+      transform: translateY(-2px);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: $color-text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $color-text-main;
+      line-height: 1.2;
+
+      // Modyfikatory kolorów liczb
+      &.text-primary {
+        color: $color-primary;
+      }
+
+      &.text-danger {
+        color: $danger-color;
+      }
+
+      &.text-success {
+        color: $success-color;
+      }
+    }
+  }
+}

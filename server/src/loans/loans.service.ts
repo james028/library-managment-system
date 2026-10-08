@@ -51,4 +51,8 @@ export class LoansService {
   findMyLoans(userId: string) {
     return this.loansRepository.findAllForUser(userId);
   }
+
+  returnSummary() {
+    return this.loansRepository.returnSummaryData();
+  }
 }

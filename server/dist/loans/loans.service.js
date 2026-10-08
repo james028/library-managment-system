@@ -40,6 +40,9 @@ let LoansService = class LoansService {
     findMyLoans(userId) {
         return this.loansRepository.findAllForUser(userId);
     }
+    returnSummary() {
+        return this.loansRepository.returnSummaryData();
+    }
 };
 LoansService = __decorate([
     Injectable(),

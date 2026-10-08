@@ -12,6 +12,12 @@ export interface LoanWithDetails extends LoanRecord {
     book_title: string;
     inventory_number: string;
 }
+export interface LoansSummary {
+    activeLoans: number;
+    overdueLoans: number;
+    toReturnToday: number;
+    returnedToday: number;
+}
 export declare class LoansRepository {
     private readonly databaseService;
     constructor(databaseService: DatabaseService);
@@ -23,4 +29,5 @@ export declare class LoansRepository {
     findById(id: string): Promise<LoanRecord | null>;
     returnLoan(id: string, fineRatePerDay: number): Promise<LoanRecord | null>;
     findAllForUser(userId: string): Promise<LoanWithDetails[]>;
+    returnSummaryData(): Promise<LoansSummary>;
 }

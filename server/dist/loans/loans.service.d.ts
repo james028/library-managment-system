@@ -6,4 +6,5 @@ export declare class LoansService {
     borrow(dto: CreateLoanDto): Promise<LoanRecord | null>;
     returnLoan(id: string): Promise<LoanRecord>;
     findMyLoans(userId: string): Promise<import("./loans.repository.js").LoanWithDetails[]>;
+    returnSummary(): Promise<import("./loans.repository.js").LoansSummary>;
 }

@@ -91,6 +91,28 @@ let LoansRepository = class LoansRepository {
                                                                       ORDER BY l.borrowed_at DESC`, [userId]);
         return result.rows;
     }
+    async returnSummaryData() {
+        const results = await this.databaseService.query(`
+        SELECT (SELECT COUNT(*)
+                FROM loans
+                WHERE returned_at IS NULL)        AS "activeLoans",
+
+               (SELECT COUNT(*)
+                FROM loans
+                WHERE returned_at IS NULL
+                  AND due_at < CURRENT_TIMESTAMP) AS "overdueLoans",
+               (SELECT COUNT(*)
+                FROM loans
+                WHERE returned_at IS NULL
+                  AND returned_at = CURRENT_DATE) AS "toReturnToday",
+               (SELECT COUNT(*)
+                FROM loans
+                WHERE returned_at >= CURRENT_DATE
+                  AND returned_at < CURRENT_DATE + INTERVAL '1 day'
+        ) AS "returnedToday"
+    `, []);
+        return results.rows[0];
+    }
 };
 LoansRepository = __decorate([
     Injectable(),

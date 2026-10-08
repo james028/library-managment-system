@@ -78,7 +78,7 @@ __decorate([
 ], BooksController.prototype, "findAll", null);
 __decorate([
     Post(),
-    Roles('member'),
+    Roles('librarian'),
     ApiOperation({
         summary: 'Create a book',
         description: 'Creates a new book. Requires librarian role.',

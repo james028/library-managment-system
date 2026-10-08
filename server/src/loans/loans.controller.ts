@@ -62,4 +62,16 @@ export class LoansController {
   returnLoan(@Param('id') id: string) {
     return this.loansService.returnLoan(id);
   }
+
+  @ApiOperation({
+    summary: 'Return a summary loans',
+    description: 'Return four values in loans summary',
+  })
+  @Get('/summary')
+  @Roles('librarian')
+  summaryLoans() {
+    return this.loansService.returnSummary();
+  }
 }
+
+

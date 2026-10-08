@@ -16,6 +16,13 @@ export interface LoanWithDetails extends LoanRecord {
   inventory_number: string;
 }
 
+export interface LoansSummary {
+  activeLoans: number;
+  overdueLoans: number;
+  toReturnToday: number;
+  returnedToday: number;
+}
+
 @Injectable()
 export class LoansRepository {
   constructor(private readonly databaseService: DatabaseService) {}
@@ -74,7 +81,10 @@ export class LoansRepository {
     return result.rows[0] ?? null;
   }
 
-  async returnLoan(id: string, fineRatePerDay: number): Promise<LoanRecord | null> {
+  async returnLoan(
+    id: string,
+    fineRatePerDay: number,
+  ): Promise<LoanRecord | null> {
     const client = await this.databaseService.getClient();
 
     try {
@@ -109,7 +119,7 @@ export class LoansRepository {
       let fineAmount: number | null = null;
 
       if (daysOverdue > 0) {
-        fineAmount = Math.round(daysOverdue * fineRatePerDay  * 100) / 100;
+        fineAmount = Math.round(daysOverdue * fineRatePerDay * 100) / 100;
         await client.query(
           'INSERT INTO fines (loan_id, amount) VALUES ($1, $2, $3)',
           [loan.id, fineAmount],
@@ -137,5 +147,32 @@ export class LoansRepository {
       [userId],
     );
     return result.rows;
+  }
+
+  async returnSummaryData(): Promise<LoansSummary> {
+    const results = await this.databaseService.query<LoansSummary>(
+      `
+        SELECT (SELECT COUNT(*)
+                FROM loans
+                WHERE returned_at IS NULL)        AS "activeLoans",
+
+               (SELECT COUNT(*)
+                FROM loans
+                WHERE returned_at IS NULL
+                  AND due_at < CURRENT_TIMESTAMP) AS "overdueLoans",
+               (SELECT COUNT(*)
+                FROM loans
+                WHERE returned_at IS NULL
+                  AND returned_at = CURRENT_DATE) AS "toReturnToday",
+               (SELECT COUNT(*)
+                FROM loans
+                WHERE returned_at >= CURRENT_DATE
+                  AND returned_at < CURRENT_DATE + INTERVAL '1 day'
+        ) AS "returnedToday"
+    `,
+      [],
+    );
+
+    return results.rows[0];
   }
 }

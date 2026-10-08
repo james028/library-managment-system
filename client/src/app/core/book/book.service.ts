@@ -31,6 +31,16 @@ export interface BooksQuery {
   search?: string;
 }
 
+// Kształt body wysyłanego do POST/PATCH — zgodny z CreateBookDto/UpdateBookDto z Nest.
+export interface BookFormValue {
+  title: string;
+  author: string;
+  isbn?: string;
+  publisher?: string;
+  publishedYear?: number;
+  description?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class BooksService {
   private readonly baseUrl = `${environment.apiUrl}/books`;
@@ -48,4 +58,14 @@ export class BooksService {
 
     return this.http.get<PaginatedBooks>(this.baseUrl, { params });
   }
+
+  createBook(payload: BookFormValue): Observable<Book> {
+    return this.http.post<Book>(this.baseUrl, payload);
+  }
+
+  updateBook(editId: string, payload: Partial<BookFormValue>): Observable<Book> {
+    return this.http.patch<Book>(`${this.baseUrl}/${editId}`, payload);
+  }
+
+
 }
