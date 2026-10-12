@@ -35,7 +35,6 @@ let AuthService = class AuthService {
         return this.buildAuthResponse(user.id, user.email, user.role, user.first_name, user.last_name);
     }
     async login(dto) {
-        console.log(dto, "dto w login");
         const user = await this.usersRepository.findByEmail(dto.email);
         if (!user) {
             throw new UnauthorizedException('Nieprawidłowy email lub hasło');

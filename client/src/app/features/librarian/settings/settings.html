@@ -1,0 +1,73 @@
+<div class="settings-page">
+  <header class="page-header">
+    <div>
+      <h1>Ustawienia</h1>
+      <p>Konfiguracja zasad działania biblioteki</p>
+    </div>
+  </header>
+
+  <div class="settings-layout">
+    <aside class="settings-sidebar" aria-label="Kategorie ustawień">
+      <nav>
+        <button
+          type="button"
+          class="settings-nav-item"
+          [class.active]="activeSection === 'loans'"
+          (click)="setSection('loans')">
+          Wypożyczenia
+        </button>
+
+        <button
+          type="button"
+          class="settings-nav-item"
+          [class.active]="activeSection === 'fines'"
+          (click)="setSection('fines')">
+          Opłaty
+        </button>
+
+        <button
+          type="button"
+          class="settings-nav-item"
+          [class.active]="activeSection === 'holds'"
+          (click)="setSection('holds')">
+          Rezerwacje
+        </button>
+
+        <button
+          type="button"
+          class="settings-nav-item"
+          [class.active]="activeSection === 'notifications'"
+          (click)="setSection('notifications')">
+          Powiadomienia
+        </button>
+
+        <button
+          type="button"
+          class="settings-nav-item"
+          [class.active]="activeSection === 'patrons'"
+          (click)="setSection('patrons')">
+          Kategorie czytelników
+        </button>
+
+        <button
+          type="button"
+          class="settings-nav-item"
+          [class.active]="activeSection === 'library'"
+          (click)="setSection('library')">
+          Biblioteka
+        </button>
+      </nav>
+    </aside>
+
+    <main class="settings-content">
+      <app-settings-form
+        [section]="activeSection"
+        [form]="form"
+        [groups]="groups"
+        [initialValues]="initial"
+        (saveClicked)="save()"
+      >
+      </app-settings-form>
+    </main>
+  </div>
+</div>

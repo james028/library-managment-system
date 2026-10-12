@@ -38,7 +38,6 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    console.log(dto, "dto w login");
     const user = await this.usersRepository.findByEmail(dto.email);
 
     // Celowo ten sam komunikat błędu dla "nie ma takiego usera" i "złe hasło" —

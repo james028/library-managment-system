@@ -12,8 +12,6 @@ export class FinesController {
   constructor(private readonly finesService: FinesService) {}
 
   @Get('me') findMyFines(@CurrentUser() user: CurrentUserPayload) {
-
-    console.log(user, "us");
     return this.finesService.findMyFines(user.userId);
   }
 }

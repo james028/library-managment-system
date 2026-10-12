@@ -1,0 +1,94 @@
+@use '../../../../styles/variables' as *;
+
+.settings-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.5rem; // 24px -> 1.5rem dla spójności
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem; // ~28px
+    font-weight: 600;
+    color: $color-text-main;
+  }
+
+  p {
+    margin: 0.5rem 0 0;
+    color: $color-text-muted;
+    font-size: 0.9rem;
+  }
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.settings-sidebar,
+.settings-content {
+  background: $color-bg-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-base;
+  box-shadow: $shadow-sm;
+}
+
+.settings-sidebar {
+  padding: 0.75rem; // 12px
+
+  nav {
+    display: grid;
+    gap: 0.25rem; // 4px
+  }
+}
+
+.settings-nav-item {
+  width: 100%;
+  padding: 0.7rem 0.75rem; // 11px 12px
+  border: 0;
+  border-radius: $radius-sm;
+  background: transparent;
+  color: $color-text-main;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: $color-border-light;
+  }
+
+  &.active {
+    background: #eff6ff; // Lekki błękit zgodny z systemem
+    color: $color-primary;
+    font-weight: 600;
+  }
+}
+
+.settings-content {
+  min-height: 500px;
+  padding: 1.5rem; // 24px
+}
+
+@media (max-width: 760px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-sidebar nav {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
+  .settings-nav-item {
+    width: auto;
+    white-space: nowrap;
+  }
+}

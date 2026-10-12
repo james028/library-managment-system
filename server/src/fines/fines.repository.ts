@@ -19,8 +19,6 @@ export class FinesRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async findAllForUser(userId: string): Promise<any> {
-
-
     const results = await this.databaseService.query<FineWithDetails>(
       `
           SELECT f.*, l.user_id, b.title, b.published_year
