@@ -6,7 +6,7 @@ import { SettingsService } from '../../../core/services/SettingsService';
 
 type SettingsSection = 'loans' | 'fines' | 'holds' | 'notifications' | 'patrons' | 'library' | '';
 
-export interface Setting {
+export interface SettingsProps {
   key: string;
   value: string;
   type: 'int' | 'decimal' | 'bool' | 'string';
@@ -22,7 +22,7 @@ export interface Setting {
 export class Settings implements OnInit {
   activeSection: SettingsSection = '';
   form = new FormGroup<Record<string, FormControl>>({});
-  groups: { name: string; items: Settings[] }[] = [];
+  groups: { name: string; items: SettingsProps[] }[] = [];
   settingsService = inject(SettingsService);
   initial: Record<string, unknown> = {};
 
@@ -36,7 +36,7 @@ export class Settings implements OnInit {
 
   load() {
     this.settingsService.getSettings().subscribe((settings) => {
-      settings.forEach((s: any) => {
+      settings.forEach((s) => {
         const v = this.parse(s);
         this.form.addControl(s.key, new FormControl(v, this.validatorsFor(s)));
       });
@@ -63,7 +63,7 @@ export class Settings implements OnInit {
     });
   }
 
-  private parse(s: Setting) {
+  private parse(s: SettingsProps) {
     switch (s.type) {
       case 'int':
         return parseInt(s.value, 10);
@@ -76,17 +76,16 @@ export class Settings implements OnInit {
     }
   }
 
-  private validatorsFor(s: Setting) {
+  private validatorsFor(s: SettingsProps) {
     return s.type === 'int' || s.type === 'decimal'
       ? [Validators.required, Validators.min(0)]
       : [Validators.required];
   }
 
-  private buildGroups(list: Setting[]) {
-    const map = new Map<string, Settings[]>();
+  private buildGroups(list: SettingsProps[]) {
+    const map = new Map<string, SettingsProps[]>();
     list.forEach((l) => {
       const prefix = l.key.split('.')[0];
-      // @ts-ignore
       map.set(prefix, [...(map.get(prefix) ?? []), l]);
     });
 
