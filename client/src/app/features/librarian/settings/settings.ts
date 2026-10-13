@@ -30,6 +30,7 @@ export class Settings implements OnInit {
   loading = signal(true);
   successMessage = signal('');
   errorMessage = signal('');
+  errorDataMessage = signal('');
 
   setSection(section: SettingsSection): void {
     this.activeSection = section;
@@ -42,7 +43,7 @@ export class Settings implements OnInit {
 
   load() {
     this.loading.set(true);
-    this.errorMessage.set('');
+    this.errorDataMessage.set('');
 
     this.settingsService.getSettings().subscribe({
       next: (settings) => {
@@ -58,7 +59,7 @@ export class Settings implements OnInit {
       },
       error: () => {
         this.loading.set(false);
-        this.errorMessage.set('Wystąpiły błędy przy pobieraniu danych');
+        this.errorDataMessage.set('Wystąpiły błędy przy pobieraniu danych');
       },
     });
   }
