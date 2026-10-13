@@ -1,65 +1,73 @@
-@if (groups.length === 0) {
-  <h3 class="panel-title">Wybierz kategorię ustawień</h3>
-} @else {
-  <form [formGroup]="form" (ngSubmit)="saveClicked.emit()" class="settings-form">
-    <nav class="tabs-nav">
-      @for (g of groups; track g.name) {
-        <button type="button"
-                class="tab-btn"
-                [class.active]="g.name === section"
-                (click)="section = g.name">
-          {{ groupLabels[g.name] || '' }}
-        </button>
-      }
-    </nav>
+<form [formGroup]="form" (ngSubmit)="saveClicked.emit()" class="settings-form">
+  <nav class="tabs-nav">
+    @for (g of groups; track g.name) {
+      <button type="button"
+              class="tab-btn"
+              [class.active]="g.name === section"
+              (click)="section = g.name">
+        {{ groupLabels[g.name] || '' }}
+      </button>
+    }
+  </nav>
 
-    <div class="panel-content">
-      @for (g of groups; track g.name) {
-        @if (g.name === section) {
-          <h3 class="panel-title">{{ groupLabels[g.name] || '' }}</h3>
+  <div class="panel-content">
+    @for (g of groups; track g.name) {
+      @if (g.name === section) {
+        <h3 class="panel-title">{{ groupLabels[g.name] || '' }}</h3>
 
-          <div class="fields-grid">
-            @for (s of g.items; track s.key) {
-              @switch (s.type) {
-                @case ('bool') {
-                  <div class="row">
-                    <mat-slide-toggle [formControl]="getCtrl(s.key)">
-                      {{ s.description ?? s.key }}
-                    </mat-slide-toggle>
-                  </div>
-                }
-                @case ('int') {
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>{{ s.description ?? s.key }}</mat-label>
-                    <input matInput type="number" step="1" min="0" [formControl]="getCtrl(s.key)" />
-                  </mat-form-field>
-                }
-                @case ('decimal') {
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>{{ s.description ?? s.key }}</mat-label>
-                    <input matInput type="number" step="0.01" [formControl]="getCtrl(s.key)" />
-                  </mat-form-field>
-                }
-                @default {
-                  <mat-form-field>
-                    <mat-label>{{ s.description ?? s.key }}</mat-label>
-                    <input matInput type="text" [formControl]="getCtrl(s.key)" />
-                  </mat-form-field>
-                }
+        <div class="fields-grid">
+          @for (s of g.items; track s.key) {
+            @switch (s.type) {
+              @case ('bool') {
+                <div class="row">
+                  <mat-slide-toggle [formControl]="getCtrl(s.key)">
+                    {{ s.description ?? s.key }}
+                  </mat-slide-toggle>
+                </div>
+              }
+              @case ('int') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ s.description ?? s.key }}</mat-label>
+                  <input matInput type="number" step="1" min="0" [formControl]="getCtrl(s.key)" />
+                </mat-form-field>
+              }
+              @case ('decimal') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ s.description ?? s.key }}</mat-label>
+                  <input matInput type="number" step="0.01" [formControl]="getCtrl(s.key)" />
+                </mat-form-field>
+              }
+              @default {
+                <mat-form-field>
+                  <mat-label>{{ s.description ?? s.key }}</mat-label>
+                  <input matInput type="text" [formControl]="getCtrl(s.key)" />
+                </mat-form-field>
               }
             }
-          </div>
-        }
+          }
+        </div>
       }
-    </div>
+    }
+  </div>
 
-    <footer class="form-actions">
-      <button type="button" mat-button (click)="form.reset(initialValues)">Anuluj</button>
-      <button type="submit" mat-flat-button color="primary"
-              [disabled]="form.invalid">
-        Zapisz zmiany
-      </button>
-    </footer>
-  </form>
-}
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <footer class="form-actions">
+    <button type="button" mat-button (click)="form.reset(initialValues)">Anuluj</button>
+    <button type="submit" mat-flat-button color="primary"
+            [disabled]="form.invalid">
+      {{ saving() ? 'Zapisywanie...' : 'Zapisz' }}
+    </button>
+  </footer>
+</form>
 

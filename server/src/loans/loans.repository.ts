@@ -167,8 +167,7 @@ export class LoansRepository {
                (SELECT COUNT(*)
                 FROM loans
                 WHERE returned_at >= CURRENT_DATE
-                  AND returned_at < CURRENT_DATE + INTERVAL '1 day'
-        ) AS "returnedToday"
+                  AND returned_at < CURRENT_DATE + INTERVAL '1 day' ) AS "returnedToday"
     `,
       [],
     );

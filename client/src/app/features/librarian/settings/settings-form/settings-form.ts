@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, input, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatButton } from '@angular/material/button';
+import { SettingsProps, SettingsSection } from '../settings';
 
 @Component({
   selector: 'app-settings-form',
@@ -23,9 +24,11 @@ import { MatButton } from '@angular/material/button';
 export class SettingsForm implements OnChanges {
   @Input() section?: string;
   @Input() form!: FormGroup<Record<string, FormControl>>;
-  @Input() groups!: any;
-  @Input() activeGroup!: string;
+  @Input() groups: { name: SettingsSection; items: SettingsProps[] }[] = [];
   @Input() initialValues: Record<string, unknown> = {};
+  readonly successMessage = input<string>();
+  readonly errorMessage = input<string>();
+  readonly saving = input<boolean>();
 
   @Output() saveClicked: EventEmitter<void> = new EventEmitter();
 
