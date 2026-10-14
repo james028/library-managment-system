@@ -1,0 +1,71 @@
+@if (loading) {
+  <p>Ładowanie...</p>
+}
+
+@if (error) {
+  <p role="alert">{{ error }}</p>
+}
+
+<table [attr.aria-busy]="loading">
+  <thead>
+  <tr>
+    @for (column of columns; track column.key) {
+      <th>{{ column.header }}</th>
+    }
+
+    <th>Akcje</th>
+  </tr>
+  </thead>
+
+  <tbody>
+    @for (row of rows; track row.id) {
+      <tr>
+<!--        @for (column of columns; track column.key) {-->
+<!--          <td>{{ row[column.key] }}</td>-->
+<!--        }-->
+        @for (column of columns; track column.key) {
+          <td [style.text-align]="column.align ?? 'left'">
+            {{ getValue(row, column) }}
+          </td>
+        }
+        <td>
+          <button
+            type="button"
+            [disabled]="loading"
+            (click)="edit.emit(row)"
+          >
+            Edytuj
+          </button>
+        </td>
+      </tr>
+    } @empty {
+      @if (!loading && !error) {
+        <tr>
+          <td [attr.colspan]="columns.length + 1">
+            Brak wyników.
+          </td>
+        </tr>
+      }
+    }
+  </tbody>
+</table>
+
+<div>
+  <button
+    type="button"
+    [disabled]="page <= 1 || loading"
+    (click)="pageChange.emit(page - 1)"
+  >
+    Poprzednia
+  </button>
+
+  <span>Strona {{ page }} z {{ totalPages }}</span>
+
+  <button
+    type="button"
+    [disabled]="page >= totalPages || loading"
+    (click)="pageChange.emit(page + 1)"
+  >
+    Następna
+  </button>
+</div>
