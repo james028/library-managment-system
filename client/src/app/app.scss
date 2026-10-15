@@ -3,7 +3,8 @@
 :host {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100dvh;
+  min-height: 0;
   background-color: $color-bg-body;
   color: $color-text-main;
   font-family: inherit;
@@ -11,11 +12,12 @@
 
 header {
   flex-shrink: 0;
-  background-color: $color-bg-surface;
-  border-bottom: 1px solid $color-border;
-  padding: 1rem 2rem;
 
   nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
     font-weight: 700;
     font-size: 1.1rem;
     color: $color-primary;
@@ -23,20 +25,30 @@ header {
 }
 
 main {
-  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  box-sizing: border-box;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+router-outlet {
+  display: none;
 }
 
 footer {
   flex-shrink: 0;
   background-color: $color-bg-surface;
   border-top: 1px solid $color-border;
-  text-align: center;
   padding: 1rem;
+  text-align: center;
   color: $color-text-muted;
   font-size: 0.875rem;
+
+  p {
+    margin: 0;
+  }
 }

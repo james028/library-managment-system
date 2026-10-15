@@ -1,9 +1,16 @@
 @use '../../../../styles/variables' as *;
+@use '../../../../styles/dashboard' as dashboard;
+
+:host {
+  @include dashboard.tab-host;
+}
 
 .settings-page {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 1.5rem; // 24px -> 1.5rem dla spójności
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  overflow: auto;
 }
 
 .page-header {
@@ -11,15 +18,17 @@
 
   h1 {
     margin: 0;
-    font-size: 1.75rem; // ~28px
+    font-size: 1.5rem;
     font-weight: 600;
+    line-height: 1.3;
     color: $color-text-main;
   }
 
   p {
     margin: 0.5rem 0 0;
     color: $color-text-muted;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
 }
 
@@ -32,6 +41,7 @@
 
 .settings-sidebar,
 .settings-content {
+  min-width: 0;
   background: $color-bg-surface;
   border: 1px solid $color-border;
   border-radius: $radius-base;
@@ -39,46 +49,55 @@
 }
 
 .settings-sidebar {
-  padding: 0.75rem; // 12px
+  padding: 0.75rem;
 
   nav {
     display: grid;
-    gap: 0.25rem; // 4px
+    gap: 0.25rem;
   }
 }
 
 .settings-nav-item {
   width: 100%;
-  padding: 0.7rem 0.75rem; // 11px 12px
+  padding: 0.75rem;
   border: 0;
   border-radius: $radius-sm;
   background: transparent;
   color: $color-text-main;
   text-align: left;
-  cursor: pointer;
-  font-size: 0.9rem;
+  font-family: inherit;
+  font-size: 0.875rem;
   font-weight: 500;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 
   &:hover {
-    background: $color-border-light;
+    background: #f8fafc;
   }
 
   &.active {
-    background: #eff6ff; // Lekki błękit zgodny z systemem
+    background: #eff6ff;
     color: $color-primary;
     font-weight: 600;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
   }
 }
 
 .settings-content {
-  min-height: 500px;
-  padding: 1.5rem; // 24px
+  padding: 1.5rem;
 }
 
 @media (max-width: 760px) {
   .settings-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
   }
 
   .settings-sidebar nav {
@@ -88,7 +107,12 @@
   }
 
   .settings-nav-item {
+    flex: 0 0 auto;
     width: auto;
     white-space: nowrap;
+  }
+
+  .settings-content {
+    padding: 1rem;
   }
 }

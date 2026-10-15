@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
@@ -12,7 +12,7 @@ import {
 import { Loan, LoansService, LoansSummary } from '../../../core/services/LoansService';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { ColumnDef, DataTable, ListQuery, TableColumn } from '../../../shared/ui/data-table/data-table';
+import { ColumnDef, DataTable } from '../../../shared/ui/data-table/data-table';
 import { tap } from 'rxjs/operators';
 
 export enum LoanStatsEnum {
@@ -64,7 +64,7 @@ export interface LoanTag {
 export class ManageLoans {
   loansService = inject(LoansService);
 
-  readonly isFormOpen = signal(false);
+  //readonly isFormOpen = signal(false);
   form: FormGroup;
   selectedLoan: Loan | null = null;
   saving: boolean = false;
@@ -140,23 +140,6 @@ export class ManageLoans {
     },
   ];
 
-  result = [
-    {
-      id: '2334',
-      book_title: 'dasdfsaf',
-    },
-    {
-      id: '1334',
-      book_title: 'ee',
-    },
-  ];
-
-
-  private readonly initialQuery: ListQuery = {
-    search: '',
-    page: 1,
-    pageSize: 10,
-  };
   private readonly querySubject = new BehaviorSubject<{
     search: string;
     page: number;
@@ -182,6 +165,7 @@ export class ManageLoans {
         tap((a) => console.log(a, "a")),
         map((result): any => ({
           items: result,
+          total: result.length,
           query,
           loading: false,
           error: null,
@@ -207,15 +191,10 @@ export class ManageLoans {
     ),
   );
 
-  changePage(page: number): void {
-    //this.actions$.next({ type: 'page', page });
-  }
-
   edit(loan: Loan) {
     if (this.saving) {
       return;
     }
-
     this.selectedLoan = loan;
   }
 }

@@ -1,11 +1,16 @@
 @use 'styles/variables' as *;
 
-html, body {
+html,
+body {
+  height: 100%;
   margin: 0;
-  min-height: 100%;
 }
 
-*, *::before, *::after {
+body {
+  overflow: hidden;
+}
+
+* {
   box-sizing: border-box;
 }
 
@@ -29,7 +34,7 @@ html, body {
       font-size: 0.95rem;
       padding: 0.5rem 0.75rem;
       border-radius: 6px;
-      transition: all 0.2s ease;
+      transition: background-color 0.2s ease, color 0.2s ease;
 
       &:hover {
         color: $color-text-main;
@@ -64,7 +69,7 @@ html, body {
       font-weight: 500;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
 
       &:hover {
         background-color: $color-danger-bg;
@@ -103,7 +108,6 @@ html, body {
     background-color: $danger-active;
   }
 
-  // Dostępność (accessibility) dla klawiatury
   &:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba($danger-color, 0.4);
@@ -114,7 +118,6 @@ html, body {
     cursor: not-allowed;
   }
 
-  // Stan ładowania np. podczas strzału do API
   &--loading {
     position: relative;
     color: transparent;
@@ -136,159 +139,5 @@ html, body {
 @keyframes spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  background-color: $color-bg-container;
-  border: 1px solid $color-border;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  max-width: 1000px;
-  margin: 0 auto;
-
-  // Pasek zakładek
-  .tabs-list {
-    display: flex;
-    background-color: #f1f5f9;
-    border-bottom: 1px solid $color-border;
-    padding: 0.5rem 0.5rem 0 0.5rem;
-    gap: 0.25rem;
-    overflow-x: auto; // Zabezpieczenie na wypadek mniejszych ekranów
-
-    button {
-      background: transparent;
-      border: none;
-      padding: 0.75rem 1.25rem;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: $color-text-muted;
-      cursor: pointer;
-      border-top-left-radius: 6px;
-      border-top-right-radius: 6px;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-
-      &:hover {
-        background-color: $color-bg-tab-hover;
-        color: $color-text-main;
-      }
-
-      // Stan aktywnej zakładki
-      &.active {
-        background-color: $color-bg-tab-active;
-        color: $color-primary;
-        font-weight: 600;
-        box-shadow: 0 -2px 0 0 $color-primary inset, 0 1px 2px rgba(0, 0, 0, 0.02);
-        border-bottom: 1px solid $color-bg-tab-active; // Niweluje linię obramowania kontenera
-        margin-bottom: -1px; // Nakłada się na dolną krawędź paska
-      }
-
-      // Dostępność z klawiatury
-      &:focus-visible {
-        outline: 2px solid $color-primary;
-        outline-offset: -2px;
-      }
-    }
-  }
-
-  // Obszar zawartości zakładki (wyrenderowany komponent dynamiczny)
-  .tab-content {
-    padding: 1.5rem;
-    background-color: $color-bg-tab-active;
-    min-height: 300px;
-  }
-}
-
-
-table {
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid $color-border;
-  border-radius: 12px;
-  border-collapse: collapse;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-  margin-bottom: 1.5rem;
-
-  th, td {
-    padding: 0.85rem 1.25rem;
-    text-align: left;
-    font-size: 0.9rem;
-  }
-
-  th {
-    background-color:  #f1f5f9;
-    color: $color-text-muted;
-    font-weight: 600;
-    border-bottom: 1px solid $color-border;
-  }
-
-  tbody tr {
-    border-bottom: 1px solid #f1f5f9;
-    transition: background-color 0.15s ease;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &:hover {
-      background-color: #fafafa;
-    }
-  }
-
-  td {
-    color: $color-text-main;
-
-    // Styl akcji (przyciski / linki w tabeli)
-    div, span, td {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    button, a {
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 0.3rem 0.6rem;
-      border-radius: 4px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    button:first-of-type {
-      background: transparent;
-      border: 1px solid $color-border;
-      color: $color-text-main;
-
-      &:hover {
-        background:  #f1f5f9;
-      }
-    }
-
-    a {
-      background: #eff6ff;
-      color: $color-primary;
-      border: 1px solid #bfdbfe;
-
-      &:hover {
-        background: #dbeafe;
-      }
-    }
-
-    button:last-of-type {
-      background: transparent;
-      border: 1px solid #fca5a5;
-      color: $danger-color;
-
-      &:hover {
-        background: #fee2e2;
-      }
-    }
   }
 }

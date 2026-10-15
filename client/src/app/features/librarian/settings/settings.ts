@@ -21,7 +21,7 @@ export interface SettingsProps {
   styleUrl: './settings.scss',
 })
 export class Settings implements OnInit {
-  activeSection: SettingsSection = '';
+  activeSection: SettingsSection | null = null;
   form = new FormGroup<Record<string, FormControl>>({});
   groups: { name: SettingsSection; items: SettingsProps[] }[] = [];
   settingsService = inject(SettingsService);
@@ -37,7 +37,8 @@ export class Settings implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.groups, "groups");
+    console.log(this.activeSection, 'active');
+    console.log(this.groups, 'groups');
     this.load();
   }
 
@@ -161,7 +162,7 @@ export class Settings implements OnInit {
   }
 
   private buildGroups(list: SettingsProps[]) {
-    const map = new Map<string, SettingsProps[]>();
+    const map = new Map<any, SettingsProps[]>();
     list.forEach((l) => {
       const prefix = l.key.split('.')[0];
       map.set(prefix, [...(map.get(prefix) ?? []), l]);

@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { MatButton } from '@angular/material/button';
 import { SettingsProps, SettingsSection } from '../settings';
 
 @Component({
@@ -15,14 +13,12 @@ import { SettingsProps, SettingsSection } from '../settings';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggle,
-    MatButton,
   ],
   templateUrl: './settings-form.html',
   styleUrl: './settings-form.scss',
 })
 export class SettingsForm implements OnChanges {
-  @Input() section?: string;
+  @Input() section!: SettingsSection;
   @Input() form!: FormGroup<Record<string, FormControl>>;
   @Input() groups: { name: SettingsSection; items: SettingsProps[] }[] = [];
   @Input() initialValues: Record<string, unknown> = {};
@@ -31,6 +27,7 @@ export class SettingsForm implements OnChanges {
   readonly saving = input<boolean>();
 
   @Output() saveClicked: EventEmitter<void> = new EventEmitter();
+  @Output() sectionChange: EventEmitter<SettingsSection> = new EventEmitter();
 
   readonly meta: Record<string, { unit?: string; step?: number }> = {
     'fines.per_day_amount': { unit: 'PLN', step: 0.01 },
@@ -54,6 +51,10 @@ export class SettingsForm implements OnChanges {
     if (changes['groups']) {
       console.log('Nowa wartość input:', changes['groups'].currentValue);
       //console.log('Nowa wartość input:', changes['groups'].currentValue);
+    }
+
+    if (changes['section']) {
+      console.log('Nowa wartość input:', changes['section'].currentValue);
     }
   }
 

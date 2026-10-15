@@ -1,9 +1,7 @@
 <div class="settings-page">
   <header class="page-header">
-    <div>
-      <h1>Ustawienia</h1>
-      <p>Konfiguracja zasad działania biblioteki</p>
-    </div>
+    <h1>Ustawienia</h1>
+    <p>Konfiguracja zasad działania biblioteki</p>
   </header>
 
   <div class="settings-layout">
@@ -13,52 +11,67 @@
           type="button"
           class="settings-nav-item"
           [class.active]="activeSection === 'loans'"
-          (click)="setSection('loans')">
+          (click)="setSection('loans')"
+        >
           Wypożyczenia
         </button>
+
         <button
           type="button"
           class="settings-nav-item"
           [class.active]="activeSection === 'fines'"
-          (click)="setSection('fines')">
+          (click)="setSection('fines')"
+        >
           Opłaty
         </button>
+
         <button
           type="button"
           class="settings-nav-item"
           [class.active]="activeSection === 'holds'"
-          (click)="setSection('holds')">
+          (click)="setSection('holds')"
+        >
           Rezerwacje
         </button>
+
         <button
           type="button"
           class="settings-nav-item"
           [class.active]="activeSection === 'notifications'"
-          (click)="setSection('notifications')">
+          (click)="setSection('notifications')"
+        >
           Powiadomienia
         </button>
+
         <button
           type="button"
           class="settings-nav-item"
           [class.active]="activeSection === 'library'"
-          (click)="setSection('library')">
+          (click)="setSection('library')"
+        >
           Biblioteka
         </button>
       </nav>
     </aside>
 
-
-    <main class="settings-content">
+    <section class="settings-content" aria-label="Panel ustawień">
       @if (loading()) {
-        <p>Ładowanie ustawień...</p>
+        <p class="status-message" role="status">
+          Ładowanie ustawień...
+        </p>
       } @else if (errorDataMessage()) {
-        <div class="alert alert-error">{{ errorDataMessage() }}</div>
+        <div class="status-message error-message" role="alert">
+          {{ errorDataMessage() }}
+        </div>
       } @else {
         @if (!activeSection) {
-          <h3 class="panel-title">Wybierz kategorię ustawień</h3>
+          <p class="status-message">
+            Wybierz kategorię ustawień z menu.
+          </p>
         } @else {
           <app-settings-form
             [section]="activeSection"
+            (sectionChange)="setSection($event)"
             [form]="form"
             [groups]="groups"
             [initialValues]="initial"
@@ -66,10 +79,9 @@
             [errorMessage]="errorMessage()"
             [saving]="saving()"
             (saveClicked)="save()"
-          >
-          </app-settings-form>
+          ></app-settings-form>
         }
       }
-    </main>
+    </section>
   </div>
 </div>
