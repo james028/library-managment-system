@@ -1,4 +1,12 @@
-import { Component, EventEmitter, input, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  input,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,12 +16,7 @@ import { SettingsProps, SettingsSection } from '../settings';
 @Component({
   selector: 'app-settings-form',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule],
   templateUrl: './settings-form.html',
   styleUrl: './settings-form.scss',
 })
@@ -47,14 +50,6 @@ export class SettingsForm implements OnChanges {
     if (changes['activeGroup']) {
       console.log('Nowa wartość input:', changes['activeGroup'].currentValue);
       //console.log('Nowa wartość input:', changes['groups'].currentValue);
-    }
-    if (changes['groups']) {
-      console.log('Nowa wartość input:', changes['groups'].currentValue);
-      //console.log('Nowa wartość input:', changes['groups'].currentValue);
-    }
-
-    if (changes['section']) {
-      console.log('Nowa wartość input:', changes['section'].currentValue);
     }
   }
 

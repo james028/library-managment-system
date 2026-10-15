@@ -115,7 +115,7 @@ export class LoansService {
 
   getUserProfileMock(): Observable<LoanMock[]> {
     return of(loans).pipe(
-      delay(400), // opóźnienie 400ms, żeby zobaczyć np. loader, jeśli go masz
+      delay(400)
     );
   }
 }

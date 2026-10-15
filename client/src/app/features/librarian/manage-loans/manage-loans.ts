@@ -163,7 +163,13 @@ export class ManageLoans {
     switchMap((query) =>
       this.loansService.getUserProfileMock().pipe(
         tap((a) => console.log(a, "a")),
-        map((result): any => ({
+        map((result): {
+          items: LoanMock[];
+          total: number;
+          query: { search: string; page: number; pageSize: number };
+          loading: boolean;
+          error: null
+        } => ({
           items: result,
           total: result.length,
           query,
@@ -172,15 +178,15 @@ export class ManageLoans {
         })),
         tap((a) => console.log(a, "b")),
         catchError(() =>
-          of<any>({
+          of({
             items: [],
             total: 0,
             query,
             loading: false,
-            error: 'Nie udało się pobrać książek.',
+            error: 'Nie udało się pobrać danych',
           }),
         ),
-        startWith<any>({
+        startWith({
           items: [],
           total: 0,
           query,
