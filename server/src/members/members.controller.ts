@@ -1,12 +1,17 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Query, Post } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { MembersService } from './members.service.js';
 import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.js';
+import { CreateMemberDto } from './dto/create-member.dto.js';
+import {
+  CurrentUser
+} from '../common/decorators/current-user.decorator.js';
+import type { CurrentUserPayload } from '../common/decorators/current-user.decorator.js';
+
 
 @Controller('members')
 export class MembersController {
-  constructor(private readonly membersService: MembersService) {
-  }
+  constructor(private readonly membersService: MembersService) {}
 
   @Get()
   @ApiOperation({
@@ -15,5 +20,18 @@ export class MembersController {
   })
   getAllMembers(@Query() query: any): Promise<PaginatedMembers> {
     return this.membersService.getMembers(query);
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: 'Create member',
+    description: 'Crate a new member',
+  })
+  createNewMember(
+    @Body() dto: CreateMemberDto,
+    @CurrentUser() user: CurrentUserPayload
+  ) {
+    console.log(user);
+    return this.membersService.createMember(user.userId, dto);
   }
 }
