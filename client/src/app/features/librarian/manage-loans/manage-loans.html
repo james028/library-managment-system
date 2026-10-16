@@ -18,7 +18,7 @@
 @if (vm$ | async; as vm) {
   <app-data-table
     [rows]="vm.items"
-    [columns]="$any(loanColumns)"
+    [columns]="loansColumns"
     [total]="vm.total"
     [page]="vm.query.page"
     [pageSize]="vm.query.pageSize"

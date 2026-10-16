@@ -1,13 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { combineLatest, map, tap } from 'rxjs';
-import { LoansService, Loan } from '../../../core/services/LoansService.js';
-import { FinesService, Fine } from '../../../core/services/FinesService.js';
+import { FinesService } from '../../../core/services/FinesService.js';
+import { LoansService } from '../../librarian/manage-loans/LoansService';
+import { LoanView } from '../../librarian/manage-loans/models/loan-model';
 
-interface LoanView extends Loan {
-  isOverdue: boolean;
-  fine?: Fine;
-}
 
 @Component({
   selector: 'app-my-loans',

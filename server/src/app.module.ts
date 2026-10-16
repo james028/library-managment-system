@@ -12,6 +12,7 @@ import { ReservationsService } from './reservations/reservations.service.js';
 import { ReservationsModule } from './reservations/reservations.module.js';
 import { FinesModule } from './fines/fines.module.js';
 import { SettingsModule } from './settings/settings.module.js';
+import { MembersModule } from './members/members.module.js';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SettingsModule } from './settings/settings.module.js';
     ReservationsModule,
     FinesModule,
     SettingsModule,
+    MembersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
