@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Query, Post } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { Body, Controller, Get, Query, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { MembersService } from './members.service.js';
 import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.js';
 import { CreateMemberDto } from './dto/create-member.dto.js';
@@ -7,9 +7,13 @@ import {
   CurrentUser
 } from '../common/decorators/current-user.decorator.js';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator.js';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { RolesGuard } from '../auth/guards/roles.guards.js';
 
 
 @Controller('members')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth()
 export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
