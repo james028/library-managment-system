@@ -1,20 +1,48 @@
 <header class="app-header">
-  <nav>
-    <div>Moja Biblioteka</div>
-    <a routerLink="/profile" routerLinkActive="active">
-      Profil
-    </a>
-  </nav>
+  <a class="header-brand" routerLink="/">
+    Moja Biblioteka
+  </a>
 
-  <div class="user-info">
-    <span>
-      {{ authService.user()?.firstName }}
-      ({{ authService.user()?.role }})
-    </span>
+  <div class="header-right">
+    <nav class="header-nav" aria-label="Nawigacja główna">
+      @for (item of headerItems(); track item.page) {
+        <a
+          class="header-link"
+          [class.header-link-primary]="item.primary"
+          [routerLink]="item.page"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </nav>
 
-    <button type="button" (click)="logout()">
-      Wyloguj
-    </button>
+    @if (authService.user(); as user) {
+      <div class="header-user">
+        <div class="header-user-details">
+          <span class="header-user-name">
+            {{ user.firstName }} {{ user.lastName }}
+          </span>
+
+          <span class="header-user-email">
+            {{ user.email }}
+          </span>
+        </div>
+
+        <span class="header-user-role">
+          {{ user.role }}
+        </span>
+
+        <button
+          class="header-logout"
+          type="button"
+          (click)="logout()"
+        >
+          Wyloguj
+        </button>
+      </div>
+    }
   </div>
 </header>
 

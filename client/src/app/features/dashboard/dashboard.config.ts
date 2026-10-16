@@ -10,6 +10,7 @@ import { ManageBooks } from '../librarian/manage-books/manage-books';
 import { AdminPanel } from '../librarian/admin-panel/admin-panel';
 import { ManageLoans } from '../librarian/manage-loans/manage-loans';
 import { Settings } from '../librarian/settings/settings';
+import { Members } from '../librarian/members/members';
 
 export type ActiveTab =
   | 'catalog'
@@ -22,7 +23,8 @@ export type ActiveTab =
   | 'panel'
   | 'manage-books'
   | 'manage-loans'
-  | 'settings';
+  | 'settings'
+  | 'members';
 
 export interface TabConfig {
   id: ActiveTab;
@@ -43,5 +45,7 @@ export const LIBRARIAN_TABS: TabConfig[] = [
   { id: 'panel', label: 'Panel Główny Admina', component: AdminPanel },
   { id: 'manage-books', label: 'Zarządzaj Książkami', component: ManageBooks },
   { id: 'manage-loans', label: 'Zarządzaj Wypożyczeniami', component: ManageLoans },
+  { id: 'members', label: 'Czytelnicy', component: Members },
   { id: 'settings', label: 'Ustawienia', component: Settings },
+
 ];

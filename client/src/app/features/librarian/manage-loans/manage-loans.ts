@@ -16,7 +16,7 @@ import { DataTable } from '../../../shared/ui/data-table/data-table';
 import { LOAN_COLUMNS } from './loan-columns';
 import { getLoanStatsLabel } from './loan-stats.constants';
 import { LoansSummary, LoanStatsEnum, LoanMock } from './models/loan-model';
-import { LoansService } from './LoansService';
+import { LoansService } from './loans-service';
 
 @Component({
   selector: 'app-manage-loans',

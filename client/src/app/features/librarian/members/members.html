@@ -1,0 +1,13 @@
+@if (vm$ | async; as vm) {
+  <app-data-table
+    [rows]="vm.items"
+    [columns]="memberColumns"
+    [total]="vm.total"
+    [page]="vm.query.page"
+    [pageSize]="vm.query.pageSize"
+    [loading]="vm.loading"
+    [error]="vm.error"
+
+  >
+  </app-data-table>
+}

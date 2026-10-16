@@ -10,17 +10,174 @@
   font-family: inherit;
 }
 
-header {
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.875rem 1.5rem;
+  background: $color-bg-surface;
+  border-bottom: 1px solid $color-border;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
 
-  nav {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    font-weight: 700;
-    font-size: 1.1rem;
+.header-brand {
+  flex-shrink: 0;
+  color: $color-primary;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 4px;
+  }
+}
+
+.header-right,
+.header-user {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.header-right {
+  margin-left: auto;
+}
+
+.app-header .header-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.app-header .header-nav .header-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: $color-text-muted;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: background-color 0.15s ease,
+  border-color 0.15s ease,
+  color 0.15s ease;
+
+  &:hover,
+  &.active {
+    background: #eff6ff;
     color: $color-primary;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+
+  &.header-link-primary {
+    background: $color-primary;
+    border-color: $color-primary;
+    color: #ffffff;
+
+    &:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
+  }
+}
+
+.header-user {
+  padding-left: 1rem;
+  border-left: 1px solid $color-border;
+}
+
+.header-user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.header-user-name {
+  color: $color-text-main;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.header-user-email {
+  color: $color-text-muted;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.header-user-role {
+  padding: 0.25rem 0.625rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: $color-primary;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.header-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  background: $color-bg-surface;
+  color: $color-danger-color;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 0.15s ease,
+  border-color 0.15s ease;
+
+  &:hover {
+    background: #fef2f2;
+    border-color: #fca5a5;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-danger-color;
+    outline-offset: 2px;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-header {
+    padding: 0.875rem 1rem;
+  }
+
+  .header-right {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .header-user {
+    width: 100%;
+    padding-top: 0.75rem;
+    padding-left: 0;
+    border-top: 1px solid $color-border;
+    border-left: 0;
   }
 }
 
