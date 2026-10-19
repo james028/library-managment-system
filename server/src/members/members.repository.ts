@@ -3,71 +3,75 @@ import { DatabaseService } from '../database/database.service.js';
 import { MemberQueryDto } from './dto/member-query.dto.js';
 import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.js';
 import { SqlQueryBuilder } from '../database/query-builder/sql-query-builder.js';
-
-//import selectMembersSql from '../sql/select.members.sql';
-
-export interface MemberDetails {
-  id: number;
-  //firstName: string;
-  //lastName: string;
-  //email: string;
-  cardNumber: string;
-  status: 'ACTIVE' | 'BLOCKED';
-  //activeLoans: number;
-  //activeReservations: number;
-  //unpaidFinesAmount: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Member, MemberDetails } from './interfaces/members.interface.dto.js';
 
 // Mapa: pole z DTO -> bezpieczna kolumna SQL.
 const MEMBER_SORT_COLUMNS = {
   createdAt: 'm.created_at',
-  lastName: 'm.last_name',
-  activeLoans: '"activeLoans"',
+  lastName: 'm.last_name', //you can add another parameters depends on what you want to sort
+  //activeLoans: '"activeLoans"',
 } as const;
 
 @Injectable()
 export class MembersRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  // @ts-ignore
   async findMembers(query: MemberQueryDto): Promise<PaginatedMembers> {
-    const filters = this.buildFilters(query);
-    const { whereSql, values } = filters;
+    const queryBuilder = this.buildFilters(query);
+    const { page, size } = query;
 
-    console.log(whereSql, query, values);
-    const offset = (query.page - 1) * query.size;
+    queryBuilder.setPagination({
+      page,
+      size,
+    });
+    const { whereSql, values, paginationSql, paginationValues } =
+      queryBuilder.buildPaginated();
 
-    //const sortColumn = MEMBER_SORT_COLUMNS[query.sortBy];
+    const sortColumn = MEMBER_SORT_COLUMNS[query.sortBy];
 
     const membersSql = `
         SELECT m.id,
 
-               m.card_number AS "cardNumber",
+               u.first_name  AS "firstName",
+               u.last_name   AS "lastName",
+               u.email,
 
+               m.card_number AS "cardNumber",
                m.status,
                m.created_at,
                m.updated_at
         FROM members m
+                 INNER JOIN users u ON u.id = m.user_id
             ${whereSql}
+        ORDER BY ${sortColumn} ${query.sortOrder} NULLS LAST, m.id ASC
+            ${paginationSql}
     `;
 
-    const membersResult = await this.databaseService.query(membersSql, values);
+    const membersResult = await this.databaseService.query<Member>(membersSql, [
+      ...values,
+      ...paginationValues,
+    ]);
 
-    // const selectMembersSql = readFileSync(
-    //   join(__dirname, 'sql', 'select-members.sql'),
-    //   'utf8',
-    // )
-    console.log(membersSql, values, membersResult.rows);
+    const countSql = `
+        SELECT COUNT(*) AS "totalItems"
+        FROM members m
+                 INNER JOIN users u ON u.id = m.user_id
+            ${whereSql};
+    `;
+
+    const countResult = await this.databaseService.query<{
+      totalItems: number;
+    }>(countSql, values);
+
+    const totalItems = Number(countResult.rows[0].totalItems);
+    const totalPages = Math.ceil(totalItems / query.size);
 
     return {
-      // @ts-ignore
       items: membersResult.rows,
-      page: 1,
-      size: 2,
-      totalItems: 3,
-      totalPages: 1,
+      page,
+      size,
+      totalItems,
+      totalPages,
     };
   }
 
@@ -111,20 +115,41 @@ export class MembersRepository {
 
   private buildFilters(query: MemberQueryDto) {
     const queryBuilder = new SqlQueryBuilder();
+    const { search, status, createdFrom, createdTo } = query;
 
-    queryBuilder.addSearchFilter(
-      ['m.first_name', 'm.last_name', 'm.card_number', 'm.email'],
-      query.search,
-    );
+    if (search) {
+      queryBuilder.addSearchFilter(
+        ['m.first_name', 'm.last_name', 'm.card_number', 'm.email'],
+        search,
+      );
+    }
 
     console.log(query, 'query');
 
-    queryBuilder.addFilter({
-      column: 'm.status',
-      operator: 'EQUAL',
-      value: query.status,
-    });
+    if (status) {
+      queryBuilder.addFilter({
+        column: 'm.status',
+        operator: 'EQUAL',
+        value: query.status,
+      });
+    }
 
-    return queryBuilder.build();
+    if (createdFrom) {
+      queryBuilder.addFilter({
+        column: 'm.created_at::DATE',
+        operator: 'GREATER_THAN_OR_EQUAL',
+        value: createdFrom,
+      });
+    }
+
+    if (createdTo) {
+      queryBuilder.addFilter({
+        column: 'm.created_at::DATE',
+        operator: 'LESS_THAN_OR_EQUAL',
+        value: createdTo,
+      });
+    }
+
+    return queryBuilder;
   }
 }

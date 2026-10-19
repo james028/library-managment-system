@@ -9,6 +9,7 @@ import {
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guards.js';
+import { MemberQueryDto } from './dto/member-query.dto.js';
 
 
 @Controller('members')
@@ -22,7 +23,7 @@ export class MembersController {
     summary: 'Get all settings',
     description: 'Returns list of all settings or by specific keys',
   })
-  getAllMembers(@Query() query: any): Promise<PaginatedMembers> {
+  getAllMembers(@Query() query: MemberQueryDto): Promise<PaginatedMembers> {
     return this.membersService.getMembers(query);
   }
 

@@ -5,6 +5,16 @@ export interface BuiltQuery {
   values: unknown[];
 }
 
+export interface PaginatedQuery extends BuiltQuery {
+  paginationSql: string;
+  paginationValues: unknown[];
+}
+
+export interface Pagination {
+  page: number;
+  size: number;
+}
+
 const OPERATOR_SQL = {
   EQUAL: '=',
   NOT_EQUAL: '<>',
@@ -15,6 +25,8 @@ const OPERATOR_SQL = {
 } as const;
 
 export class SqlQueryBuilder {
+  limit?: number;
+  offset?: number;
   private conditions: string[] = [];
   private values: unknown[] = [];
 
@@ -33,12 +45,8 @@ export class SqlQueryBuilder {
     // @ts-ignore
     const operatorSql = OPERATOR_SQL[filter.operator];
 
-    this.conditions.push(
-      `${filter.column} ${operatorSql} $${parameterIndex}`,
-    );
+    this.conditions.push(`${filter.column} ${operatorSql} $${parameterIndex}`);
     this.values.push(filter.value);
-
-    console.log("w add filter", this.conditions, this.values);
 
     return this;
   }
@@ -62,7 +70,14 @@ export class SqlQueryBuilder {
     return this;
   }
 
-  build(): BuiltQuery {
+  setPagination({ page, size }: Pagination) {
+    this.offset = (page - 1) * size;
+    this.limit = size;
+
+    return this;
+  }
+
+  buildPaginated(): PaginatedQuery {
     const whereSql = this.conditions.length
       ? `WHERE ${this.conditions.join(' AND ')}`
       : '';
@@ -70,6 +85,8 @@ export class SqlQueryBuilder {
     return {
       whereSql,
       values: this.values,
+      paginationSql: `LIMIT $${this.values.length + 1} OFFSET $${this.values.length + 2}`,
+      paginationValues: [this.limit, this.offset],
     };
   }
 }

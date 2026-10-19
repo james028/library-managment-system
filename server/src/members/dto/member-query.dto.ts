@@ -1,5 +1,13 @@
 import { Type } from 'class-transformer';
-import { IsOptional, IsString, IsIn, IsInt, Min, Max } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsIn,
+  IsInt,
+  Min,
+  Max,
+  IsDateString,
+} from 'class-validator';
 
 export class MemberQueryDto {
   @IsOptional()
@@ -9,6 +17,14 @@ export class MemberQueryDto {
   @IsOptional()
   @IsIn(['ACTIVE', 'BLOCKED'])
   status?: 'ACTIVE' | 'BLOCKED';
+
+  @IsOptional()
+  @IsDateString()
+  createdFrom?: string;
+
+  @IsOptional()
+  @IsDateString()
+  createdTo?: string;
 
   @IsOptional()
   @Type(() => Number)
@@ -26,4 +42,9 @@ export class MemberQueryDto {
   @IsOptional()
   @IsIn(['ASC', 'DESC'])
   sortOrder: 'ASC' | 'DESC' = 'DESC';
+
+
+  @IsOptional()
+  @IsIn(['createdAt', 'lastName'])
+  sortBy: 'createdAt' | 'lastName' = 'createdAt';
 }

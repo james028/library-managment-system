@@ -1,8 +1,13 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
-import { MemberDetails, MembersRepository } from './members.repository.js';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
+import { MembersRepository } from './members.repository.js';
 import { MemberQueryDto } from './dto/member-query.dto.js';
 import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.js';
 import { CreateMemberDto } from './dto/create-member.dto.js';
+import { MemberDetails } from './interfaces/members.interface.dto.js';
 
 const MIN_SEARCH_LENGTH = 2;
 
