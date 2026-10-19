@@ -8,7 +8,8 @@ import { Member, MemberDetails } from './interfaces/members.interface.dto.js';
 // Mapa: pole z DTO -> bezpieczna kolumna SQL.
 const MEMBER_SORT_COLUMNS = {
   createdAt: 'm.created_at',
-  lastName: 'm.last_name', //you can add another parameters depends on what you want to sort
+  lastName: 'm.last_name',
+  //you can add another parameters depends on what you want to sort
   //activeLoans: '"activeLoans"',
 } as const;
 
