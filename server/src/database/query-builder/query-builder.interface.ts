@@ -7,16 +7,29 @@ export type QueryFilterOperator =
   | 'LESS_THAN_OR_EQUAL'
   | 'EXISTS';
 
-export interface QueryFilter {
+export type QueryFilter =
+  | {
   column: string;
-  operator:
-    | 'EQUAL'
-    | 'NOT_EQUAL'
-    | 'LIKE'
-    | 'ILIKE'
-    | 'GREATER_THAN_OR_EQUAL'
-    | 'LESS_THAN_OR_EQUAL'
-    | 'EXISTS';
+  operator: QueryFilterOperator;
+  value: unknown;
+}
+  | {
+  column: string;
+  operator: 'EXISTS';
+  value: boolean;
+};
 
-  value?: unknown;
+export interface BuiltQuery {
+  whereSql: string;
+  values: unknown[];
+}
+
+export interface PaginatedQuery extends BuiltQuery {
+  paginationSql: string;
+  paginationValues: unknown[];
+}
+
+export interface Pagination {
+  page: number;
+  size: number;
 }

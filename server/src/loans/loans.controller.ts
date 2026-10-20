@@ -23,7 +23,6 @@ export class LoansController {
   findMyLoans(
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    console.log(user, "user");
     return this.loansService.findMyLoans(user.userId);
   }
 

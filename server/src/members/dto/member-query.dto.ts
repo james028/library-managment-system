@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsOptional,
   IsString,
@@ -6,7 +6,7 @@ import {
   IsInt,
   Min,
   Max,
-  IsDateString,
+  IsDateString, IsBoolean,
 } from 'class-validator';
 
 export class MemberQueryDto {
@@ -25,6 +25,16 @@ export class MemberQueryDto {
   @IsOptional()
   @IsDateString()
   createdTo?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
+  hasOverdueLoans?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
+  hasUnpaidFines?: boolean;
 
   @IsOptional()
   @Type(() => Number)

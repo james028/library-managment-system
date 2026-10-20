@@ -4,14 +4,7 @@ import { MemberQueryDto } from './dto/member-query.dto.js';
 import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.js';
 import { SqlQueryBuilder } from '../database/query-builder/sql-query-builder.js';
 import { Member, MemberDetails } from './interfaces/members.interface.dto.js';
-
-// Mapa: pole z DTO -> bezpieczna kolumna SQL.
-const MEMBER_SORT_COLUMNS = {
-  createdAt: 'm.created_at',
-  lastName: 'm.last_name',
-  //you can add another parameters depends on what you want to sort
-  //activeLoans: '"activeLoans"',
-} as const;
+import { EXISTS_SQL, MEMBER_SORT_COLUMNS } from './members.query.config.js';
 
 @Injectable()
 export class MembersRepository {
@@ -32,21 +25,30 @@ export class MembersRepository {
 
     const membersSql = `
         SELECT m.id,
-
-               u.first_name  AS "firstName",
-               u.last_name   AS "lastName",
+               u.first_name                  AS "firstName",
+               u.last_name                   AS "lastName",
                u.email,
-
-               m.card_number AS "cardNumber",
+               m.card_number                 AS "cardNumber",
                m.status,
                m.created_at,
-               m.updated_at
+               m.updated_at,
+               (SELECT COUNT(*)::int
+                FROM loans l
+                WHERE l.user_id = m.user_id
+                  AND l.returned_at IS NULL) AS "activeLoans",
+               (SELECT COALESCE(SUM(f.amount), 0)
+                FROM fines f
+                         INNER JOIN loans l ON l.id = f.loan_id
+                WHERE l.user_id = m.user_id
+                  AND f.paid = false)        AS "totalUnpaidFinesAmount"
         FROM members m
                  INNER JOIN users u ON u.id = m.user_id
             ${whereSql}
         ORDER BY ${sortColumn} ${query.sortOrder} NULLS LAST, m.id ASC
             ${paginationSql}
     `;
+
+    console.log(membersSql);
 
     const membersResult = await this.databaseService.query<Member>(membersSql, [
       ...values,
@@ -116,7 +118,14 @@ export class MembersRepository {
 
   private buildFilters(query: MemberQueryDto) {
     const queryBuilder = new SqlQueryBuilder();
-    const { search, status, createdFrom, createdTo } = query;
+    const {
+      search,
+      status,
+      createdFrom,
+      createdTo,
+      hasOverdueLoans,
+      hasUnpaidFines,
+    } = query;
 
     if (search) {
       queryBuilder.addSearchFilter(
@@ -124,8 +133,6 @@ export class MembersRepository {
         search,
       );
     }
-
-    console.log(query, 'query');
 
     if (status) {
       queryBuilder.addFilter({
@@ -148,6 +155,22 @@ export class MembersRepository {
         column: 'm.created_at::DATE',
         operator: 'LESS_THAN_OR_EQUAL',
         value: createdTo,
+      });
+    }
+
+    if (hasOverdueLoans === true) {
+      queryBuilder.addFilter({
+        column: EXISTS_SQL.hasOverdueLoans,
+        operator: 'EXISTS',
+        value: true,
+      });
+    }
+
+    if (hasUnpaidFines === true) {
+      queryBuilder.addFilter({
+        column: EXISTS_SQL.hasUnpaidFines,
+        operator: 'EXISTS',
+        value: true,
       });
     }
 

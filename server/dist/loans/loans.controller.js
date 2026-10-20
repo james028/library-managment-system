@@ -24,7 +24,6 @@ let LoansController = class LoansController {
         this.loansService = loansService;
     }
     findMyLoans(user) {
-        console.log(user, "user");
         return this.loansService.findMyLoans(user.userId);
     }
     borrow(dto) {

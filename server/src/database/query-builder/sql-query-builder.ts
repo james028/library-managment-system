@@ -1,19 +1,8 @@
-import { QueryFilter } from './query-builder.interface.js';
-
-export interface BuiltQuery {
-  whereSql: string;
-  values: unknown[];
-}
-
-export interface PaginatedQuery extends BuiltQuery {
-  paginationSql: string;
-  paginationValues: unknown[];
-}
-
-export interface Pagination {
-  page: number;
-  size: number;
-}
+import {
+  PaginatedQuery,
+  Pagination,
+  QueryFilter,
+} from './query-builder.interface.js';
 
 const OPERATOR_SQL = {
   EQUAL: '=',
@@ -38,11 +27,12 @@ export class SqlQueryBuilder {
     const parameterIndex = this.values.length + 1;
 
     if (filter.operator === 'EXISTS') {
-      this.conditions.push(filter.column);
-      this.values.push(filter.value);
-    }
+      if (filter.value === true) {
+        this.conditions.push(filter.column);
+      }
 
-    // @ts-ignore
+      return this;
+    }
     const operatorSql = OPERATOR_SQL[filter.operator];
 
     this.conditions.push(`${filter.column} ${operatorSql} $${parameterIndex}`);
