@@ -1,10 +1,10 @@
 import { ColumnDef } from '../../../shared/ui/data-table/data-table';
-import { MemberMock } from './interfaces/members.interface';
+import { Member } from './interfaces/members.interface';
 
-export const MEMBER_COLUMNS: ColumnDef<MemberMock>[] = [
+export const MEMBER_COLUMNS: ColumnDef<Member>[] = [
   {
     key: 'id',
-    header: 'ID',
+    header: 'Id',
     align: 'left',
   },
   {
@@ -21,15 +21,41 @@ export const MEMBER_COLUMNS: ColumnDef<MemberMock>[] = [
     header: 'Email',
   },
   {
-    key: 'phone',
-    header: 'Telefon',
+    key: 'status',
+    header: 'Status konta',
+    accessor: (row) => row.status,
+    format: (value) =>
+      ({
+        ACTIVE: 'Aktywne',
+        BLOCKED: 'Zablokowane',
+      })[value as 'BLOCKED' | 'ACTIVE'] ?? String(value),
   },
-  // {
-  //   key: 'borrowedAt',
-  //   header: 'Data wypożyczenia',
-  //   accessor: (row) => row.borrowedAt,
-  //   format: (value) => new Date(value as string).toLocaleDateString('pl-PL'),
-  // },
+  {
+    key: 'email',
+    header: 'Email',
+  },
+  {
+    key: 'activeLoans',
+    header: 'Aktywne wypożyczenia',
+    accessor: (row) => (+row.activeLoans),
+  },
+  {
+    key: 'totalUnpaidFinesAmount',
+    header: 'Kwota niezapłaconych kar',
+    accessor: (row) => `${+row.totalUnpaidFinesAmount} zł`,
+  },
+  {
+    key: 'createdAt',
+    header: 'Data stworzenia czytelnika',
+    accessor: (row) => row.createdAt,
+    format: (value) => new Date(value as string).toLocaleDateString('pl-PL'),
+  },
+  {
+    key: 'updatedAt',
+    header: 'Data aktualizacji danych czytelnika',
+    accessor: (row) => row.updatedAt,
+    format: (value) => new Date(value as string).toLocaleDateString('pl-PL'),
+  },
   // {
   //   key: 'dueAt',
   //   header: 'Termin zwrotu',

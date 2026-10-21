@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MEMBERS_MOCK } from './mock/members.mock';
-import { MemberMock } from './interfaces/members.interface';
-
+import { PaginatedMember } from './interfaces/members.interface';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 export const PAGINATED_MEMBERS_MOCK: any = {
   items: MEMBERS_MOCK,
@@ -17,7 +18,10 @@ export const PAGINATED_MEMBERS_MOCK: any = {
   providedIn: 'root',
 })
 export class MembersService {
-  getMembers(): Observable<MemberMock[]> {
-    return of(MEMBERS_MOCK);
+  private readonly baseUrl = `${environment.apiUrl}/members`;
+  constructor(private http: HttpClient) {}
+
+  getMembers(): Observable<PaginatedMember> {
+    return this.http.get<PaginatedMember>(`${this.baseUrl}`);
   }
 }

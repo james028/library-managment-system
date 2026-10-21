@@ -27,6 +27,9 @@ export class MembersController {
     required: false,
     enum: ['ACTIVE', 'BLOCKED'],
   })
+  @ApiQuery({ name: 'createdFrom', required: false, type: Date })
+  @ApiQuery({ name: 'createdTo', required: false, type: Date })
+  @ApiQuery({ name: 'hasActiveLoans', required: false, type: Boolean })
   @ApiQuery({ name: 'hasOverdueLoans', required: false, type: Boolean })
   @ApiQuery({
     name: 'hasUnpaidFines',
@@ -53,7 +56,6 @@ export class MembersController {
     @Body() dto: CreateMemberDto,
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    console.log(user);
-    return this.membersService.createMember(user.userId, dto);
+    return this.membersService.createMember(user, dto);
   }
 }

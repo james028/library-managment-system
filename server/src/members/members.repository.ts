@@ -30,8 +30,8 @@ export class MembersRepository {
                u.email,
                m.card_number                 AS "cardNumber",
                m.status,
-               m.created_at,
-               m.updated_at,
+               m.created_at AS "createdAt",
+               m.updated_at AS "updatedAt",
                (SELECT COUNT(*)::int
                 FROM loans l
                 WHERE l.user_id = m.user_id
@@ -125,11 +125,12 @@ export class MembersRepository {
       createdTo,
       hasOverdueLoans,
       hasUnpaidFines,
+      hasActiveLoans
     } = query;
 
     if (search) {
       queryBuilder.addSearchFilter(
-        ['m.first_name', 'm.last_name', 'm.card_number', 'm.email'],
+        ['u.first_name', 'u.last_name', 'm.card_number', 'u.email'],
         search,
       );
     }
@@ -169,6 +170,14 @@ export class MembersRepository {
     if (hasUnpaidFines === true) {
       queryBuilder.addFilter({
         column: EXISTS_SQL.hasUnpaidFines,
+        operator: 'EXISTS',
+        value: true,
+      });
+    }
+
+    if (hasActiveLoans === true) {
+      queryBuilder.addFilter({
+        column: EXISTS_SQL.hasActiveLoans,
         operator: 'EXISTS',
         value: true,
       });

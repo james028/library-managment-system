@@ -1,1 +1,68 @@
-<p>table-filters works!</p>
+<form
+  [formGroup]="form"
+  class="filters"
+>
+  @for (field of config; track field.key) {
+    <div class="filter-field">
+      @if (field.kind !== 'boolean') {
+        <label [attr.for]="field.key">
+          {{ field.label }}
+        </label>
+      }
+
+      @switch (field.kind) {
+        @case ('text') {
+          <input
+            [id]="field.key"
+            [placeholder]="field.placeholder ?? ''"
+            type="search"
+            [formControlName]="field.key"
+          />
+        }
+        @case ('number') {
+          <input
+            [id]="field.key"
+            [placeholder]="field.placeholder ?? ''"
+            type="number"
+            [formControlName]="field.key"
+          />
+        }
+        @case ('select') {
+          <select
+            [id]="field.key"
+            [formControlName]="field.key"
+          >
+            <option value="">
+              -- wybierz --
+            </option>
+
+            @for (option of field.options ?? []; track option.value) {
+              <option [value]="option.value">
+                {{ option.label }}
+              </option>
+            }
+          </select>
+        }
+        @case ('date') {
+          <input
+            [id]="field.key"
+            type="date"
+            [formControlName]="field.key"
+          />
+        }
+        @case ('boolean') {
+          <label class="filter-checkbox">
+            <input
+              type="checkbox"
+              [formControlName]="field.key"
+            />
+
+            <span>
+              {{ field.placeholder ?? field.label }}
+            </span>
+          </label>
+        }
+      }
+    </div>
+  }
+</form>

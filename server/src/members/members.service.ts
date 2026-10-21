@@ -8,6 +8,7 @@ import { MemberQueryDto } from './dto/member-query.dto.js';
 import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.js';
 import { CreateMemberDto } from './dto/create-member.dto.js';
 import { MemberDetails } from './interfaces/members.interface.dto.js';
+import { CurrentUserPayload } from '../common/decorators/current-user.decorator.js';
 
 const MIN_SEARCH_LENGTH = 2;
 
@@ -22,11 +23,11 @@ export class MembersService {
   }
 
   async createMember(
-    userId: string,
+    user: CurrentUserPayload,
     dto: CreateMemberDto,
   ): Promise<MemberDetails> {
     const existingMember =
-      await this.membersRepository.findMemberByUserId(userId);
+      await this.membersRepository.findMemberByUserId(user.userId);
 
     if (existingMember) {
       throw new ConflictException(
@@ -34,7 +35,11 @@ export class MembersService {
       );
     }
 
-    return this.membersRepository.createMember(userId, dto.cardNumber);
+    if (user.role !== 'ADMIN') {
+      throw new ConflictException('Only members can have a library card.');
+    }
+
+    return this.membersRepository.createMember(user.userId, dto.cardNumber);
   }
 
   private normalizeQuery(query: MemberQueryDto): MemberQueryDto {

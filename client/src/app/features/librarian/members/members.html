@@ -1,3 +1,9 @@
+<app-table-filters
+  [config]="membersFilterConfig"
+  [value]="filtersForm"
+  (valueChange)="onFiltersChange($event)"
+/>
+
 @if (vm$ | async; as vm) {
   <app-data-table
     [rows]="vm.items"

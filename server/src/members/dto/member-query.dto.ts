@@ -29,6 +29,11 @@ export class MemberQueryDto {
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
+  hasActiveLoans?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
   hasOverdueLoans?: boolean;
 
   @IsOptional()
