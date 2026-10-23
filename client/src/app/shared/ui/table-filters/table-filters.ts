@@ -35,6 +35,9 @@ export class TableFilters implements OnInit {
 
   @Output() readonly valueChange =
     new EventEmitter<Record<string, unknown>>();
+  @Output() readonly apply = new EventEmitter<any>();
+  @Output() readonly reset = new EventEmitter<void>();
+
 
   readonly form = new FormGroup({});
 
@@ -44,9 +47,27 @@ export class TableFilters implements OnInit {
   ngOnInit() {
     this.buildForm();
 
-    this.form.valueChanges.subscribe((val) => {
-      this.valueChange.emit(val);
+    this.form.valueChanges.subscribe((values) => {
+      this.valueChange.emit(values);
     })
+  }
+
+  // applyFilters(): void {
+  //   this.apply.emit(this.form.getRawValue());
+  // }
+
+  resetFilters(): void {
+    this.form.reset(
+      Object.fromEntries(
+        this.config.map((field) => [
+          field.key,
+          field.kind === 'boolean' ? false : '',
+        ]),
+      ),
+      { emitEvent: false },
+    );
+
+    this.reset.emit();
   }
 
   private buildForm(): void {

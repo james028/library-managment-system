@@ -2,18 +2,19 @@
   [config]="membersFilterConfig"
   [value]="filtersForm"
   (valueChange)="onFiltersChange($event)"
-/>
+  (reset)="onResetFilters()"
+></app-table-filters>
 
-@if (vm$ | async; as vm) {
+@if (facade.vm$ | async; as vm) {
   <app-data-table
     [rows]="vm.items"
     [columns]="memberColumns"
     [total]="vm.total"
     [page]="vm.query.page"
-    [pageSize]="vm.query.pageSize"
+    [pageSize]="0"
     [loading]="vm.loading"
     [error]="vm.error"
-
+    (pageChange)="onChangePage($event)"
   >
   </app-data-table>
 }
