@@ -1,6 +1,7 @@
 <form
   [formGroup]="form"
   class="filters"
+  (ngSubmit)="applyFilters()"
 >
   @for (field of config; track field.key) {
     <div class="filter-field">

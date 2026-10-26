@@ -1,9 +1,11 @@
 <app-table-filters
   [config]="membersFilterConfig"
   [value]="filtersForm"
-  (valueChange)="onFiltersChange($event)"
+  (apply)="onApplySubmit($event)"
   (reset)="onResetFilters()"
 ></app-table-filters>
+
+<!--(valueChange)="onFiltersChange($event)"-->
 
 @if (facade.vm$ | async; as vm) {
   <app-data-table

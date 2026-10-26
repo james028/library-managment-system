@@ -14,16 +14,14 @@ export interface TableVm<TItem, TFilters> {
 }
 
 export interface TableQuery<TFilters> {
-  search: string;
+  //search: string;
   page: number;
   //pageSize: number;
   filters: TFilters;
 }
 
 export type TableAction<TFilters> =
-  //| { type: 'search'; search: string }
-  | { type: 'filters'; filters: TFilters }
-  | { type: 'resetFilters' }
+  | { type: 'apply'; filters: TFilters }
   | { type: 'page'; page: number }
-  | { type: 'refresh' }
-  | { type: 'apply', filters: TFilters };
+  | { type: 'resetFilters' }
+  | { type: 'refresh' };

@@ -3,8 +3,8 @@ import { AsyncPipe } from '@angular/common';
 import { DataTable } from '../../../shared/ui/data-table/data-table';
 import { MEMBER_COLUMNS } from './member-column';
 import { membersFilterConfig } from './members.config';
-import { FormBuilder } from '@angular/forms';
-import { TableFilters } from '../../../shared/ui/table-filters/table-filters';
+import { NonNullableFormBuilder } from '@angular/forms';
+import { FiltersFormValue, TableFilters } from '../../../shared/ui/table-filters/table-filters';
 import { MembersTableFacade } from './data-access/members-table.facade';
 
 @Component({
@@ -16,18 +16,16 @@ import { MembersTableFacade } from './data-access/members-table.facade';
   styleUrl: './members.scss',
 })
 export class Members implements OnInit {
-  fb = inject(FormBuilder);
+  readonly fb = inject(NonNullableFormBuilder);
   readonly facade = inject(MembersTableFacade);
 
   readonly membersFilterConfig = membersFilterConfig;
 
   filtersForm!: any;
-
   protected readonly memberColumns = MEMBER_COLUMNS;
 
-  onFiltersChange(filter: any): void {
-    this.filtersForm = filter;
-    this.facade.setFilters(filter);
+  onApplySubmit(value: FiltersFormValue): void {
+    this.facade.applySubmit(value as FiltersFormValue);
   }
 
   onResetFilters() {
@@ -39,9 +37,6 @@ export class Members implements OnInit {
   }
 
   ngOnInit(): void {
-    this.facade.vm$.subscribe((v) => {
-      console.log(v);
-    });
     this.buildForm();
   }
 

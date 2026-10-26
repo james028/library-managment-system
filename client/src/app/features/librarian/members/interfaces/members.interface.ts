@@ -1,3 +1,5 @@
+import { FormControl, FormGroup } from '@angular/forms';
+
 export interface MemberMock {
   id: number;
   firstName: string;
@@ -31,4 +33,27 @@ export interface PaginatedMember {
   size: number;
   totalItems: number;
   totalPages: number;
+}
+
+export type MembersFiltersForm = FormGroup<{
+  search: FormControl<string>;
+  status: FormControl<string>;
+  createdFrom: FormControl<string>;
+  createdTo: FormControl<string>;
+  hasActiveLoans: FormControl<boolean>;
+  hasOverdueLoans: FormControl<boolean>;
+  hasUnpaidFines: FormControl<boolean>;
+}>;
+
+export interface MembersFilters {
+  status: string;
+  createdFrom: string;
+  createdTo: string;
+  hasActiveLoans: boolean;
+  hasOverdueLoans: boolean;
+  hasUnpaidFines: boolean;
+}
+
+export interface MembersFiltersFormValue extends MembersFilters {
+  search: string;
 }
