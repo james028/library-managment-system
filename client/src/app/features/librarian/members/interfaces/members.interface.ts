@@ -27,14 +27,6 @@ export interface Member {
   totalUnpaidFinesAmount: string;
 }
 
-export interface PaginatedMember {
-  items: Member[];
-  page: number;
-  size: number;
-  totalItems: number;
-  totalPages: number;
-}
-
 export type MembersFiltersForm = FormGroup<{
   search: FormControl<string>;
   status: FormControl<string>;

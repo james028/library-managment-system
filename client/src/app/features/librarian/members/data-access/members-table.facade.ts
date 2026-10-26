@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MembersService } from './members.service';
-import { Member, MembersFilters } from '../interfaces/members.interface';
+import { MembersService, PaginatedMembers } from './members.service';
+import { Member, MembersFiltersFormValue } from '../interfaces/members.interface';
 import { BaseTableFacade } from '../../../../shared/table-state/base-table.facade';
 
 export interface BooksFilters {
@@ -10,10 +10,15 @@ export interface BooksFilters {
 }
 
 @Injectable()
-export class MembersTableFacade extends BaseTableFacade<Member, MembersFilters> {
+export class MembersTableFacade extends BaseTableFacade<
+  Member,
+  MembersFiltersFormValue,
+  PaginatedMembers
+> {
   constructor(private readonly membersService: MembersService) {
     super(
       {
+        search: '',
         status: '',
         createdFrom: '',
         createdTo: '',

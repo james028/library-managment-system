@@ -6,7 +6,12 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 export type FilterKind = 'text' | 'select' | 'number' | 'date' | 'boolean';
 
@@ -23,7 +28,10 @@ export interface FilterFieldConfig {
   options?: FilterOption[];
 }
 
-export type FiltersFormValue = Record<string, string | number | boolean | null>;
+export type FiltersFormValue = Record<
+  string,
+  string | number | boolean | null
+>;
 
 @Component({
   selector: 'app-table-filters',
@@ -34,28 +42,34 @@ export type FiltersFormValue = Record<string, string | number | boolean | null>;
   styleUrl: './table-filters.scss',
 })
 export class TableFilters implements OnInit {
-  @Output() readonly apply = new EventEmitter<FiltersFormValue>();
-  @Output() readonly reset = new EventEmitter<void>();
+  @Output()
+  readonly apply = new EventEmitter<FiltersFormValue>();
 
-  readonly form = new FormGroup({});
+  @Output()
+  readonly reset = new EventEmitter<void>();
+
+  form!: FormGroup;
+
   private pendingValue: FiltersFormValue | null = null;
   private isFormReady = false;
 
-  constructor(private readonly fb: FormBuilder) {}
-
   private _config: FilterFieldConfig[] = [];
+
+  constructor(private readonly fb: FormBuilder) {}
 
   get config(): FilterFieldConfig[] {
     return this._config;
   }
 
-  @Input() set config(config: FilterFieldConfig[]) {
+  @Input()
+  set config(config: FilterFieldConfig[]) {
     this._config = config;
     this.buildForm();
     this.patchPendingValue();
   }
 
-  @Input() set value(value: FiltersFormValue | null) {
+  @Input()
+  set value(value: FiltersFormValue | null) {
     this.pendingValue = value;
 
     if (this.isFormReady) {
@@ -71,6 +85,8 @@ export class TableFilters implements OnInit {
   }
 
   applyFilters(): void {
+    console.log(this.form.getRawValue(), '!!');
+
     this.apply.emit(this.form.getRawValue() as FiltersFormValue);
   }
 
@@ -83,15 +99,19 @@ export class TableFilters implements OnInit {
   }
 
   private buildForm(): void {
-    this.form.controls = {};
+    const controls: Record<
+      string,
+      FormControl<string | number | boolean | null>
+    > = {};
 
     for (const field of this._config) {
-      const control =
-        field.kind === 'boolean' ? this.fb.nonNullable.control(false) : this.fb.control('');
-
-      this.form.addControl(field.key, control);
+      controls[field.key] =
+        field.kind === 'boolean'
+          ? this.fb.nonNullable.control(false)
+          : this.fb.control('');
     }
 
+    this.form = new FormGroup(controls);
     this.isFormReady = true;
   }
 
@@ -119,11 +139,16 @@ export class TableFilters implements OnInit {
 
   private createInitialValue(): FiltersFormValue {
     return Object.fromEntries(
-      this._config.map((field) => [field.key, this.getInitialValueForKind(field.kind)]),
+      this._config.map((field) => [
+        field.key,
+        this.getInitialValueForKind(field.kind),
+      ]),
     ) as FiltersFormValue;
   }
 
-  private getInitialValueForKind(kind: FilterKind): string | boolean | number {
+  private getInitialValueForKind(
+    kind: FilterKind,
+  ): string | boolean | number {
     switch (kind) {
       case 'boolean':
         return false;
