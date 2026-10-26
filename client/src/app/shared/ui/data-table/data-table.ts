@@ -65,6 +65,7 @@ export class DataTable<T extends {id: string | number }> {
   }
 
   get totalPages(): number {
+    console.log(this.total, this.pageSize, "table");
     return Math.max(1, Math.ceil(this.total / this.pageSize));
   }
 }

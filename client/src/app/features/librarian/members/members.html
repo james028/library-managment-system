@@ -5,7 +5,6 @@
   (reset)="onResetFilters()"
 ></app-table-filters>
 
-<!--(valueChange)="onFiltersChange($event)"-->
 
 @if (facade.vm$ | async; as vm) {
   <app-data-table
@@ -13,7 +12,6 @@
     [columns]="memberColumns"
     [total]="vm.total"
     [page]="vm.query.page"
-    [pageSize]="0"
     [loading]="vm.loading"
     [error]="vm.error"
     (pageChange)="onChangePage($event)"
