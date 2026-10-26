@@ -4,7 +4,7 @@ import { DataTable } from '../../../shared/ui/data-table/data-table';
 import { MEMBER_COLUMNS } from './member-column';
 import { membersFilterConfig } from './members.config';
 import { NonNullableFormBuilder } from '@angular/forms';
-import { TableFilters } from '../../../shared/ui/table-filters/table-filters';
+import { FiltersFormValue, TableFilters } from '../../../shared/ui/table-filters/table-filters';
 import { MembersTableFacade } from './data-access/members-table.facade';
 import { MembersFiltersFormValue } from './interfaces/members.interface';
 
@@ -25,7 +25,7 @@ export class Members implements OnInit {
   filtersForm!: any;
   protected readonly memberColumns = MEMBER_COLUMNS;
 
-  onApplySubmit(value: MembersFiltersFormValue): void {
+  onApplySubmit(value: any): void {
     this.facade.applySubmit(value);
   }
 
