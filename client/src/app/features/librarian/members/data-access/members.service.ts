@@ -28,7 +28,9 @@ export class MembersService {
   ): Observable<any> {
     const params = buildHttpParams({
       page: query.page,
-      ...query.filters,
+      //...query.filters,
+      createdFrom: query.filters.createdFrom,
+      createdTo: query.filters.createdTo,
     });
 
     return this.http.get<PaginatedMember>(this.baseUrl, {
