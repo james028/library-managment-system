@@ -49,3 +49,10 @@ export interface MembersFilters {
 export interface MembersFiltersFormValue extends MembersFilters {
   search: string;
 }
+
+  export interface MemberEditValue {
+  firstName: string;
+  lastName: string;
+  email: string;
+  status: string;
+}

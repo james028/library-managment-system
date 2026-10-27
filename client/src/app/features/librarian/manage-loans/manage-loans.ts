@@ -16,17 +16,20 @@ import { DataTable } from '../../../shared/ui/data-table/data-table';
 import { LOAN_COLUMNS } from './loan-columns';
 import { getLoanStatsLabel } from './loan-stats.constants';
 import { LoansSummary, LoanStatsEnum, LoanMock } from './models/loan-model';
-import { LoansService } from './loans-service';
+import { LoansService } from './data-access/loans.service';
+import { LoansTableFacade } from './data-access/members-table.facade';
 
 @Component({
   selector: 'app-manage-loans',
   standalone: true,
+  providers: [LoansTableFacade],
   imports: [CommonModule, AsyncPipe, DataTable],
   templateUrl: './manage-loans.html',
   styleUrl: './manage-loans.scss',
 })
 export class ManageLoans {
   loansService = inject(LoansService);
+  readonly loansTableFacade = inject(LoansTableFacade);
 
   //readonly isFormOpen = signal(false);
   form: FormGroup;
@@ -46,64 +49,68 @@ export class ManageLoans {
     shareReplay(1),
   );
 
-  private readonly querySubject = new BehaviorSubject<{
-    search: string;
-    page: number;
-    pageSize: number;
-  }>({
-    search: '',
-    page: 1,
-    pageSize: 10,
-  });
-  readonly query$ = this.querySubject.asObservable();
+  // private readonly querySubject = new BehaviorSubject<{
+  //   search: string;
+  //   page: number;
+  //   pageSize: number;
+  // }>({
+  //   search: '',
+  //   page: 1,
+  //   pageSize: 10,
+  // });
+  // readonly query$ = this.querySubject.asObservable();
 
-  readonly vm$ = this.query$.pipe(
-    switchMap((query) =>
-      this.loansService.getUserProfileMock().pipe(
-        tap((a) => console.log(a, 'a')),
-        map(
-          (
-            result,
-          ): {
-            items: LoanMock[];
-            total: number;
-            query: { search: string; page: number; pageSize: number };
-            loading: boolean;
-            error: null;
-          } => ({
-            items: result,
-            total: result.length,
-            query,
-            loading: false,
-            error: null,
-          }),
-        ),
-        tap((a) => console.log(a, 'b')),
-        catchError(() =>
-          of({
-            items: [],
-            total: 0,
-            query,
-            loading: false,
-            error: 'Nie udało się pobrać danych',
-          }),
-        ),
-        startWith({
-          items: [],
-          total: 0,
-          query,
-          loading: true,
-          error: null,
-        }),
-      ),
-    ),
-  );
+  // readonly vm$ = this.query$.pipe(
+  //   switchMap((query) =>
+  //     this.loansService.getUserProfileMock().pipe(
+  //       tap((a) => console.log(a, 'a')),
+  //       map(
+  //         (
+  //           result,
+  //         ): {
+  //           items: LoanMock[];
+  //           total: number;
+  //           query: { search: string; page: number; pageSize: number };
+  //           loading: boolean;
+  //           error: null;
+  //         } => ({
+  //           items: result,
+  //           total: result.length,
+  //           query,
+  //           loading: false,
+  //           error: null,
+  //         }),
+  //       ),
+  //       tap((a) => console.log(a, 'b')),
+  //       catchError(() =>
+  //         of({
+  //           items: [],
+  //           total: 0,
+  //           query,
+  //           loading: false,
+  //           error: 'Nie udało się pobrać danych',
+  //         }),
+  //       ),
+  //       startWith({
+  //         items: [],
+  //         total: 0,
+  //         query,
+  //         loading: true,
+  //         error: null,
+  //       }),
+  //     ),
+  //   ),
+  // );
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       bookCopyId: ['', Validators.required],
       userId: ['', Validators.required],
     });
+
+    this.loansTableFacade.vm$.subscribe((e) => {
+      console.log(e, "eeeee");
+    })
   }
 
   edit(loan: LoanMock) {

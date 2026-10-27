@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MembersService, PaginatedMembers } from './members.service';
-import { Member, MembersFiltersFormValue } from '../interfaces/members.interface';
+import { Member, MemberEditValue, MembersFiltersFormValue } from '../interfaces/members.interface';
 import { BaseTableFacade } from '../../../../shared/table-state/base-table.facade';
-
-export interface BooksFilters {
-  title: string;
-  author: string;
-  publishedYear: string;
-}
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class MembersTableFacade extends BaseTableFacade<
@@ -28,5 +24,9 @@ export class MembersTableFacade extends BaseTableFacade<
       },
       (query) => membersService.getMembers(query),
     );
+  }
+
+  updateMember(id: number, values: Partial<MemberEditValue>): Observable<Member> {
+    return this.membersService.updateMember(id, values).pipe(tap(() => this.refresh()));
   }
 }

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { delay, Observable, of } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { Loan, LoanMock, LoansSummary, PaginatedLoans, LoanQuery } from './models/loan-model';
+import { environment } from '../../../../../environments/environment';
+import { Loan, LoanMock, LoansSummary, LoanQuery } from '../models/loan-model';
+import { Member, MembersFiltersFormValue } from '../../members/interfaces/members.interface';
+import { TableQuery } from '../../../../shared/table-state/table.types';
 
 
 const loans: LoanMock[] = [
@@ -41,6 +43,16 @@ const loans: LoanMock[] = [
   },
 ];
 
+export interface PaginatedResult<T> {
+  items: T[];
+  page: number;
+  size: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export type PaginatedLoans = PaginatedResult<Loan>;
+
 @Injectable({ providedIn: 'root' })
 export class LoansService {
   private readonly baseUrl = `${environment.apiUrl}/loans`;
@@ -55,7 +67,7 @@ export class LoansService {
     return this.http.get<LoansSummary>(`${this.baseUrl}/summary`);
   }
 
-  getLoans(query: LoanQuery): Observable<PaginatedLoans> {
+  getLoans(query: any): Observable<PaginatedLoans> {
     let params = new HttpParams();
 
     //zmienić na funcje pod dynamiczne wartośći
@@ -66,7 +78,17 @@ export class LoansService {
     return this.http.get<PaginatedLoans>(this.baseUrl, { params });
   }
 
-  getUserProfileMock(): Observable<LoanMock[]> {
-    return of(loans).pipe(delay(400));
+  getUserProfileMock(): Observable<PaginatedLoans> {
+    const c = of(loans).pipe(delay(400));
+
+
+    return {
+      // @ts-ignore
+      items: loans,
+      page: 1,
+      size: 3,
+      totalItems: null,
+      totalPages: null,
+    }
   }
 }

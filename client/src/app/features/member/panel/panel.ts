@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
-import { LoansService } from '../../librarian/manage-loans/loans-service';
+import { LoansService } from '../../librarian/manage-loans/data-access/loans.service';
 import { Fine, FinesService } from '../../../core/services/FinesService';
 import { Reservation, ReservationsService } from '../../../core/services/ReservationsService';
 import { CommonModule } from '@angular/common';

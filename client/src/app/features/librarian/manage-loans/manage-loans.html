@@ -15,13 +15,13 @@
 </div>
 
 
-@if (vm$ | async; as vm) {
+@if (loansTableFacade.vm$ | async; as vm) {
   <app-data-table
     [rows]="vm.items"
     [columns]="loansColumns"
     [total]="vm.total"
     [page]="vm.query.page"
-    [pageSize]="vm.query.pageSize"
+    [pageSize]="20"
     [loading]="vm.loading"
     [error]="vm.error"
 

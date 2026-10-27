@@ -42,6 +42,13 @@ export interface LoanView extends Loan {
   fine?: Fine;
 }
 
+export interface LoansFilters {
+  search: string;
+  status: string;
+  createdFrom: string;
+  createdTo: string;
+}
+
 export interface PaginatedLoans {
   items: LoanMock[];
   meta: {

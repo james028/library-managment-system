@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { combineLatest, map, tap } from 'rxjs';
 import { FinesService } from '../../../core/services/FinesService.js';
-import { LoansService } from '../../librarian/manage-loans/loans-service';
+import { LoansService } from '../../librarian/manage-loans/data-access/loans.service';
 import { LoanView } from '../../librarian/manage-loans/models/loan-model';
 
 

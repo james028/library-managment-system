@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Member, MembersFiltersFormValue } from '../interfaces/members.interface';
+import { Member, MemberEditValue, MembersFiltersFormValue } from '../interfaces/members.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import { buildHttpParams } from '../../../../shared/http/http-params.utils';
@@ -26,7 +26,6 @@ export class MembersService {
   constructor(private http: HttpClient) {}
 
   getMembers(query: TableQuery<MembersFiltersFormValue>): Observable<PaginatedMembers> {
-    console.log(query);
     const params = buildHttpParams({
       page: query.page,
       search: query.filters.search,
@@ -34,12 +33,16 @@ export class MembersService {
       createdTo: query.filters.createdTo,
       hasActiveLoans: query.filters.hasActiveLoans,
       hasOverdueLoans: query.filters.hasOverdueLoans,
-      hasUnpaidFines: query.filters.hasUnpaidFines
+      hasUnpaidFines: query.filters.hasUnpaidFines,
       //...query.filters,
     });
 
     return this.http.get<PaginatedMember>(this.baseUrl, {
       params,
     });
+  }
+
+  updateMember(id: number, value: Partial<MemberEditValue>): Observable<Member> {
+    return this.http.patch<Member>(`${this.baseUrl}/${id}`, value);
   }
 }

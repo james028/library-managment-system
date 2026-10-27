@@ -15,6 +15,17 @@
     [loading]="vm.loading"
     [error]="vm.error"
     (pageChange)="onChangePage($event)"
+    (edit)="onEdit($event)"
   >
   </app-data-table>
+}
+
+@if (selectedMember) {
+  <app-member-edit
+    [member]="selectedMember"
+    [saving]="saving"
+    [error]="saveError"
+    (save)="onSaveEdit($event)"
+    (cancel)="cancelEdit()"
+  ></app-member-edit>
 }
