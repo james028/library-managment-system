@@ -1,4 +1,5 @@
 import { DatabaseService } from '../database/database.service.js';
+import { QueryLoanDto } from './dto/query-loan.dto.js';
 export interface LoanRecord {
     id: string;
     book_copy_id: string;
@@ -30,4 +31,6 @@ export declare class LoansRepository {
     returnLoan(id: string, fineRatePerDay: number): Promise<LoanRecord | null>;
     findAllForUser(userId: string): Promise<LoanWithDetails[]>;
     returnSummaryData(): Promise<LoansSummary>;
+    returnAllLoans(query: QueryLoanDto): Promise<any>;
+    private buildFilters;
 }

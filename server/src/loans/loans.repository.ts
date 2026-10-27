@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service.js';
+import { QueryLoanDto } from './dto/query-loan.dto.js';
+import { SqlQueryBuilder } from '../database/query-builder/sql-query-builder.js';
 
 export interface LoanRecord {
   id: string;
@@ -173,5 +175,48 @@ export class LoansRepository {
     );
 
     return results.rows[0];
+  }
+
+  async returnAllLoans(query: QueryLoanDto): Promise<any> {
+    const queryBuilder = this.buildFilters(query);
+    const { page, size } = query;
+
+    queryBuilder.setPagination({
+      page,
+      size,
+    });
+    const { whereSql, values, paginationSql, paginationValues } =
+      queryBuilder.buildPaginated();
+
+    //const sortColumn = MEMBER_SORT_COLUMNS[query.sortBy];
+
+    const loansSql = `
+        SELECT l.id,
+               l.borrowed_at AS borrowedAt,
+               u.first_name,
+               bc.book_id,
+               bc.condition
+        FROM loans l
+                 INNER JOIN users u ON u.id = l.user_id
+                 INNER JOIN book_copies bc ON l.book_copy_id = bc.id
+           
+    `;
+
+    // ${whereSql} ${paginationSql}
+
+    console.log(loansSql);
+
+    const loansResult = await this.databaseService.query<any>(loansSql, [
+      ...values,
+      //...paginationValues,
+    ]);
+
+    console.log(loansResult);
+  }
+
+  private buildFilters(query: QueryLoanDto) {
+    const queryBuilder = new SqlQueryBuilder();
+
+    return queryBuilder;
   }
 }

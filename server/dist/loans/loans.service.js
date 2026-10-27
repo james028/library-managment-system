@@ -7,9 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { ConflictException, Injectable, NotFoundException, } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, } from '@nestjs/common';
 import { LoansRepository } from './loans.repository.js';
 const DEFAULT_LOAN_DAYS = 14;
+const MIN_SEARCH_LENGTH = 2;
 let LoansService = class LoansService {
     loansRepository;
     constructor(loansRepository) {
@@ -42,6 +43,22 @@ let LoansService = class LoansService {
     }
     returnSummary() {
         return this.loansRepository.returnSummaryData();
+    }
+    getAllLoans(query) {
+        const normalizedQuery = this.normalizeQuery(query);
+        return this.loansRepository.returnAllLoans(normalizedQuery);
+    }
+    normalizeQuery(query) {
+        const search = query.search?.trim();
+        if (search !== undefined &&
+            search.length > 0 &&
+            search.length < MIN_SEARCH_LENGTH) {
+            throw new BadRequestException(`Search phrase must contain at least ${MIN_SEARCH_LENGTH} characters.`);
+        }
+        return {
+            ...query,
+            search: search || undefined,
+        };
     }
 };
 LoansService = __decorate([

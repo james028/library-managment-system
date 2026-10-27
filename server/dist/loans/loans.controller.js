@@ -10,14 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Body, Controller, Param, Patch, Post, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards, } from '@nestjs/common';
 import { LoansService } from './loans.service.js';
 import { CreateLoanDto } from './dto/create.loan.dto.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags, } from '@nestjs/swagger';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guards.js';
+import { QueryLoanDto } from './dto/query-loan.dto.js';
 let LoansController = class LoansController {
     loansService;
     constructor(loansService) {
@@ -34,6 +35,9 @@ let LoansController = class LoansController {
     }
     summaryLoans() {
         return this.loansService.returnSummary();
+    }
+    getAllLoans(query) {
+        return this.loansService.getAllLoans(query);
     }
 };
 __decorate([
@@ -98,6 +102,42 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], LoansController.prototype, "summaryLoans", null);
+__decorate([
+    Get(),
+    ApiOperation({ summary: 'Get paginated loans' }),
+    ApiQuery({
+        name: 'search',
+        required: false,
+        type: String,
+    }),
+    ApiQuery({
+        name: 'status',
+        required: false,
+        enum: ['ACTIVE', 'OVERDUE', 'RETURNED'],
+    }),
+    ApiQuery({ name: 'borrowedFrom', required: false, type: Date }),
+    ApiQuery({
+        name: 'borrowedTo',
+        required: false,
+        type: Date,
+    }),
+    ApiQuery({ name: 'returnedFrom', required: false, type: Date }),
+    ApiQuery({
+        name: 'returnedTo',
+        required: false,
+        type: Date,
+    }),
+    ApiQuery({ name: 'page', required: false, type: Number }),
+    ApiQuery({
+        name: 'size',
+        required: false,
+        type: Number,
+    }),
+    __param(0, Query()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [QueryLoanDto]),
+    __metadata("design:returntype", Promise)
+], LoansController.prototype, "getAllLoans", null);
 LoansController = __decorate([
     ApiTags('Loans'),
     ApiBearerAuth(),

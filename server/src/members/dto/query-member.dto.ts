@@ -9,7 +9,7 @@ import {
   IsDateString, IsBoolean,
 } from 'class-validator';
 
-export class MemberQueryDto {
+export class QueryMemberDto {
   @IsOptional()
   @IsString()
   search?: string;

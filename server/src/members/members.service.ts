@@ -4,7 +4,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { MembersRepository } from './members.repository.js';
-import { MemberQueryDto } from './dto/member-query.dto.js';
+import { QueryMemberDto } from './dto/query-member.dto.js';
 import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.js';
 import { CreateMemberDto } from './dto/create-member.dto.js';
 import { MemberDetails } from './interfaces/members.interface.dto.js';
@@ -16,7 +16,7 @@ const MIN_SEARCH_LENGTH = 2;
 export class MembersService {
   constructor(private readonly membersRepository: MembersRepository) {}
 
-  async getMembers(query: MemberQueryDto): Promise<PaginatedMembers> {
+  async getMembers(query: QueryMemberDto): Promise<PaginatedMembers> {
     const normalizedQuery = this.normalizeQuery(query);
 
     return this.membersRepository.findMembers(normalizedQuery);
@@ -42,7 +42,7 @@ export class MembersService {
     return this.membersRepository.createMember(user.userId, dto.cardNumber);
   }
 
-  private normalizeQuery(query: MemberQueryDto): MemberQueryDto {
+  private normalizeQuery(query: QueryMemberDto): QueryMemberDto {
     const search = query.search?.trim();
 
     if (

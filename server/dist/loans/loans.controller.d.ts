@@ -1,6 +1,8 @@
 import { LoansService } from './loans.service.js';
 import { CreateLoanDto } from './dto/create.loan.dto.js';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator.js';
+import { PaginatedMembers } from '../members/interfaces/paginated-members.interface.dto.js';
+import { QueryLoanDto } from './dto/query-loan.dto.js';
 export declare class LoansController {
     private readonly loansService;
     constructor(loansService: LoansService);
@@ -8,4 +10,5 @@ export declare class LoansController {
     borrow(dto: CreateLoanDto): Promise<import("./loans.repository.js").LoanRecord | null>;
     returnLoan(id: string): Promise<import("./loans.repository.js").LoanRecord>;
     summaryLoans(): Promise<import("./loans.repository.js").LoansSummary>;
+    getAllLoans(query: QueryLoanDto): Promise<PaginatedMembers>;
 }

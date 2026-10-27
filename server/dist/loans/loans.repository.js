@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service.js';
+import { SqlQueryBuilder } from '../database/query-builder/sql-query-builder.js';
 let LoansRepository = class LoansRepository {
     databaseService;
     constructor(databaseService) {
@@ -111,6 +112,35 @@ let LoansRepository = class LoansRepository {
                   AND returned_at < CURRENT_DATE + INTERVAL '1 day' ) AS "returnedToday"
     `, []);
         return results.rows[0];
+    }
+    async returnAllLoans(query) {
+        const queryBuilder = this.buildFilters(query);
+        const { page, size } = query;
+        queryBuilder.setPagination({
+            page,
+            size,
+        });
+        const { whereSql, values, paginationSql, paginationValues } = queryBuilder.buildPaginated();
+        const loansSql = `
+        SELECT l.id,
+               l.borrowed_at AS borrowedAt,
+               u.first_name,
+               bc.book_id,
+               bc.condition
+        FROM loans l
+                 INNER JOIN users u ON u.id = l.user_id
+                 INNER JOIN book_copies bc ON l.book_copy_id = bc.id
+           
+    `;
+        console.log(loansSql);
+        const loansResult = await this.databaseService.query(loansSql, [
+            ...values,
+        ]);
+        console.log(loansResult);
+    }
+    buildFilters(query) {
+        const queryBuilder = new SqlQueryBuilder();
+        return queryBuilder;
     }
 };
 LoansRepository = __decorate([

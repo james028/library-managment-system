@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service.js';
-import { MemberQueryDto } from './dto/member-query.dto.js';
+import { QueryMemberDto } from './dto/query-member.dto.js';
 import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.js';
 import { SqlQueryBuilder } from '../database/query-builder/sql-query-builder.js';
 import { Member, MemberDetails } from './interfaces/members.interface.dto.js';
@@ -10,7 +10,7 @@ import { EXISTS_SQL, MEMBER_SORT_COLUMNS } from './members.query.config.js';
 export class MembersRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async findMembers(query: MemberQueryDto): Promise<PaginatedMembers> {
+  async findMembers(query: QueryMemberDto): Promise<PaginatedMembers> {
     const queryBuilder = this.buildFilters(query);
     const { page, size } = query;
 
@@ -116,7 +116,7 @@ export class MembersRepository {
     return result.rows[0];
   }
 
-  private buildFilters(query: MemberQueryDto) {
+  private buildFilters(query: QueryMemberDto) {
     const queryBuilder = new SqlQueryBuilder();
     const {
       search,

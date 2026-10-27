@@ -7,7 +7,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guards.js';
-import { MemberQueryDto } from './dto/member-query.dto.js';
+import { QueryMemberDto } from './dto/query-member.dto.js';
 
 @Controller('members')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -43,7 +43,7 @@ export class MembersController {
     required: false,
     type: Number,
   })
-  getAllMembers(@Query() query: MemberQueryDto): Promise<PaginatedMembers> {
+  getAllMembers(@Query() query: QueryMemberDto): Promise<PaginatedMembers> {
     return this.membersService.getMembers(query);
   }
 
