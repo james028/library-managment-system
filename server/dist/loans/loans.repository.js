@@ -10,6 +10,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service.js';
 import { SqlQueryBuilder } from '../database/query-builder/sql-query-builder.js';
+const LOAN_STATUS_SQL = `
+  CASE
+    WHEN l.returned_at IS NOT NULL THEN 'RETURNED'
+    WHEN l.due_at < NOW() THEN 'OVERDUE'
+    ELSE 'ACTIVE'
+  END
+`;
 let LoansRepository = class LoansRepository {
     databaseService;
     constructor(databaseService) {
@@ -122,24 +129,161 @@ let LoansRepository = class LoansRepository {
         });
         const { whereSql, values, paginationSql, paginationValues } = queryBuilder.buildPaginated();
         const loansSql = `
-        SELECT l.id,
-               l.borrowed_at AS borrowedAt,
-               u.first_name,
-               bc.book_id,
-               bc.condition
+        SELECT jsonb_build_object(
+                       'id', l.id,
+                       'status', CASE
+                                     WHEN l.returned_at IS NOT NULL THEN 'RETURNED'
+                                     WHEN l.due_at < NOW() THEN 'OVERDUE'
+                                     ELSE 'ACTIVE'
+                           END,
+                       'borrowedAt', l.borrowed_at,
+                       'dueAt', l.due_at,
+                       'returnedAt', l.returned_at,
+                       'extendedCount', l.extended_count,
+                       'isOverdue',
+                       l.returned_at IS NULL
+                           AND l.due_at < NOW(),
+                       'daysOverdue', GREATEST(
+                               CASE
+                                   WHEN l.returned_at IS NOT NULL
+                                       THEN EXTRACT(DAY FROM (l.returned_at - l.due_at))
+                                   ELSE EXTRACT(DAY FROM (NOW() - l.due_at))
+                                   END,
+                               0
+                                      ),
+                       'bookCopy', jsonb_build_object(
+                               'id', bc.id,
+                               'inventory_number', bc.inventory_number,
+                               'condition', bc.condition,
+                               'book', jsonb_build_object(
+                                       'id', b.id,
+                                       'title', b.title,
+                                       'author', b.author
+                                       )
+                                   ),
+                       'member', jsonb_build_object(
+                               'id', u.id,
+                               'firstName', u.first_name,
+                               'lastName', u.last_name,
+                               'email', u.email,
+                               'role', u.role
+                                 )
+               ) AS loan
         FROM loans l
-                 INNER JOIN users u ON u.id = l.user_id
-                 INNER JOIN book_copies bc ON l.book_copy_id = bc.id
-           
+                 INNER JOIN users u
+                            ON u.id = l.user_id
+                 INNER JOIN book_copies bc
+                            ON bc.id = l.book_copy_id
+                 INNER JOIN books b
+                            ON b.id = bc.book_id
+            ${whereSql} ${paginationSql}
     `;
-        console.log(loansSql);
-        const loansResult = await this.databaseService.query(loansSql, [
-            ...values,
-        ]);
+        const loansResult = await this.databaseService.query(loansSql, [...values, ...paginationValues]);
         console.log(loansResult);
+        const countSql = `
+        SELECT COUNT(*) AS "totalItems"
+        FROM loans l
+                 INNER JOIN users u
+                            ON u.id = l.user_id
+                 INNER JOIN book_copies bc
+                            ON bc.id = l.book_copy_id
+                 INNER JOIN books b
+                            ON b.id = bc.book_id
+            ${whereSql};`;
+        const countResult = await this.databaseService.query(countSql, values);
+        const totalItems = Number(countResult.rows[0].totalItems);
+        const totalPages = Math.ceil(totalItems / query.size);
+        return {
+            items: loansResult.rows,
+            page,
+            size,
+            totalItems,
+            totalPages,
+        };
     }
     buildFilters(query) {
         const queryBuilder = new SqlQueryBuilder();
+        const { search, status, memberId, bookId, bookCopyId, borrowedFrom, borrowedTo, dueFrom, dueTo, returnedFrom, returnedTo, overdue, active, } = query;
+        if (search) {
+            queryBuilder.addSearchFilter([
+                'b.title',
+                'b.author',
+                'u.email',
+                "concat_ws(' ', u.first_name, u.last_name)",
+            ], search);
+        }
+        if (status) {
+            queryBuilder.addFilter({
+                column: LOAN_STATUS_SQL,
+                operator: 'EQUAL',
+                value: status,
+            });
+        }
+        if (memberId) {
+            queryBuilder.addFilter({
+                column: 'l.user_id',
+                operator: 'EQUAL',
+                value: memberId,
+            });
+        }
+        if (bookCopyId) {
+            queryBuilder.addFilter({
+                column: 'l.book_copy_id',
+                operator: 'EQUAL',
+                value: bookCopyId,
+            });
+        }
+        if (bookId) {
+            queryBuilder.addFilter({
+                column: 'bc.book_id',
+                operator: 'EQUAL',
+                value: bookId,
+            });
+        }
+        const dateRanges = [
+            { column: 'l.borrowed_at', from: borrowedFrom, to: borrowedTo },
+            {
+                column: 'l.due_at',
+                from: dueFrom,
+                to: dueTo,
+            },
+            { column: 'l.returned_at', from: returnedFrom, to: returnedTo },
+        ];
+        const endOfDay = (date) => {
+            const result = new Date(`${date}T00:00:00Z`);
+            result.setUTCHours(23, 59, 59, 999);
+            return result.toISOString();
+        };
+        for (const { column, from, to } of dateRanges) {
+            if (from) {
+                queryBuilder.addFilter({
+                    column,
+                    operator: 'GREATER_THAN_OR_EQUAL',
+                    value: from,
+                });
+            }
+            if (to) {
+                queryBuilder.addFilter({
+                    column,
+                    operator: 'LESS_THAN_OR_EQUAL',
+                    value: endOfDay(to),
+                });
+            }
+        }
+        if (active) {
+            queryBuilder.addFilter({
+                column: 'l.returned_at IS NULL',
+                operator: 'EXISTS',
+                value: active,
+            });
+        }
+        if (overdue) {
+            queryBuilder.addFilter({
+                column: 'l.returned_at IS NULL AND l.due_at < NOW()',
+                operator: 'EXISTS',
+                value: overdue,
+            });
+        }
         return queryBuilder;
     }
 };

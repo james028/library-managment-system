@@ -28,3 +28,19 @@ export interface LoanListItemDto {
     cardNumber: string;
   };
 }
+
+export interface LoanFilters {
+  search?: string;
+  status?: LoanStatus;
+  memberId?: string;
+  bookId?: string;
+  bookCopyId?: string;
+  borrowedFrom?: string;
+  borrowedTo?: string;
+  dueFrom?: string;
+  dueTo?: string;
+  returnedFrom?: string;
+  returnedTo?: string;
+  overdue?: boolean;
+  active?: boolean;
+}

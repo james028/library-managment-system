@@ -14,11 +14,12 @@ import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards, } from '@n
 import { LoansService } from './loans.service.js';
 import { CreateLoanDto } from './dto/create.loan.dto.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags, } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags, } from '@nestjs/swagger';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guards.js';
 import { QueryLoanDto } from './dto/query-loan.dto.js';
+import { LoansQuerySwagger } from '../common/decorators/loans-query-swagger.decorator.js';
 let LoansController = class LoansController {
     loansService;
     constructor(loansService) {
@@ -105,34 +106,7 @@ __decorate([
 __decorate([
     Get(),
     ApiOperation({ summary: 'Get paginated loans' }),
-    ApiQuery({
-        name: 'search',
-        required: false,
-        type: String,
-    }),
-    ApiQuery({
-        name: 'status',
-        required: false,
-        enum: ['ACTIVE', 'OVERDUE', 'RETURNED'],
-    }),
-    ApiQuery({ name: 'borrowedFrom', required: false, type: Date }),
-    ApiQuery({
-        name: 'borrowedTo',
-        required: false,
-        type: Date,
-    }),
-    ApiQuery({ name: 'returnedFrom', required: false, type: Date }),
-    ApiQuery({
-        name: 'returnedTo',
-        required: false,
-        type: Date,
-    }),
-    ApiQuery({ name: 'page', required: false, type: Number }),
-    ApiQuery({
-        name: 'size',
-        required: false,
-        type: Number,
-    }),
+    LoansQuerySwagger(),
     __param(0, Query()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [QueryLoanDto]),

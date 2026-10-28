@@ -5,9 +5,9 @@ export interface Member {
   cardNumber: string;
   email: string; // z tabeli users
   status: 'ACTIVE' | 'BLOCKED';
-  //activeLoans: number; // z tabeli wypozyczenia
-  //activeReservations: number; // z tabeli rezerwacje
-  //unpaidFinesAmount: string; // z tabeli kary
+  activeLoans: number; // z tabeli wypozyczenia
+  activeReservations: number; // z tabeli rezerwacje
+  unpaidFinesAmount: string; // z tabeli kary
   createdAt: string;
 }
 

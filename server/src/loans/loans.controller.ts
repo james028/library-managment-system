@@ -14,7 +14,6 @@ import { Roles } from '../auth/decorators/roles.decorator.js';
 import {
   ApiBearerAuth,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -24,6 +23,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guards.js';
 import { PaginatedMembers } from '../members/interfaces/paginated-members.interface.dto.js';
 import { QueryLoanDto } from './dto/query-loan.dto.js';
+import { LoansQuerySwagger } from '../common/decorators/loans-query-swagger.decorator.js';
 
 @ApiTags('Loans')
 @ApiBearerAuth()
@@ -89,34 +89,7 @@ export class LoansController {
 
   @Get()
   @ApiOperation({ summary: 'Get paginated loans' })
-  @ApiQuery({
-    name: 'search',
-    required: false,
-    type: String,
-  })
-  @ApiQuery({
-    name: 'status',
-    required: false,
-    enum: ['ACTIVE', 'OVERDUE', 'RETURNED'],
-  })
-  @ApiQuery({ name: 'borrowedFrom', required: false, type: Date })
-  @ApiQuery({
-    name: 'borrowedTo',
-    required: false,
-    type: Date,
-  })
-  @ApiQuery({ name: 'returnedFrom', required: false, type: Date })
-  @ApiQuery({
-    name: 'returnedTo',
-    required: false,
-    type: Date,
-  })
-  @ApiQuery({ name: 'page', required: false, type: Number })
-  @ApiQuery({
-    name: 'size',
-    required: false,
-    type: Number,
-  })
+  @LoansQuerySwagger()
   getAllLoans(@Query() query: QueryLoanDto): Promise<PaginatedMembers> {
     return this.loansService.getAllLoans(query);
   }
