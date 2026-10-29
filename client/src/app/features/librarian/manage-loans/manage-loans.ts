@@ -1,29 +1,22 @@
 import { Component, inject } from '@angular/core';
-import {
-  BehaviorSubject,
-  catchError,
-  map,
-  Observable,
-  of,
-  shareReplay,
-  startWith,
-  switchMap,
-} from 'rxjs';
+import { catchError, Observable, of, shareReplay } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { DataTable } from '../../../shared/ui/data-table/data-table';
 import { LOAN_COLUMNS } from './loan-columns';
 import { getLoanStatsLabel } from './loan-stats.constants';
-import { LoansSummary, LoanStatsEnum, LoanMock } from './models/loan-model';
+import { LoanMock, LoansSummary, LoanStatsEnum } from './models/loan-model';
 import { LoansService } from './data-access/loans.service';
 import { LoansTableFacade } from './data-access/members-table.facade';
+import { TableFilters } from '../../../shared/ui/table-filters/table-filters';
+import { loansFilterConfig } from './manage-loans-filter-config';
 
 @Component({
   selector: 'app-manage-loans',
   standalone: true,
   providers: [LoansTableFacade],
-  imports: [CommonModule, AsyncPipe, DataTable],
+  imports: [CommonModule, AsyncPipe, DataTable, TableFilters],
   templateUrl: './manage-loans.html',
   styleUrl: './manage-loans.scss',
 })
@@ -32,13 +25,15 @@ export class ManageLoans {
   readonly loansTableFacade = inject(LoansTableFacade);
 
   //readonly isFormOpen = signal(false);
-  form: FormGroup;
+  form: any;
   selectedLoan: LoanMock | null = null;
   saving: boolean = false;
 
   loansColumns = LOAN_COLUMNS;
   getLoanStatsLabel = getLoanStatsLabel;
   statsKeys = Object.values(LoanStatsEnum);
+
+  readonly loansFilterConfig = loansFilterConfig;
 
   readonly loansSummary$: Observable<LoansSummary> = this.loansService.getSummaryLoans().pipe(
     tap((data) => console.log('Pobrane kategorie:', data)),
@@ -54,10 +49,14 @@ export class ManageLoans {
       bookCopyId: ['', Validators.required],
       userId: ['', Validators.required],
     });
+  }
 
-    this.loansTableFacade.vm$.subscribe((loan) => {
-      console.log(loan.items[0]?.loan, "eeeee");
-    })
+  onApplySubmit(value: any): void {
+    this.loansTableFacade.applySubmit(value);
+  }
+
+  onResetFilters() {
+    this.loansTableFacade.resetFilters();
   }
 
   edit(loan: any) {

@@ -44,7 +44,7 @@ export class LoansRepository {
   async borrow(params: {
     bookCopyId: string;
     userId: string;
-    dueAt: Date; //@ts-ignore
+    dueAt: Date;
   }): Promise<LoanRecord | null> {
     const client = await this.databaseService.getClient();
 

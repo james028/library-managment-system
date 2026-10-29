@@ -6,6 +6,7 @@ import {
   IsInt,
   IsOptional,
   IsString,
+  IsUUID,
   Max,
   Min,
 } from 'class-validator';
@@ -16,9 +17,11 @@ export class QueryLoanDto {
   @IsOptional() @IsIn(['ACTIVE', 'OVERDUE', 'RETURNED']) status?:
     'ACTIVE' | 'OVERDUE' | 'RETURNED';
 
-  @IsOptional() @Type(() => String) @IsInt() @Min(1) memberId?: string;
-  @IsOptional() @Type(() => String) @IsInt() @Min(1) bookId?: string;
-  @IsOptional() @Type(() => String) @IsInt() @Min(1) bookCopyId?: string;
+  @IsOptional() @IsUUID() memberId?: string;
+
+  @IsOptional() @IsUUID() bookId?: string;
+
+  @IsOptional() @IsUUID() bookCopyId?: string;
 
   @IsOptional() @IsDateString() borrowedFrom?: string;
   @IsOptional() @IsDateString() borrowedTo?: string;

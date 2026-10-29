@@ -3,67 +3,70 @@ import { LoanListItem } from './models/loan-model';
 
 export const LOAN_COLUMNS: ColumnDef<LoanListItem>[] = [
   {
-    key: 'id',
+    key: '',
     header: 'ID',
     align: 'left',
     accessor: (row) => row.loan.id,
   },
   {
-    key: 'dueAt',
+    key: '',
+    header: 'Imię i nazwisko',
+    align: 'left',
+    accessor: (row) => `${row.loan.member.firstName} ${row.loan.member.lastName}`,
+  },
+  {
+    key: '',
+    header: 'Email',
+    align: 'left',
+    accessor: (row) => `${row.loan.member.email}`,
+  },
+  {
+    key: '',
+    header: 'Status wypożyczenia',
+    accessor: (row) => row.loan.status,
+    format: (value) =>
+      ({
+        ACTIVE: 'Aktywne',
+        OVERDUE: 'Zaległe',
+        RETURNED: 'Zwrócone',
+      })[value as 'RETURNED' | 'ACTIVE' | 'OVERDUE'] ?? String(value),
+  },
+  {
+    key: '',
+    header: 'Id kopii książki',
+    align: 'left',
+    accessor: (row) => row.loan.bookCopy.book.id,
+  },
+  {
+    key: '',
+    header: 'Autor i tytuł książki',
+    align: 'left',
+    accessor: (row) => `${row.loan.bookCopy.book.author} - ${row.loan.bookCopy.book.title}`,
+  },
+  {
+    key: '',
+    header: 'Dni przetrzymane',
+    align: 'left',
+    accessor: (row) => row.loan.daysOverdue,
+  },
+  {
+    key: '',
+    header: 'Ilość prolognat',
+    align: 'left',
+    accessor: (row) => row.loan.extendedCount,
+  },
+  {
+    key: '',
     header: 'Termin zwrotu',
     align: 'left',
     accessor: (row) => row.loan.dueAt,
-  },
+    format: (value) =>
+      value ? new Date(value as string).toLocaleDateString('pl-PL') : '—',  },
   {
     key: 'returnedAt',
     header: 'Zwrócone',
     align: 'left',
-  }, // {
-  //   key: 'bookTitle',
-  //   header: 'Tytuł książki',
-  // },
-  // {
-  //   key: 'borrowerName',
-  //   header: 'Czytelnik',
-  // },
-  // {
-  //   key: 'borrowedAt',
-  //   header: 'Data wypożyczenia',
-  //   accessor: (row) => row.borrowedAt,
-  //   format: (value) => new Date(value as string).toLocaleDateString('pl-PL'),
-  // },
-  // {
-  //   key: 'dueAt',
-  //   header: 'Termin zwrotu',
-  //   accessor: (row) => row.dueAt,
-  //   format: (value) => new Date(value as string).toLocaleDateString('pl-PL'),
-  // },
-  // {
-  //   key: 'amountDue',
-  //   header: 'Kwota do zapłaty',
-  //   accessor: (row) => row.amountDue,
-  //   format: (value) =>
-  //     new Intl.NumberFormat('pl-PL', {
-  //       style: 'currency',
-  //       currency: 'PLN',
-  //     }).format(value as number),
-  //   align: 'right',
-  // },
-  // {
-  //   key: 'status',
-  //   header: 'Status',
-  //   accessor: (row) => row.status,
-  //   format: (value) =>
-  //     ({
-  //       ACTIVE: 'Aktywne',
-  //       RETURNED: 'Zwrócone',
-  //       OVERDUE: 'Po terminie',
-  //     })[value as LoanStatus] ?? String(value),
-  // },
-  // {
-  //   key: 'tags',
-  //   header: 'Tagi',
-  //   accessor: (row) => row.tags, // Jeśli na razie nie masz cellTemplate, można wyświetlić etykiety tekstem:
-  //   format: (value) => (value as LoanTag[]).map((tag) => tag.label).join(', '),
-  //},
+    accessor: (row) => row.loan.returnedAt,
+    format: (value) =>
+      value ? new Date(value as string).toLocaleDateString('pl-PL') : '—',  },
 ];
