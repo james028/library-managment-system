@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BaseTableFacade } from '../../../../shared/table-state/base-table.facade';
-import { LoansService, PaginatedLoans } from './loans.service';
-import { Loan, LoansFilters } from '../models/loan-model';
+import { LoansService, PaginatedLoans, PaginatedResult } from './loans.service';
+import { Loan, LoanFilters, LoanListItem } from '../models/loan-model';
 
 @Injectable()
 export class LoansTableFacade extends BaseTableFacade<
-  Loan,
-  LoansFilters,
+  LoanListItem,
+  LoanFilters,
   PaginatedLoans
 > {
   constructor(private readonly loansService: LoansService) {
@@ -14,10 +14,19 @@ export class LoansTableFacade extends BaseTableFacade<
       {
         search: '',
         status: '',
-        createdFrom: '',
-        createdTo: '',
+        memberId: '',
+        bookId: '',
+        bookCopyId: '',
+        borrowedFrom: '',
+        borrowedTo: '',
+        dueFrom: '',
+        dueTo: '',
+        returnedFrom: '',
+        returnedTo: '',
+        active: false,
+        overdue: false,
       },
-      () => this.loansService.getUserProfileMock(),
+      (query) => this.loansService.getLoans(query),
     );
   }
 }

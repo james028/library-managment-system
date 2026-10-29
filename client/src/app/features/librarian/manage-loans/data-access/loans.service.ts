@@ -2,46 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { delay, Observable, of } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
-import { Loan, LoanMock, LoansSummary, LoanQuery } from '../models/loan-model';
-import { Member, MembersFiltersFormValue } from '../../members/interfaces/members.interface';
-import { TableQuery } from '../../../../shared/table-state/table.types';
-
-
-const loans: LoanMock[] = [
-  {
-    id: 1,
-    bookTitle: 'Czysty kod',
-    borrowerName: 'Anna Kowalska',
-    borrowedAt: '2026-09-28',
-    dueAt: '2026-10-12',
-    amountDue: 0,
-    status: 'ACTIVE',
-    tags: [{ label: 'Popularna', type: 'success' }],
-  },
-  {
-    id: 2,
-    bookTitle: 'Design Patterns',
-    borrowerName: 'Piotr Nowak',
-    borrowedAt: '2026-08-30',
-    dueAt: '2026-09-13',
-    amountDue: 12.5,
-    status: 'OVERDUE',
-    tags: [
-      { label: 'Po terminie', type: 'danger' },
-      { label: 'Kara', type: 'warning' },
-    ],
-  },
-  {
-    id: 3,
-    bookTitle: 'Clean Architecture',
-    borrowerName: 'Maria Wiśniewska',
-    borrowedAt: '2026-09-01',
-    dueAt: '2026-09-15',
-    amountDue: 0,
-    status: 'RETURNED',
-    tags: [{ label: 'Zwrócona', type: 'success' }],
-  },
-];
+import { Loan, LoansSummary, LoanListResponse, LoanQueryParams, LoanView, LoanListItem } from '../models/loan-model';
+import { buildHttpParams } from '../../../../shared/http/http-params.utils';
 
 export interface PaginatedResult<T> {
   items: T[];
@@ -51,7 +13,7 @@ export interface PaginatedResult<T> {
   totalPages: number;
 }
 
-export type PaginatedLoans = PaginatedResult<Loan>;
+export type PaginatedLoans = PaginatedResult<LoanListItem>;
 
 @Injectable({ providedIn: 'root' })
 export class LoansService {
@@ -59,36 +21,22 @@ export class LoansService {
 
   constructor(private http: HttpClient) {}
 
-  getMyLoans(): Observable<Loan[]> {
-    return this.http.get<Loan[]>(`${this.baseUrl}/me`);
+  getMyLoans(): Observable<LoanView[]> {
+    return this.http.get<LoanView[]>(`${this.baseUrl}/me`);
   }
 
   getSummaryLoans(): Observable<LoansSummary> {
     return this.http.get<LoansSummary>(`${this.baseUrl}/summary`);
   }
 
-  getLoans(query: any): Observable<PaginatedLoans> {
-    let params = new HttpParams();
+  getLoans(query: LoanQueryParams): Observable<PaginatedLoans> {
 
-    //zmienić na funcje pod dynamiczne wartośći
-    if (query.page) params = params.set('page', query.page);
-    if (query.limit) params = params.set('limit', query.limit);
-    if (query.search) params = params.set('search', query.search);
+    console.log(query, "get loans");
+    const params = buildHttpParams({
+      page: query.page,
+      //...query.filters,
+    });
 
     return this.http.get<PaginatedLoans>(this.baseUrl, { params });
-  }
-
-  getUserProfileMock(): Observable<PaginatedLoans> {
-    const c = of(loans).pipe(delay(400));
-
-
-    return {
-      // @ts-ignore
-      items: loans,
-      page: 1,
-      size: 3,
-      totalItems: null,
-      totalPages: null,
-    }
   }
 }

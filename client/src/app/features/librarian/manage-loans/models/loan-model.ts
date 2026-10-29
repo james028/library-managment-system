@@ -1,7 +1,5 @@
 import { Fine } from '../../../../core/services/FinesService';
 
-export type LoanStatus = 'ACTIVE' | 'RETURNED' | 'OVERDUE';
-
 export interface LoanTag {
   label: string;
   type: 'success' | 'warning' | 'danger';
@@ -25,7 +23,7 @@ export interface LoansSummary {
   returnedToday: number;
 }
 
-export interface Loan {
+export interface LoanView {
   id: string;
   book_copy_id: string;
   user_id: string;
@@ -40,13 +38,6 @@ export interface Loan {
 export interface LoanView extends Loan {
   isOverdue: boolean;
   fine?: Fine;
-}
-
-export interface LoansFilters {
-  search: string;
-  status: string;
-  createdFrom: string;
-  createdTo: string;
 }
 
 export interface PaginatedLoans {
@@ -84,4 +75,82 @@ export enum LoanStatsEnum {
 }
 
 export type LoanStatsKey = `${LoanStatsEnum}`;
+
+
+export type LoanStatus = 'ACTIVE' | 'OVERDUE' | 'RETURNED';
+
+export type BookCopyCondition = 'new' | 'good' | 'worn' | 'damaged';
+
+export type MemberRole = 'member' | 'librarian' | 'admin';
+
+export interface LoanBook {
+  id: string;
+  title: string;
+  author: string;
+}
+
+export interface LoanBookCopy {
+  id: string;
+  book: LoanBook;
+  condition: BookCopyCondition;
+  inventory_number: string;
+}
+
+export interface LoanMember {
+  id: string;
+  role: MemberRole;
+  email: string;
+  lastName: string;
+  firstName: string;
+}
+
+export interface Loan {
+  id: string;
+  dueAt: string;
+  member: LoanMember;
+  status: LoanStatus;
+  bookCopy: LoanBookCopy;
+  isOverdue: boolean;
+  borrowedAt: string;
+  returnedAt: string | null;
+  daysOverdue: number;
+  extendedCount: number;
+}
+
+export interface LoanListItem {
+  loan: Loan;
+}
+
+export type LoanListResponse = LoanListItem[];
+
+export type LoanSortField =
+  | 'borrowedAt'
+  | 'dueAt'
+  | 'returnedAt'
+  | 'status';
+
+export type SortDirection = 'ASC' | 'DESC';
+
+export interface LoanFilters {
+  search?: string;
+  status?: LoanStatus | string;
+  memberId?: string;
+  bookId?: string;
+  bookCopyId?: string;
+  borrowedFrom?: string;
+  borrowedTo?: string;
+  dueFrom?: string;
+  dueTo?: string;
+  returnedFrom?: string;
+  returnedTo?: string;
+  active?: boolean;
+  overdue?: boolean;
+}
+
+export interface LoanQueryParams extends LoanFilters {
+  page?: number;
+  limit?: number;
+  //sortBy?: LoanSortField;
+  //sortDirection?: SortDirection;
+}
 

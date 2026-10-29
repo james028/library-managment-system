@@ -15,7 +15,6 @@ import { getReservationLabel } from '../reservations/model/reservation.model';
   styleUrl: './panel.scss',
 })
 export class Panel {
-  readonly messages$ = [{}, {}, {}];
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private loansService = inject(LoansService);

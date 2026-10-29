@@ -227,7 +227,7 @@ export class LoansRepository {
                                       ),
                        'bookCopy', jsonb_build_object(
                                'id', bc.id,
-                               'inventory_number', bc.inventory_number,
+                               'inventoryNumber', bc.inventory_number,
                                'condition', bc.condition,
                                'book', jsonb_build_object(
                                        'id', b.id,

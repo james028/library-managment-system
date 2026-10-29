@@ -14,11 +14,6 @@ import { LoanView } from '../../librarian/manage-loans/models/loan-model';
   styleUrl: './my-loans.scss',
 })
 export class MyLoans {
-  // constructor(
-  //   private loansService: LoansService,
-  //   private finesService: FinesService,
-  // ) {}
-
   private loansService = inject(LoansService);
   private finesService = inject(FinesService);
 
@@ -26,9 +21,6 @@ export class MyLoans {
     this.loansService.getMyLoans(),
     this.finesService.getMyFines(),
   ]).pipe(
-    tap(([loans, fines]) => {
-      console.log(loans, fines);
-    }),
     map(([loans, fines]): LoanView[] => {
       return loans.map((loan) => {
         return {

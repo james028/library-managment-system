@@ -1,13 +1,24 @@
 import { ColumnDef } from '../../../shared/ui/data-table/data-table';
-import { Loan, LoanMock, LoanStatus, LoanTag } from './models/loan-model';
+import { LoanListItem } from './models/loan-model';
 
-export const LOAN_COLUMNS: ColumnDef<Loan>[] = [
+export const LOAN_COLUMNS: ColumnDef<LoanListItem>[] = [
   {
     key: 'id',
     header: 'ID',
     align: 'left',
+    accessor: (row) => row.loan.id,
   },
-  // {
+  {
+    key: 'dueAt',
+    header: 'Termin zwrotu',
+    align: 'left',
+    accessor: (row) => row.loan.dueAt,
+  },
+  {
+    key: 'returnedAt',
+    header: 'Zwrócone',
+    align: 'left',
+  }, // {
   //   key: 'bookTitle',
   //   header: 'Tytuł książki',
   // },
