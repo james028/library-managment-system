@@ -11,7 +11,7 @@ export interface SettingRow {
   updated_by: string | null;
 }
 
-type SettingKeyRow = Pick<SettingRow, 'key' | 'type'>;
+type SettingKeyRow = Pick<SettingRow, 'key' | 'type' | 'value'>;
 
 @Injectable()
 export class SettingsRepository {
@@ -44,6 +44,17 @@ export class SettingsRepository {
     );
 
     return results.rows;
+  }
+
+  async findByKey(key: string): Promise<SettingKeyRow> {
+    const results = await this.databaseService.query<SettingKeyRow>(
+      `SELECT key, type, value
+                                                                     FROM settings
+                                                                     WHERE key = $1`,
+      [key],
+    );
+
+    return results.rows[0];
   }
 
   async updateValue(

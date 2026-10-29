@@ -1,7 +1,6 @@
 import { ColumnDef } from '../../../shared/ui/data-table/data-table';
-import { LoanListItem } from './models/loan-model';
 
-export const LOAN_COLUMNS: ColumnDef<LoanListItem>[] = [
+export const LOAN_COLUMNS: ColumnDef<any>[] = [
   {
     key: '',
     header: 'ID',

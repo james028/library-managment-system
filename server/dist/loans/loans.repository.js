@@ -72,12 +72,9 @@ let LoansRepository = class LoansRepository {
                           SET status     = 'available',
                               updated_at = now()
                           WHERE id = $1`, [loan.book_copy_id]);
-            const msOverdue = Date.now() - new Date(loan.due_at).getTime();
-            const daysOverdue = Math.floor(msOverdue / (24 * 60 * 60 * 1000));
-            let fineAmount = null;
-            if (daysOverdue > 0) {
-                fineAmount = Math.round(daysOverdue * fineRatePerDay * 100) / 100;
-                await client.query('INSERT INTO fines (loan_id, amount) VALUES ($1, $2, $3)', [loan.id, fineAmount]);
+            const fineAmount = await this.calculateFine(fineRatePerDay, loan);
+            if (Number(fineAmount) > 0) {
+                await client.query('INSERT INTO fines (loan_id, amount) VALUES ($1, $2)', [loan.id, fineAmount]);
             }
             await client.query('COMMIT');
             return loan;
@@ -200,6 +197,17 @@ let LoansRepository = class LoansRepository {
             totalItems,
             totalPages,
         };
+    }
+    async calculateFine(ratePerDay, loan) {
+        const returnedAt = loan.returned_at
+            ? new Date(loan.returned_at)
+            : new Date();
+        const msOverdue = returnedAt.getTime() - new Date(loan.due_at).getTime();
+        const daysOverdue = Math.floor(msOverdue / (24 * 60 * 60 * 1000));
+        if (daysOverdue <= 0) {
+            return 0;
+        }
+        return Math.round(daysOverdue * ratePerDay * 100) / 100;
     }
     buildFilters(query) {
         const queryBuilder = new SqlQueryBuilder();

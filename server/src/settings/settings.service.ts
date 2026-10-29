@@ -40,4 +40,23 @@ export class SettingsService {
       client.release();
     }
   }
+
+  async getFineRatePerDay(): Promise<number> {
+    const key = 'fines.per_day_amount';
+    const setting = await this.settingsRepository.findByKey(key);
+
+    if (!setting) {
+      return 1.0;
+    }
+
+    const value = Number(setting?.value);
+
+    if (Number.isNaN(value) || value < 0) {
+      throw new Error(
+        `Invalid setting value for fine_rate_per_day: ${setting.value}`,
+      );
+    }
+
+    return value;
+  }
 }

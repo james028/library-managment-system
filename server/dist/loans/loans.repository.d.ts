@@ -32,5 +32,6 @@ export declare class LoansRepository {
     findAllForUser(userId: string): Promise<LoanWithDetails[]>;
     returnSummaryData(): Promise<LoansSummary>;
     returnAllLoans(query: QueryLoanDto): Promise<any>;
+    private calculateFine;
     private buildFilters;
 }

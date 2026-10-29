@@ -9,12 +9,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { BadRequestException, ConflictException, Injectable, NotFoundException, } from '@nestjs/common';
 import { LoansRepository } from './loans.repository.js';
+import { SettingsService } from '../settings/settings.service.js';
 const DEFAULT_LOAN_DAYS = 14;
 const MIN_SEARCH_LENGTH = 2;
 let LoansService = class LoansService {
     loansRepository;
-    constructor(loansRepository) {
+    settingsService;
+    constructor(loansRepository, settingsService) {
         this.loansRepository = loansRepository;
+        this.settingsService = settingsService;
     }
     async borrow(dto) {
         const dueAt = dto.dueAt
@@ -31,7 +34,7 @@ let LoansService = class LoansService {
         return loan;
     }
     async returnLoan(id) {
-        const fineRatePerDay = 1.0;
+        const fineRatePerDay = await this.settingsService.getFineRatePerDay();
         const loan = await this.loansRepository.returnLoan(id, fineRatePerDay);
         if (!loan) {
             throw new NotFoundException('Wypożyczenie nie istnieje albo zostało już wcześniej zwrócone');
@@ -63,7 +66,8 @@ let LoansService = class LoansService {
 };
 LoansService = __decorate([
     Injectable(),
-    __metadata("design:paramtypes", [LoansRepository])
+    __metadata("design:paramtypes", [LoansRepository,
+        SettingsService])
 ], LoansService);
 export { LoansService };
 //# sourceMappingURL=loans.service.js.map

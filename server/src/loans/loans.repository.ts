@@ -127,15 +127,11 @@ export class LoansRepository {
         [loan.book_copy_id],
       );
 
-      const msOverdue = Date.now() - new Date(loan.due_at).getTime();
-      const daysOverdue = Math.floor(msOverdue / (24 * 60 * 60 * 1000));
+      const fineAmount = await this.calculateFine(fineRatePerDay, loan);
 
-      let fineAmount: number | null = null;
-
-      if (daysOverdue > 0) {
-        fineAmount = Math.round(daysOverdue * fineRatePerDay * 100) / 100;
+      if (Number(fineAmount) > 0) {
         await client.query(
-          'INSERT INTO fines (loan_id, amount) VALUES ($1, $2, $3)',
+          'INSERT INTO fines (loan_id, amount) VALUES ($1, $2)',
           [loan.id, fineAmount],
         );
       }
@@ -285,6 +281,25 @@ export class LoansRepository {
       totalItems,
       totalPages,
     };
+  }
+
+  private async calculateFine(
+    ratePerDay: number,
+    loan: LoanRecord,
+  ): Promise<number> {
+    const returnedAt = loan.returned_at
+      ? new Date(loan.returned_at)
+      : new Date();
+
+    const msOverdue = returnedAt.getTime() - new Date(loan.due_at).getTime();
+
+    const daysOverdue = Math.floor(msOverdue / (24 * 60 * 60 * 1000));
+
+    if (daysOverdue <= 0) {
+      return 0;
+    }
+
+    return Math.round(daysOverdue * ratePerDay * 100) / 100;
   }
 
   private buildFilters(query: LoanFilters) {

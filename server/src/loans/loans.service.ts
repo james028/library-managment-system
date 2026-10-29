@@ -7,7 +7,7 @@ import {
 import { LoanRecord, LoansRepository } from './loans.repository.js';
 import { CreateLoanDto } from './dto/create.loan.dto.js';
 import { QueryLoanDto } from './dto/query-loan.dto.js';
-
+import { SettingsService } from '../settings/settings.service.js';
 
 //zrobić z bazy. juz jest
 const DEFAULT_LOAN_DAYS = 14;
@@ -15,8 +15,10 @@ const MIN_SEARCH_LENGTH = 2;
 
 @Injectable()
 export class LoansService {
-  constructor(private readonly loansRepository: LoansRepository) {
-  }
+  constructor(
+    private readonly loansRepository: LoansRepository,
+    private readonly settingsService: SettingsService,
+  ) {}
 
   async borrow(dto: CreateLoanDto): Promise<LoanRecord | null> {
     const dueAt = dto.dueAt
@@ -41,7 +43,7 @@ export class LoansService {
   }
 
   async returnLoan(id: string) {
-    const fineRatePerDay  = 1.0;
+    const fineRatePerDay = await this.settingsService.getFineRatePerDay();
     const loan = await this.loansRepository.returnLoan(id, fineRatePerDay);
 
     if (!loan) {
