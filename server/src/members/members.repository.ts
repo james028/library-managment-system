@@ -114,7 +114,7 @@ export class MembersRepository {
         `
           INSERT INTO users (first_name, last_name, email, password_hash, role, is_active)
           VALUES ($1, $2, $3, $4, 'member', false)
-          RETURNING id
+          RETURNING *
       `,
         [firstName, lastName, email, passwordHash],
       );
@@ -142,7 +142,7 @@ export class MembersRepository {
       );
 
       await client.query('COMMIT');
-      return userResult;
+      return this.sanitizeUser(userResult.rows[0]);
     } catch (error) {
       await client.query('ROLLBACK');
       throw error;
@@ -257,5 +257,10 @@ export class MembersRepository {
       tokenHash,
       expiresAt,
     };
+  }
+
+  private sanitizeUser<T extends { password_hash: string }>(user: T): Omit<T, 'password_hash'> {
+    const { password_hash, ...safeUser } = user;
+    return safeUser;
   }
 }
