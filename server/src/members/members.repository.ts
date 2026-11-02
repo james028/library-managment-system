@@ -5,6 +5,9 @@ import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.j
 import { SqlQueryBuilder } from '../database/query-builder/sql-query-builder.js';
 import { Member, MemberDetails } from './interfaces/members.interface.dto.js';
 import { EXISTS_SQL, MEMBER_SORT_COLUMNS } from './members.query.config.js';
+import { createHash } from 'node:crypto';
+import { randomBytes } from 'crypto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class MembersRepository {
@@ -30,8 +33,8 @@ export class MembersRepository {
                u.email,
                m.card_number                 AS "cardNumber",
                m.status,
-               m.created_at AS "createdAt",
-               m.updated_at AS "updatedAt",
+               m.created_at                  AS "createdAt",
+               m.updated_at                  AS "updatedAt",
                (SELECT COUNT(*)::int
                 FROM loans l
                 WHERE l.user_id = m.user_id
@@ -94,26 +97,78 @@ export class MembersRepository {
     return result.rows[0] ?? null;
   }
 
-  async createMember(
-    userId: string,
-    cardNumber: string,
-  ): Promise<MemberDetails> {
-    const result = await this.databaseService.query<MemberDetails>(
-      `INSERT INTO members (user_id,
-                                                                                         card_number)
-                                                                    VALUES ($1,
-                                                                            $2)
-                                                                    RETURNING
-                                                                        id,
-                                                                        user_id AS "userId",
-                                                                        card_number AS "cardNumber",
-                                                                        status,
-                                                                        created_at AS "createdAt",
-                                                                        updated_at AS "updatedAt";`,
-      [userId, cardNumber],
+  async createMemberWithInvitation(member: any) {
+    const client = await this.databaseService.getClient();
+
+    try {
+      await client.query('BEGIN');
+
+      console.log(member, 'member');
+      const { firstName, lastName, email, cardNumber } = member;
+
+      const temporaryPassword = randomBytes(32).toString('hex');
+
+      const passwordHash = await bcrypt.hash(temporaryPassword, 10);
+
+      const userResult = await client.query(
+        `
+          INSERT INTO users (first_name, last_name, email, password_hash, role, is_active)
+          VALUES ($1, $2, $3, $4, 'member', false)
+          RETURNING id
+      `,
+        [firstName, lastName, email, passwordHash],
+      );
+
+      const userId = userResult.rows[0].id;
+
+      await client.query(
+        `
+          INSERT INTO members (user_id, card_number, status)
+          VALUES ($1, $2, 'ACTIVE')
+      `,
+        [userId, cardNumber],
+      );
+
+      const invitation = this.generateInvitationToken();
+
+      await client.query(
+        `
+          INSERT INTO user_invitations (user_id,
+                                        token_hash,
+                                        expires_at)
+          VALUES ($1, $2, $3)
+      `,
+        [userId, invitation.tokenHash, invitation.expiresAt],
+      );
+
+      await client.query('COMMIT');
+      return userResult;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
+  async findMemberByCardNumber(
+    cardNumber: string, //poprawic any
+  ): Promise<any | null> {
+    const result = await this.databaseService.query(
+      `
+        SELECT id,
+               user_id,
+               card_number,
+               status,
+               created_at
+        FROM members
+        WHERE card_number = $1
+        LIMIT 1
+    `,
+      [cardNumber],
     );
 
-    return result.rows[0];
+    return result.rows[0] ?? null;
   }
 
   private buildFilters(query: QueryMemberDto) {
@@ -125,7 +180,7 @@ export class MembersRepository {
       createdTo,
       hasOverdueLoans,
       hasUnpaidFines,
-      hasActiveLoans
+      hasActiveLoans,
     } = query;
 
     if (search) {
@@ -184,5 +239,23 @@ export class MembersRepository {
     }
 
     return queryBuilder;
+  }
+
+  private generateInvitationToken(): {
+    token: string;
+    tokenHash: string;
+    expiresAt: Date;
+  } {
+    const token = randomBytes(32).toString('hex');
+
+    const tokenHash = createHash('sha256').update(token).digest('hex');
+
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    return {
+      token,
+      tokenHash,
+      expiresAt,
+    };
   }
 }

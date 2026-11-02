@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SettingsService } from './settings/settings.service.js';
+import { LoansService } from './loans/loans.service.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,6 +28,11 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+
+  //const loansService = app.get(LoansService);
+  // Wywołujemy zagnieżdżoną funkcję bezpośrednio!
+  //const result = await loansService.returnLoan('22');
+  //console.log('--- WYNIK DIAGNOSTYKI ---', result);
 
   const document = SwaggerModule.createDocument(app, config);
 

@@ -1,6 +1,14 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  UploadedFile,
+  UseGuards, UseInterceptors,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { MembersService } from './members.service.js';
+import { MemberImportResult, MembersService } from './members.service.js';
 import { PaginatedMembers } from './interfaces/paginated-members.interface.dto.js';
 import { CreateMemberDto } from './dto/create-member.dto.js';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator.js';
@@ -8,6 +16,12 @@ import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guards.js';
 import { QueryMemberDto } from './dto/query-member.dto.js';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  MEMBER_IMPORT_ALLOWED_MIME_TYPES,
+  MEMBER_IMPORT_FILE_FIELD,
+  MEMBER_IMPORT_MAX_FILE_SIZE,
+} from './dto/members-import.constants.dto.js';
 
 @Controller('members')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -56,6 +70,34 @@ export class MembersController {
     @Body() dto: CreateMemberDto,
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    return this.membersService.createMember(user, dto);
+    return this.membersService.createMemberManually(user, dto);
+  }
+
+
+  @Post('import')
+  @UseInterceptors(
+    FileInterceptor(MEMBER_IMPORT_FILE_FIELD, {
+      limits: {
+        fileSize: MEMBER_IMPORT_MAX_FILE_SIZE,
+      },
+      fileFilter: (_req, file, callback) => {
+        const isValid =
+          MEMBER_IMPORT_ALLOWED_MIME_TYPES.includes(file.mimetype);
+
+        callback(
+          isValid
+            ? null
+            : new Error('Only CSV files are allowed'),
+          isValid,
+        );
+      },
+    }),
+  )
+  importMembers(
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: CurrentUserPayload,
+  ): Promise<MemberImportResult> {
+    console.log("ss");
+    return this.membersService.importFromCsv(user.userId, file);
   }
 }
