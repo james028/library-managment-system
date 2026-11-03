@@ -1,21 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Member, MemberEditValue, MembersFiltersFormValue } from '../interfaces/members.interface';
+import {
+  Member,
+  MemberEditValue,
+  MemberImportResult,
+  MembersFiltersFormValue,
+  PaginatedMembers,
+} from '../interfaces/members.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import { buildHttpParams } from '../../../../shared/http/http-params.utils';
 import { PaginatedMember, TableQuery } from '../../../../shared/table-state/table.types';
 import { Observable } from 'rxjs';
-
-export interface PaginatedResult<T> {
-  items: T[];
-  page: number;
-  size: number;
-  totalItems: number;
-  totalPages: number;
-}
-
-export type PaginatedMembers = PaginatedResult<Member>;
-
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +39,17 @@ export class MembersService {
 
   updateMember(id: number, value: Partial<MemberEditValue>): Observable<Member> {
     return this.http.patch<Member>(`${this.baseUrl}/${id}`, value);
+  }
+
+  importFromCsv(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    console.log(formData, "formData");
+
+    return this.http.post<MemberImportResult>(
+      `${this.baseUrl}/import`,
+      formData,
+    );
   }
 }

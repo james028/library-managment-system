@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MembersService, PaginatedMembers } from './members.service';
-import { Member, MemberEditValue, MembersFiltersFormValue } from '../interfaces/members.interface';
+import { MembersService } from './members.service';
+import { Member, MemberEditValue, MembersFiltersFormValue, PaginatedMembers } from '../interfaces/members.interface';
 import { BaseTableFacade } from '../../../../shared/table-state/base-table.facade';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';

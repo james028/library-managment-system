@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { catchError, map, scan, startWith, switchMap, tap } from 'rxjs/operators';
-
 import {
   TableAction,
   TableQuery,
   TableVm,
 } from './table.types';
-import { PaginatedResult } from '../../features/librarian/members/data-access/members.service';
+import { PaginatedResult } from '../../features/librarian/members/interfaces/members.interface';
 
 @Injectable()
 export abstract class BaseTableFacade<

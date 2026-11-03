@@ -7,6 +7,7 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterOutlet,],
   templateUrl: './layout.html',
+  styleUrl: './layout.scss',
 })
 export class Layout {
   // Publiczne pole, bo szablon HTML potrzebuje bezpośredniego dostępu do authService.user()

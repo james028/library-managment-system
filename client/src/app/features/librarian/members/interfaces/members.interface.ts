@@ -56,3 +56,25 @@ export interface MembersFiltersFormValue extends MembersFilters {
   email: string;
   status: string;
 }
+
+export interface PaginatedResult<T> {
+  items: T[];
+  page: number;
+  size: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export type PaginatedMembers = PaginatedResult<Member>;
+
+export interface MemberImportError {
+  row: number;
+  email?: string;
+  message: string;
+}
+
+export interface MemberImportResult {
+  imported: number;
+  failed: number;
+  errors: MemberImportError[];
+}

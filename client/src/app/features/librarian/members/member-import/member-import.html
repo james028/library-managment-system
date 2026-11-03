@@ -1,0 +1,219 @@
+<div class="members-import-page">
+  <header class="page-header">
+    <div class="header-content">
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()"
+      >
+        ← Wróć
+      </button>
+
+      <div>
+        <h1>Import czytelników</h1>
+        <p>
+          Wgraj plik CSV z listą nowych czytelników. Poprawne wiersze
+          zostaną zaimportowane, a błędne będą widoczne w raporcie.
+        </p>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="secondary-btn"
+    >
+      Pobierz szablon CSV
+    </button>
+  </header>
+
+  <main class="import-content">
+    <section class="upload-section">
+      <h2>1. Wybierz plik</h2>
+
+      <div
+        class="dropzone"
+
+      >
+        <input
+          #fileInput
+          type="file"
+          accept=".csv,text/csv"
+          class="file-input"
+          (change)="onFileSelected($event)"
+        />
+
+        @if (selectedFile(); as file) {
+          <div class="selected-file">
+            <div class="file-details">
+              <span class="file-name">{{ file.name }}</span>
+              <span class="file-meta">
+
+              </span>
+            </div>
+
+            <button
+              type="button"
+              class="text-btn"
+              (click)="clearFile()"
+            >
+              Usuń plik
+            </button>
+          </div>
+        } @else {
+          <div class="dropzone-content">
+            <!--            <p class="dropzone-title">-->
+            <!--              Przeciągnij plik CSV albo-->
+            <!--            </p>-->
+
+            <button
+              type="button"
+              class="secondary-btn"
+              (click)="openFilePicker(fileInput)"
+            >
+              Wybierz plik
+            </button>
+
+            <p class="dropzone-hint">
+              Maksymalny rozmiar: 2 MB · Format: UTF-8 · Separator: przecinek
+            </p>
+          </div>
+        }
+      </div>
+
+      @if (fileError()) {
+        <p class="error-message">{{ fileError() }}</p>
+      }
+    </section>
+
+    <section class="rules-section">
+      <h2>2. Wymagania dla pliku</h2>
+
+      <div class="rules-grid">
+        <div class="rule">
+          <span class="rule-title">Wymagane kolumny</span>
+          <code>firstName, lastName, email, cardNumber, status</code>
+        </div>
+
+        <div class="rule">
+          <span class="rule-title">Status</span>
+          <code>ACTIVE</code> lub <code>BLOCKED</code>
+        </div>
+
+        <div class="rule">
+          <span class="rule-title">Duplikaty</span>
+          E-mail i numer karty muszą być unikalne.
+        </div>
+
+        <div class="rule">
+          <span class="rule-title">Import</span>
+          Poprawne wiersze zostaną dodane, błędne będą pominięte.
+        </div>
+      </div>
+    </section>
+
+    <section class="actions-section">
+      <h2>3. Import</h2>
+
+      <div class="actions-card">
+        <p>
+          Po kliknięciu „Importuj czytelników” system utworzy konta
+          użytkowników oraz karty czytelników dla poprawnych wierszy.
+        </p>
+
+        @if (importing()) {
+          <div class="progress">
+            <div class="progress-bar"></div>
+            <span>Importowanie pliku...</span>
+          </div>
+        }
+
+        <div class="actions">
+          <button
+            type="button"
+            class="secondary-btn"
+            (click)="clearFile()"
+            [disabled]="importing() || !selectedFile()"
+          >
+            Wyczyść
+          </button>
+
+          <button
+            type="button"
+            class="primary-btn"
+            (click)="importCsv()"
+            [disabled]="!selectedFile() || importing()"
+          >
+            {{ importing() ? "Importowanie" : "Importuj" }}
+          </button>
+        </div>
+
+        @if (requestError()) {
+          <p class="error-message">{{ requestError() }}</p>
+        }
+      </div>
+    </section>
+
+    @if (importResult(); as result) {
+      <section class="result-section">
+        <h2>4. Raport importu</h2>
+
+        @if (result.failed > 0) {
+          <div>{{ result.failed}}</div>
+        }
+
+        <div class="result-summary">
+          <div class="summary-card success">
+            <span class="summary-value">{{ result.imported }}</span>
+            <span class="summary-label">Zaimportowano</span>
+          </div>
+
+          <div class="summary-card" [class.warning]="result.failed > 0">
+            <span class="summary-value">{{ result.failed }}</span>
+            <span class="summary-label">Pominięto</span>
+          </div>
+        </div>
+
+        @if (result.failed > 0) {
+          <div class="errors-card">
+            <h3>Błędy w pliku</h3>
+
+            <table class="errors-table">
+              <thead>
+              <tr>
+                <th>Wiersz</th>
+                <th>E-mail</th>
+                <th>Powód</th>
+              </tr>
+              </thead>
+              <tbody>
+                @for (error of result.errors; track error.row) {
+                  <tr>
+                    <td>{{ error.row }}</td>
+                    <td>{{ error.email || '—' }}</td>
+                    <td>{{ error.message }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        <div class="result-actions">
+          <button
+            type="button"
+            class="secondary-btn"
+          >
+            Importuj kolejny plik
+          </button>
+
+          <button
+            type="button"
+            class="primary-btn"
+          >
+            Wróć do czytelników
+          </button>
+        </div>
+      </section>
+    }
+  </main>
+</div>

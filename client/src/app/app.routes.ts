@@ -81,6 +81,16 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/librarian/manage-loans/manage-loans').then((m) => m.ManageLoans),
           },
+          {
+            path: 'members',
+            loadComponent: () =>
+              import('./features/librarian/members/members').then((m) => m.Members),
+          },
+          {
+            path: 'member-import',
+            loadComponent: () =>
+              import('./features/librarian/members/member-import/member-import').then((m) => m.MemberImport),
+          },
         ],
       },
     ],

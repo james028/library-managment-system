@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+}
+
+app-table-filters {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+app-data-table {
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+}

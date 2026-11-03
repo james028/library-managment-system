@@ -3,7 +3,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
   min-width: 0;
 }
@@ -11,7 +11,7 @@
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
   min-width: 0;
 
@@ -22,27 +22,38 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   .tabs-list {
-    flex: 0 0 auto;
     display: flex;
+    flex: 0 0 auto;
     gap: 0.25rem;
+    min-width: 0;
     padding: 0.5rem 0.5rem 0;
+
     background-color: #f1f5f9;
     border-bottom: 1px solid $color-border;
-    overflow-x: visible;
+
+    overflow-x: auto;
     scrollbar-width: thin;
 
     button {
       flex: 0 0 auto;
       padding: 0.75rem 1.25rem;
+
+      font-family: inherit;
       font-size: 0.9rem;
       font-weight: 500;
       color: $color-text-muted;
+
       background: transparent;
       border: none;
       border-radius: 6px 6px 0 0;
+
       cursor: pointer;
       white-space: nowrap;
-      transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
 
       &:hover {
         background-color: $color-bg-tab-hover;
@@ -53,7 +64,11 @@
         background-color: $color-bg-tab-active;
         color: $color-primary;
         font-weight: 600;
-        box-shadow: 0 -2px 0 0 $color-primary inset, 0 1px 2px rgba(0, 0, 0, 0.02);
+
+        box-shadow:
+          0 -2px 0 0 $color-primary inset,
+          0 1px 2px rgba(0, 0, 0, 0.02);
+
         border-bottom: 1px solid $color-bg-tab-active;
         margin-bottom: -1px;
       }
@@ -66,10 +81,17 @@
   }
 
   .tab-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+
     ::ng-deep > * {
       display: flex;
       flex-direction: column;
-      flex: 1;
+      flex: 1 1 0;
       min-height: 0;
       min-width: 0;
     }
