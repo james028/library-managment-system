@@ -1,40 +1,78 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <label>
-    Email
-    <input type="email" formControlName="email" />
-    @if (email?.invalid && (email?.touched || email?.dirty)) {
-      <div class="error-message">
-        @if (email?.errors?.['required']) {
-          <small>Pole e-mail jest wymagane.</small>
-        }
-        @if (email?.errors?.['email']) {
-          <small>Wprowadź poprawny adres e-mail.</small>
+<div class="login-page">
+  <div class="login-card">
+    <header class="login-header">
+      <h1 class="login-title">Zaloguj się</h1>
+      <p class="login-subtitle">
+        Zaloguj się do swojego konta w bibliotece.
+      </p>
+    </header>
+
+    <form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label class="form-label" for="email">Adres e-mail</label>
+        <input
+          class="form-input"
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="username"
+          placeholder="jan@example.com"
+          required
+          formControlName="email"
+          [disabled]="isLoading()"
+        />
+        @if (email?.invalid && (email?.dirty)) {
+          <div class="error-message">
+            @if (email?.errors?.['required']) {
+              <small>Pole e-mail jest wymagane.</small>
+            }
+            @if (email?.errors?.['email']) {
+              <small>Wprowadź poprawny adres e-mail.</small>
+            }
+          </div>
         }
       </div>
-    }
-  </label>
 
-  <label>
-    Hasło
-    <input type="password" formControlName="password" />
+      <div class="form-field">
+        <label class="form-label" for="password">Hasło</label>
+        <input
+          class="form-input"
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="••••••••"
+          required
+          formControlName="password"
+          [disabled]="isLoading()"
+        />
+        @if (password?.invalid && (email?.dirty)) {
+          <div class="error-message">
+            @if (password?.errors?.['required']) {
+              <small>Pole hasło jest wymagane.</small>
+            }
+          </div>
+        }
+      </div>
 
-<!--    @if (password?.invalid && (password?.touched || password?.dirty)) {-->
-<!--      <div class="error-message">-->
-<!--        @if (password?.errors?.['required']) {-->
-<!--          <small>Hasło jest wymagane.</small>-->
-<!--        }-->
-<!--        @if (password?.errors?.['minlength']) {-->
-<!--          <small>Hasło musi mieć co najmniej 6 znaków.</small>-->
-<!--        }-->
-<!--      </div>-->
-<!--    }-->
-  </label>
+      @if (errorMessage(); as error) {
+        <p class="form-error" role="alert">
+          {{ error }}
+        </p>
+      }
 
-  @if (errorMessage()) {
-    <p class="error">{{ errorMessage() }}</p>
-  }
-
-  <button type="submit" >
-    {{ isSubmitting() ? 'Logowanie...' : 'Zaloguj się' }}
-  </button>
-</form>
+      <button
+        class="login-button"
+        type="submit"
+        [disabled]="isLoading()"
+      >
+        @if (isLoading()) {
+          <span class="button-spinner" aria-hidden="true"></span>
+          Logowanie...
+        } @else {
+          Zaloguj się
+        }
+      </button>
+    </form>
+  </div>
+</div>

@@ -10,12 +10,14 @@ import { Member, MemberEditValue } from './interfaces/members.interface';
 import { finalize } from 'rxjs';
 import { MemberEdit } from './member-edit/member-edit';
 import { Breadcrumbs } from '../../../shared/ui/breadcrumbs/breadcrumbs';
+import { RouterLink } from '@angular/router';
+import { ViewToolbar } from '../../../shared/ui/view-toolbar/view-toolbar';
 
 @Component({
   selector: 'app-members',
   standalone: true,
   providers: [MembersTableFacade],
-  imports: [AsyncPipe, DataTable, TableFilters, MemberEdit, Breadcrumbs],
+  imports: [AsyncPipe, DataTable, TableFilters, MemberEdit, Breadcrumbs, RouterLink, ViewToolbar],
   templateUrl: './members.html',
   styleUrl: './members.scss',
 })

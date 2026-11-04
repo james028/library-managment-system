@@ -1,0 +1,61 @@
+@use '../../../../styles/variables' as *;
+
+:host {
+  display: block;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.view-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+
+  background: $color-bg-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-base;
+  box-shadow: $shadow-sm;
+}
+
+.view-toolbar__breadcrumbs {
+  flex: 1 1 16rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.view-toolbar__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  flex: 0 1 auto;
+  min-width: 0;
+  margin-left: auto;
+
+  &:empty {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .view-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .view-toolbar__breadcrumbs {
+    flex: 0 0 auto;
+  }
+
+  .view-toolbar__actions {
+    justify-content: flex-start;
+    margin-left: 0;
+  }
+}

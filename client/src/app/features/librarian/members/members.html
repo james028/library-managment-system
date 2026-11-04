@@ -1,4 +1,15 @@
-<app-breadcrumbs></app-breadcrumbs>
+<app-view-toolbar>
+  <app-breadcrumbs toolbarBreadcrumbs></app-breadcrumbs>
+
+  <div toolbarActions class="toolbar-actions">
+    <a
+      class="toolbar-button toolbar-button--secondary"
+      routerLink="/admin/member-import"
+    >
+      Import CSV
+    </a>
+  </div>
+</app-view-toolbar>
 
 <app-table-filters
   [config]="membersFilterConfig"

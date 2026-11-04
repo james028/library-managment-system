@@ -97,7 +97,6 @@ export class MembersController {
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: CurrentUserPayload,
   ): Promise<MemberImportResult> {
-    console.log("ss");
     return this.membersService.importFromCsv(user.userId, file);
   }
 }

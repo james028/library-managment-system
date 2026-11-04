@@ -12,12 +12,13 @@ import { LoansTableFacade } from './data-access/members-table.facade';
 import { TableFilters } from '../../../shared/ui/table-filters/table-filters';
 import { loansFilterConfig } from './manage-loans-filter-config';
 import { Breadcrumbs } from '../../../shared/ui/breadcrumbs/breadcrumbs';
+import { ViewToolbar } from '../../../shared/ui/view-toolbar/view-toolbar';
 
 @Component({
   selector: 'app-manage-loans',
   standalone: true,
   providers: [LoansTableFacade],
-  imports: [CommonModule, AsyncPipe, DataTable, TableFilters, Breadcrumbs],
+  imports: [CommonModule, AsyncPipe, DataTable, TableFilters, Breadcrumbs, ViewToolbar],
   templateUrl: './manage-loans.html',
   styleUrl: './manage-loans.scss',
 })

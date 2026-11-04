@@ -1,8 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MembersService } from '../data-access/members.service';
-import { filter } from 'rxjs';
-import { startWith } from 'rxjs/operators';
 import { Breadcrumbs } from '../../../../shared/ui/breadcrumbs/breadcrumbs';
 import { JsonPipe } from '@angular/common';
 
@@ -30,37 +28,13 @@ export class MemberImport {
   readonly importResult = signal<any | null>(null);
   readonly errorMessage = signal<string | null>(null);
   readonly importing = signal<boolean>(false);
+
   private readonly router = inject(Router);
   private readonly membersService = inject(MembersService);
-
-  constructor() {
-    // effect(() => {
-    //   console.log('result changed:', this.importResult());
-    // });
-
-    console.log('ss');
-
-    this.router.events
-      .pipe(
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        startWith(new NavigationEnd(0, this.router.url, this.router.url)), // Emituje aktualny URL na starcie
-      )
-      .subscribe((event) => {
-        console.log('Zakończono nawigację (lub start):', event);
-        const root = this.router.routerState.snapshot.root;
-        console.log(root);
-      });
-  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.handleFile(input.files?.[0] ?? null);
-  }
-
-  clearFile(): void {
-    this.selectedFile.set(null);
-    this.importResult.set(null);
-    this.errorMessage.set(null);
   }
 
   openFilePicker(input: HTMLInputElement) {
@@ -68,54 +42,13 @@ export class MemberImport {
   }
 
   goBack(): void {
-    console.log('clicked back');
     this.router.navigate(['admin/members']);
   }
-
-  // async importCsv(): Promise<void> {
-  //   const file = this.selectedFile();
-  //
-  //   if (!file || !this.importing) {
-  //     return;
-  //   }
-  //
-  //   this.importing.set(true);
-  //   this.requestError.set(null);
-  //   this.importResult.set(null);
-  //
-  //   // this.membersService.importFromCsv(file).subscribe({
-  //   //   next: (result) => {
-  //   //     this.importResult.set(result);
-  //   //     this.importing.set(false);
-  //   //   },
-  //   //   error: () => {
-  //   //     this.requestError.set('Nie udało się zaimportować pliku. Sprawdź plik i spróbuj ponownie.');
-  //   //     this.importing.set(false);
-  //   //   },
-  //   // });
-  //
-  //   try {
-  //     const downloadedCsv = this.membersService.importFromCsv(file);
-  //
-  //     downloadedCsv.subscribe((a) => {
-  //       console.log(a);
-  //     });
-  //
-  //     this.importResult.set(downloadedCsv);
-  //
-  //     console.log(this.importResult(), ' aaa');
-  //     this.selectedFile.set(null);
-  //   } catch (e) {
-  //     this.requestError.set('Nie udało się zaimportować pliku. Sprawdź plik i spróbuj ponownie.');
-  //   } finally {
-  //     this.importing.set(false);
-  //   }
-  // }
 
   async importCsv(): Promise<void> {
     const file = this.selectedFile();
 
-    if (!file || this.importing()) {
+    if (!file || !this.importing) {
       return;
     }
 
@@ -123,16 +56,28 @@ export class MemberImport {
     this.requestError.set(null);
     this.importResult.set(null);
 
-    try {
-      const result = await this.membersService.importFromCsv(file);
+    this.membersService.importFromCsv(file).subscribe({
+      next: (result) => {
+        this.importResult.set(result);
+        this.importing.set(false);
+        this.selectedFile.set(null);
+      },
+      error: () => {
+        this.requestError.set('Nie udało się zaimportować pliku. Sprawdź plik i spróbuj ponownie.');
+        this.importing.set(false);
+      },
+    });
+  }
 
-      this.importResult.set(result);
-      this.selectedFile.set(null);
-    } catch {
-      this.requestError.set('Nie udało się zaimportować pliku. Sprawdź plik i spróbuj ponownie.');
-    } finally {
-      this.importing.set(false);
-    }
+  clearFile(): void {
+    this.selectedFile.set(null);
+    this.fileError.set(null);
+    this.importResult.set(null);
+    this.requestError.set(null);
+  }
+
+  reset(): void {
+    this.clearFile();
   }
 
   private handleFile(file: File | null): void {

@@ -55,6 +55,7 @@
             <button
               type="button"
               class="text-btn"
+              [disabled]="importing()"
               (click)="clearFile()"
             >
               Usuń plik
@@ -69,6 +70,7 @@
             <button
               type="button"
               class="secondary-btn"
+              [disabled]="importing()"
               (click)="openFilePicker(fileInput)"
             >
               Wybierz plik
@@ -158,10 +160,6 @@
       <section class="result-section">
         <h2>4. Raport importu</h2>
 
-<!--        @if (result.failed > 0) {-->
-<!--          <div>{{ result.failed}}</div>-->
-<!--        }-->
-
         <pre>{{ importResult() | json }}</pre>
 
         <div class="result-summary">
@@ -205,6 +203,7 @@
           <button
             type="button"
             class="secondary-btn"
+            (click)="reset()"
           >
             Importuj kolejny plik
           </button>
@@ -212,6 +211,7 @@
           <button
             type="button"
             class="primary-btn"
+            (click)="goBack()"
           >
             Wróć do czytelników
           </button>
