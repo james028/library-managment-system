@@ -4,6 +4,7 @@ import { MembersService } from '../data-access/members.service';
 import { filter } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { Breadcrumbs } from '../../../../shared/ui/breadcrumbs/breadcrumbs';
+import { JsonPipe } from '@angular/common';
 
 export const MEMBER_IMPORT_ACCEPT = '.csv,text/csv';
 export const MEMBER_IMPORT_MAX_FILE_SIZE = 2 * 1024 * 1024;

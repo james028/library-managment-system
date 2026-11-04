@@ -1,0 +1,17 @@
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    @for (breadcrumb of breadCrumbs; track breadcrumb.url; let last = $last) {
+      <li>
+        @if (last) {
+          <span aria-current="page">{{ breadcrumb.label }}</span>
+        } @else {
+          <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+        }
+      </li>
+
+      @if (!last) {
+        <li aria-hidden="true">/</li>
+      }
+    }
+  </ol>
+</nav>
