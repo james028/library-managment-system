@@ -1,3 +1,5 @@
+<app-breadcrumbs></app-breadcrumbs>
+
 <div class="members-import-page">
   <header class="page-header">
     <div class="header-content">
@@ -10,7 +12,6 @@
       </button>
 
       <div>
-        <h1>Import czytelników</h1>
         <p>
           Wgraj plik CSV z listą nowych czytelników. Poprawne wiersze
           zostaną zaimportowane, a błędne będą widoczne w raporcie.
@@ -157,9 +158,11 @@
       <section class="result-section">
         <h2>4. Raport importu</h2>
 
-        @if (result.failed > 0) {
-          <div>{{ result.failed}}</div>
-        }
+<!--        @if (result.failed > 0) {-->
+<!--          <div>{{ result.failed}}</div>-->
+<!--        }-->
+
+<!--        <pre>{{ importResult() | json }}</pre>-->
 
         <div class="result-summary">
           <div class="summary-card success">

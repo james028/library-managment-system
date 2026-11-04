@@ -4,17 +4,18 @@ import { DataTable } from '../../../shared/ui/data-table/data-table';
 import { MEMBER_COLUMNS } from './member-column';
 import { membersFilterConfig } from './members.config';
 import { NonNullableFormBuilder } from '@angular/forms';
-import { FiltersFormValue, TableFilters } from '../../../shared/ui/table-filters/table-filters';
+import { TableFilters } from '../../../shared/ui/table-filters/table-filters';
 import { MembersTableFacade } from './data-access/members-table.facade';
-import { Member, MemberEditValue, MembersFiltersFormValue } from './interfaces/members.interface';
+import { Member, MemberEditValue } from './interfaces/members.interface';
 import { finalize } from 'rxjs';
 import { MemberEdit } from './member-edit/member-edit';
+import { Breadcrumbs } from '../../../shared/ui/breadcrumbs/breadcrumbs';
 
 @Component({
   selector: 'app-members',
   standalone: true,
   providers: [MembersTableFacade],
-  imports: [AsyncPipe, DataTable, TableFilters, MemberEdit],
+  imports: [AsyncPipe, DataTable, TableFilters, MemberEdit, Breadcrumbs],
   templateUrl: './members.html',
   styleUrl: './members.scss',
 })

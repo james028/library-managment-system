@@ -3,6 +3,7 @@ import { SettingsForm } from './settings-form/settings-form';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SettingsService } from '../../../core/services/SettingsService';
+import { Breadcrumbs } from '../../../shared/ui/breadcrumbs/breadcrumbs';
 
 export type SettingsSection =
   'loans' | 'fines' | 'holds' | 'notifications' | 'patrons' | 'library' | '';
@@ -16,7 +17,7 @@ export interface SettingsProps {
 
 @Component({
   selector: 'app-settings',
-  imports: [CommonModule, SettingsForm],
+  imports: [CommonModule, SettingsForm, Breadcrumbs],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
@@ -37,8 +38,6 @@ export class Settings implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.activeSection, 'active');
-    console.log(this.groups, 'groups');
     this.load();
   }
 
@@ -66,25 +65,6 @@ export class Settings implements OnInit {
   }
 
   save() {
-    console.log('Form status:', this.form.status);
-    console.log('Form values:', this.form.getRawValue());
-
-    for (const [key, ctrl] of Object.entries(this.form.controls)) {
-      console.log(key, {
-        value: ctrl.value,
-        status: ctrl.status,
-        errors: ctrl.errors,
-        dirty: ctrl.dirty,
-        disabled: ctrl.disabled,
-      });
-    }
-
-    if (this.form.invalid) {
-      console.log('Zapis zablokowany — formularz jest invalid');
-      this.form.markAllAsTouched();
-      return;
-    }
-
     if (this.form.invalid) return;
 
     const changes: Record<string, string> = {};

@@ -1,5 +1,6 @@
+<app-breadcrumbs></app-breadcrumbs>
+
 <div class="loans-container">
-  <h2>Zarządzanie Wypożyczeniami</h2>
   @if (loansSummary$ | async; as loansSummary) {
     <div class="stats-grid">
       @for (key of statsKeys; track key) {

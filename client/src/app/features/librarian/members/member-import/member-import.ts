@@ -1,6 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { MembersService } from '../data-access/members.service';
+import { filter } from 'rxjs';
+import { startWith } from 'rxjs/operators';
+import { Breadcrumbs } from '../../../../shared/ui/breadcrumbs/breadcrumbs';
 
 export const MEMBER_IMPORT_ACCEPT = '.csv,text/csv';
 export const MEMBER_IMPORT_MAX_FILE_SIZE = 2 * 1024 * 1024;
@@ -15,7 +18,7 @@ export const MEMBER_IMPORT_TEMPLATE_COLUMNS = [
 
 @Component({
   selector: 'app-member-import',
-  imports: [],
+  imports: [JsonPipe, Breadcrumbs],
   templateUrl: './member-import.html',
   styleUrl: './member-import.scss',
 })
@@ -28,6 +31,25 @@ export class MemberImport {
   readonly importing = signal<boolean>(false);
   private readonly router = inject(Router);
   private readonly membersService = inject(MembersService);
+
+  constructor() {
+    // effect(() => {
+    //   console.log('result changed:', this.importResult());
+    // });
+
+    console.log('ss');
+
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        startWith(new NavigationEnd(0, this.router.url, this.router.url)), // Emituje aktualny URL na starcie
+      )
+      .subscribe((event) => {
+        console.log('Zakończono nawigację (lub start):', event);
+        const root = this.router.routerState.snapshot.root;
+        console.log(root);
+      });
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -49,10 +71,50 @@ export class MemberImport {
     this.router.navigate(['admin/members']);
   }
 
+  // async importCsv(): Promise<void> {
+  //   const file = this.selectedFile();
+  //
+  //   if (!file || !this.importing) {
+  //     return;
+  //   }
+  //
+  //   this.importing.set(true);
+  //   this.requestError.set(null);
+  //   this.importResult.set(null);
+  //
+  //   // this.membersService.importFromCsv(file).subscribe({
+  //   //   next: (result) => {
+  //   //     this.importResult.set(result);
+  //   //     this.importing.set(false);
+  //   //   },
+  //   //   error: () => {
+  //   //     this.requestError.set('Nie udało się zaimportować pliku. Sprawdź plik i spróbuj ponownie.');
+  //   //     this.importing.set(false);
+  //   //   },
+  //   // });
+  //
+  //   try {
+  //     const downloadedCsv = this.membersService.importFromCsv(file);
+  //
+  //     downloadedCsv.subscribe((a) => {
+  //       console.log(a);
+  //     });
+  //
+  //     this.importResult.set(downloadedCsv);
+  //
+  //     console.log(this.importResult(), ' aaa');
+  //     this.selectedFile.set(null);
+  //   } catch (e) {
+  //     this.requestError.set('Nie udało się zaimportować pliku. Sprawdź plik i spróbuj ponownie.');
+  //   } finally {
+  //     this.importing.set(false);
+  //   }
+  // }
+
   async importCsv(): Promise<void> {
     const file = this.selectedFile();
 
-    if (!file || !this.importing) {
+    if (!file || this.importing()) {
       return;
     }
 
@@ -61,17 +123,11 @@ export class MemberImport {
     this.importResult.set(null);
 
     try {
-      const downloadCsv = this.membersService.importFromCsv(file);
+      const result = await this.membersService.importFromCsv(file);
 
-      downloadCsv.subscribe((a) => {
-        console.log(a);
-      })
-
-      this.importResult.set(downloadCsv);
-
-      console.log(this.importResult(), " aaa");
+      this.importResult.set(result);
       this.selectedFile.set(null);
-    } catch (e) {
+    } catch {
       this.requestError.set('Nie udało się zaimportować pliku. Sprawdź plik i spróbuj ponownie.');
     } finally {
       this.importing.set(false);

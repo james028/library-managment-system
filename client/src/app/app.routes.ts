@@ -62,7 +62,7 @@ export const routes: Routes = [
       {
         path: 'admin',
         canActivate: [roleGuard],
-        data: { roles: ['librarian'] },
+        data: { roles: ['librarian'], breadcrumb: 'Admin' },
         children: [
           {
             path: 'dashboard',
@@ -70,6 +70,9 @@ export const routes: Routes = [
               import('./features/dashboard/librarian-dashboard/librarian-dashboard').then(
                 (m) => m.LibrarianDashboard,
               ),
+            data: {
+              breadcrumb: 'Dashboard',
+            },
           },
           {
             path: 'books',
@@ -80,16 +83,21 @@ export const routes: Routes = [
             path: 'loans',
             loadComponent: () =>
               import('./features/librarian/manage-loans/manage-loans').then((m) => m.ManageLoans),
+            data: { breadcrumb: 'Wypożyczenia' },
           },
           {
             path: 'members',
             loadComponent: () =>
               import('./features/librarian/members/members').then((m) => m.Members),
+            data: { breadcrumb: 'Członkowie' },
           },
           {
             path: 'member-import',
             loadComponent: () =>
-              import('./features/librarian/members/member-import/member-import').then((m) => m.MemberImport),
+              import('./features/librarian/members/member-import/member-import').then(
+                (m) => m.MemberImport,
+              ),
+            data: { breadcrumb: 'Import czytelników' },
           },
         ],
       },
