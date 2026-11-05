@@ -65,6 +65,7 @@ export class MemberImport {
       error: () => {
         this.requestError.set('Nie udało się zaimportować pliku. Sprawdź plik i spróbuj ponownie.');
         this.importing.set(false);
+        this.selectedFile.set(null);
       },
     });
   }

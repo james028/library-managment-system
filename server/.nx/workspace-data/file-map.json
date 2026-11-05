@@ -1,0 +1,500 @@
+{
+  "version": "6.0",
+  "nxVersion": "24.0.4",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [],
+    "projectFileMap": {
+      "library-managment-system": [
+        {
+          "file": ".env",
+          "hash": "4591313534970395007"
+        },
+        {
+          "file": "nest-cli.json",
+          "hash": "18272654682417215031"
+        },
+        {
+          "file": "nx.json",
+          "hash": "13827231534901163003"
+        },
+        {
+          "file": "package-lock.json",
+          "hash": "2482285176207896652"
+        },
+        {
+          "file": "package.json",
+          "hash": "8266464359554768957",
+          "deps": [
+            "npm:@nestjs/cli",
+            "npm:@nestjs/mapped-types",
+            "npm:@nestjs/mau",
+            "npm:@nestjs/schematics",
+            "npm:@nestjs/testing",
+            "npm:@types/bcrypt",
+            "npm:@types/express",
+            "npm:@types/jest",
+            "npm:@types/multer",
+            "npm:@types/node",
+            "npm:@types/passport-jwt",
+            "npm:@types/pg",
+            "npm:@types/supertest",
+            "npm:@vitest/coverage-v8",
+            "npm:oxlint",
+            "npm:prettier",
+            "npm:source-map-support",
+            "npm:supertest",
+            "npm:tsx",
+            "npm:typescript",
+            "npm:vite-tsconfig-paths",
+            "npm:vitest",
+            "npm:nx",
+            "npm:@jest/globals",
+            "npm:@nestjs/common",
+            "npm:@nestjs/config",
+            "npm:@nestjs/core",
+            "npm:@nestjs/jwt",
+            "npm:@nestjs/passport",
+            "npm:@nestjs/platform-express",
+            "npm:@nestjs/swagger",
+            "npm:bcrypt",
+            "npm:class-transformer",
+            "npm:class-validator",
+            "npm:csv-parse",
+            "npm:node-pg-migrate",
+            "npm:passport-jwt",
+            "npm:pg",
+            "npm:reflect-metadata",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app.controller.spec.ts",
+          "hash": "15368513407861845199"
+        },
+        {
+          "file": "src/app.controller.ts",
+          "hash": "16802839097940368086"
+        },
+        {
+          "file": "src/app.module.ts",
+          "hash": "12167958777676114511"
+        },
+        {
+          "file": "src/app.service.ts",
+          "hash": "15275323873054081339"
+        },
+        {
+          "file": "src/auth/auth.controller.spec.ts",
+          "hash": "15280309293107943392"
+        },
+        {
+          "file": "src/auth/auth.controller.ts",
+          "hash": "16581914749230667280"
+        },
+        {
+          "file": "src/auth/auth.module.ts",
+          "hash": "13993401881456388540"
+        },
+        {
+          "file": "src/auth/auth.service.spec.ts",
+          "hash": "1536210036921066701"
+        },
+        {
+          "file": "src/auth/auth.service.ts",
+          "hash": "9036574718757826466"
+        },
+        {
+          "file": "src/auth/decorators/roles.decorator.ts",
+          "hash": "11827728203665661489"
+        },
+        {
+          "file": "src/auth/dto/login.dto.ts",
+          "hash": "16253565080023124741"
+        },
+        {
+          "file": "src/auth/dto/register.dto.ts",
+          "hash": "9212247328871723426"
+        },
+        {
+          "file": "src/auth/guards/jwt-auth.guard.ts",
+          "hash": "8271748273196038813"
+        },
+        {
+          "file": "src/auth/guards/roles.guards.ts",
+          "hash": "7440142175564441500"
+        },
+        {
+          "file": "src/auth/strategies/jwt-strategy.ts",
+          "hash": "17369632531863864318"
+        },
+        {
+          "file": "src/book-copies/book-copies.controller.spec.ts",
+          "hash": "15553370540836707130"
+        },
+        {
+          "file": "src/book-copies/book-copies.controller.ts",
+          "hash": "8446553760705560284"
+        },
+        {
+          "file": "src/book-copies/book-copies.module.ts",
+          "hash": "7226021759176642958"
+        },
+        {
+          "file": "src/book-copies/book-copies.repository.ts",
+          "hash": "2251362621257881809"
+        },
+        {
+          "file": "src/book-copies/book-copies.service.spec.ts",
+          "hash": "2401511234933183552"
+        },
+        {
+          "file": "src/book-copies/book-copies.service.ts",
+          "hash": "4471888574135754135"
+        },
+        {
+          "file": "src/book-copies/dto/create-book-copy.dto.ts",
+          "hash": "10674677922520768520"
+        },
+        {
+          "file": "src/book-copies/dto/update-book-copy.dto.ts",
+          "hash": "6672532646593453605"
+        },
+        {
+          "file": "src/books/books.controller.spec.ts",
+          "hash": "11823868298243823432"
+        },
+        {
+          "file": "src/books/books.controller.ts",
+          "hash": "7853235370968504711"
+        },
+        {
+          "file": "src/books/books.module.ts",
+          "hash": "4116005794405982533"
+        },
+        {
+          "file": "src/books/books.repository.ts",
+          "hash": "14088574498103040048"
+        },
+        {
+          "file": "src/books/books.service.spec.ts",
+          "hash": "11643791521891014097"
+        },
+        {
+          "file": "src/books/books.service.ts",
+          "hash": "2000233107037760442"
+        },
+        {
+          "file": "src/books/dto/createbook.dto.ts",
+          "hash": "16279744443841737013"
+        },
+        {
+          "file": "src/books/dto/updatebook.dto.ts",
+          "hash": "18006170969081139795"
+        },
+        {
+          "file": "src/common/decorators/current-user.decorator.ts",
+          "hash": "1671793480730621871"
+        },
+        {
+          "file": "src/common/decorators/loans-query-swagger.decorator.ts",
+          "hash": "11036077442828876397"
+        },
+        {
+          "file": "src/database/database.module.ts",
+          "hash": "15978336729082203544"
+        },
+        {
+          "file": "src/database/database.service.ts",
+          "hash": "14591486796314190205"
+        },
+        {
+          "file": "src/database/migration-runner.ts",
+          "hash": "11199181239131115490"
+        },
+        {
+          "file": "src/database/migrations/001_create_users.sql",
+          "hash": "13102090615825628372"
+        },
+        {
+          "file": "src/database/migrations/002_create_books.sql",
+          "hash": "13767901129841343198"
+        },
+        {
+          "file": "src/database/migrations/003_create_book_copies.sql",
+          "hash": "14461347110039446877"
+        },
+        {
+          "file": "src/database/migrations/004_loans_book.sql",
+          "hash": "7804239437326886100"
+        },
+        {
+          "file": "src/database/migrations/005_books_reservation.sql",
+          "hash": "7632927237521364777"
+        },
+        {
+          "file": "src/database/migrations/006_create_fines.sql",
+          "hash": "14724663787516200113"
+        },
+        {
+          "file": "src/database/migrations/007_create_settings.sql",
+          "hash": "14547662645774648780"
+        },
+        {
+          "file": "src/database/migrations/009_add_settings_description.sql",
+          "hash": "11938666423688730147"
+        },
+        {
+          "file": "src/database/migrations/010_seed_settings.sql",
+          "hash": "4308799048458820114"
+        },
+        {
+          "file": "src/database/migrations/011_create_members.sql",
+          "hash": "8389370299294575403"
+        },
+        {
+          "file": "src/database/migrations/012_create_users_invitations.sql",
+          "hash": "8718463475356061969"
+        },
+        {
+          "file": "src/database/query-builder/query-builder.interface.ts",
+          "hash": "3182216343256191870"
+        },
+        {
+          "file": "src/database/query-builder/sql-query-builder.spec.ts",
+          "hash": "13010239065419266008"
+        },
+        {
+          "file": "src/database/query-builder/sql-query-builder.ts",
+          "hash": "9708361037955328324"
+        },
+        {
+          "file": "src/fines/fines.controller.spec.ts",
+          "hash": "2876252403300393865"
+        },
+        {
+          "file": "src/fines/fines.controller.ts",
+          "hash": "13624675153100077065"
+        },
+        {
+          "file": "src/fines/fines.module.ts",
+          "hash": "8713803965382214446"
+        },
+        {
+          "file": "src/fines/fines.repository.ts",
+          "hash": "5309124972084229230"
+        },
+        {
+          "file": "src/fines/fines.service.spec.ts",
+          "hash": "3962217990901114789"
+        },
+        {
+          "file": "src/fines/fines.service.ts",
+          "hash": "12960460964822053914"
+        },
+        {
+          "file": "src/loans/dto/create.loan.dto.ts",
+          "hash": "10304616736843661201"
+        },
+        {
+          "file": "src/loans/dto/query-loan.dto.ts",
+          "hash": "15630185140966081609"
+        },
+        {
+          "file": "src/loans/enums/loan-status.enum.ts",
+          "hash": "3829699735252897069"
+        },
+        {
+          "file": "src/loans/interfaces/loans.interface.dto.ts",
+          "hash": "161380507961416986"
+        },
+        {
+          "file": "src/loans/interfaces/paginated-loans.interface.dto.ts",
+          "hash": "1565048422187514309"
+        },
+        {
+          "file": "src/loans/loans.controller.spec.ts",
+          "hash": "12473020594234218413"
+        },
+        {
+          "file": "src/loans/loans.controller.ts",
+          "hash": "17020842122943185306"
+        },
+        {
+          "file": "src/loans/loans.module.ts",
+          "hash": "1726590606052877229"
+        },
+        {
+          "file": "src/loans/loans.repository.ts",
+          "hash": "12692440778823346544"
+        },
+        {
+          "file": "src/loans/loans.service.spec.ts",
+          "hash": "4865428676504818283"
+        },
+        {
+          "file": "src/loans/loans.service.ts",
+          "hash": "3927973411524803758"
+        },
+        {
+          "file": "src/main.ts",
+          "hash": "8227707607174457036"
+        },
+        {
+          "file": "src/members/dto/create-member.dto.ts",
+          "hash": "18115454481612165890"
+        },
+        {
+          "file": "src/members/dto/members-import.constants.dto.ts",
+          "hash": "4672463233319083990"
+        },
+        {
+          "file": "src/members/dto/query-member.dto.spec.ts",
+          "hash": "6943900140855567161"
+        },
+        {
+          "file": "src/members/dto/query-member.dto.ts",
+          "hash": "3922553200048830199"
+        },
+        {
+          "file": "src/members/interfaces/members.interface.dto.ts",
+          "hash": "11778643055163150404"
+        },
+        {
+          "file": "src/members/interfaces/paginated-members.interface.dto.ts",
+          "hash": "6677826006731479808"
+        },
+        {
+          "file": "src/members/members.controller.spec.ts",
+          "hash": "1180067694089712833"
+        },
+        {
+          "file": "src/members/members.controller.ts",
+          "hash": "6232473097987362590"
+        },
+        {
+          "file": "src/members/members.module.ts",
+          "hash": "17622075655494098900"
+        },
+        {
+          "file": "src/members/members.query.config.ts",
+          "hash": "8790820231058731016"
+        },
+        {
+          "file": "src/members/members.repository.ts",
+          "hash": "15548526414603089763"
+        },
+        {
+          "file": "src/members/members.service.spec.ts",
+          "hash": "5402198053264296437"
+        },
+        {
+          "file": "src/members/members.service.ts",
+          "hash": "7687962707380980997"
+        },
+        {
+          "file": "src/reservations/dto/create-reservation.dto.ts",
+          "hash": "8703969147954489201"
+        },
+        {
+          "file": "src/reservations/reservations.controller.spec.ts",
+          "hash": "5883746707062994110"
+        },
+        {
+          "file": "src/reservations/reservations.controller.ts",
+          "hash": "13593770621182857222"
+        },
+        {
+          "file": "src/reservations/reservations.module.ts",
+          "hash": "12010558884972933071"
+        },
+        {
+          "file": "src/reservations/reservations.repository.ts",
+          "hash": "15710876046051636986"
+        },
+        {
+          "file": "src/reservations/reservations.service.spec.ts",
+          "hash": "4481827333315704424"
+        },
+        {
+          "file": "src/reservations/reservations.service.ts",
+          "hash": "10706733101992329642"
+        },
+        {
+          "file": "src/settings/dto/settings-query.dto.ts",
+          "hash": "3863701862527775174"
+        },
+        {
+          "file": "src/settings/settings.controller.spec.ts",
+          "hash": "13325502571018214774"
+        },
+        {
+          "file": "src/settings/settings.controller.ts",
+          "hash": "6026629393903003796"
+        },
+        {
+          "file": "src/settings/settings.module.ts",
+          "hash": "1889726498440371021"
+        },
+        {
+          "file": "src/settings/settings.repository.ts",
+          "hash": "14188541521846196976"
+        },
+        {
+          "file": "src/settings/settings.service.spec.ts",
+          "hash": "527833545286923682"
+        },
+        {
+          "file": "src/settings/settings.service.ts",
+          "hash": "8103580097351585551"
+        },
+        {
+          "file": "src/sql/select-members.sql",
+          "hash": "3390568466773751478"
+        },
+        {
+          "file": "src/users/users.controller.spec.ts",
+          "hash": "2983143703381907911"
+        },
+        {
+          "file": "src/users/users.controller.ts",
+          "hash": "16687759597252279754"
+        },
+        {
+          "file": "src/users/users.module.ts",
+          "hash": "3999391928442414521"
+        },
+        {
+          "file": "src/users/users.repository.ts",
+          "hash": "18022287693512282355"
+        },
+        {
+          "file": "src/users/users.service.spec.ts",
+          "hash": "1948380566449346836"
+        },
+        {
+          "file": "src/users/users.service.ts",
+          "hash": "16675908077818409334"
+        },
+        {
+          "file": "test/app.e2e-spec.ts",
+          "hash": "15533252373468540586"
+        },
+        {
+          "file": "tsconfig.build.json",
+          "hash": "10873807230068543040"
+        },
+        {
+          "file": "tsconfig.json",
+          "hash": "13185977923315566024"
+        },
+        {
+          "file": "vitest.setup.ts",
+          "hash": "369390561440469842"
+        }
+      ]
+    }
+  },
+  "externalNodesHash": "1365686600031509467"
+}
