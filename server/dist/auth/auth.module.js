@@ -33,12 +33,12 @@ AuthModule = __decorate([
         providers: [
             AuthService,
             JwtStrategy,
-            JwtAuthGuard,
+            JwtAuthGuard
         ],
         exports: [
             JwtModule,
             PassportModule,
-            JwtAuthGuard,
+            JwtAuthGuard
         ],
     })
 ], AuthModule);

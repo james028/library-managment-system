@@ -24,7 +24,7 @@ export class MembersRepository {
     const { whereSql, values, paginationSql, paginationValues } =
       queryBuilder.buildPaginated();
 
-    const sortColumn = MEMBER_SORT_COLUMNS[query.sortBy];
+    //const sortColumn = MEMBER_SORT_COLUMNS[query.sortBy];
 
     const membersSql = `
         SELECT m.id,
@@ -47,11 +47,12 @@ export class MembersRepository {
         FROM members m
                  INNER JOIN users u ON u.id = m.user_id
             ${whereSql}
-        ORDER BY ${sortColumn} ${query.sortOrder} NULLS LAST, m.id ASC
+        
             ${paginationSql}
     `;
 
-    console.log(membersSql);
+    // poprawić sortowanie
+    // ORDER BY ${sortColumn} ${query.sortOrder} NULLS LAST, m.id ASC
 
     const membersResult = await this.databaseService.query<Member>(membersSql, [
       ...values,

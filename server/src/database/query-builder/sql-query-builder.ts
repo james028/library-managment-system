@@ -60,7 +60,7 @@ export class SqlQueryBuilder {
     return this;
   }
 
-  setPagination({ page, size }: Pagination) {
+  setPagination({ page = 1, size = 10 }: Pagination) {
     this.offset = (page - 1) * size;
     this.limit = size;
 

@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { JwtStrategy } from './strategies/jwt-strategy.js';
-import { JwtAuthGuard } from './guards/jwt-auth.guard.js'; // <-- Dodaj import swojego guarda (dopasuj ścieżkę)
+import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 import { Module } from '@nestjs/common';
 
 @Module({
@@ -27,13 +27,13 @@ import { Module } from '@nestjs/common';
   providers: [
     AuthService,
     JwtStrategy,
-    JwtAuthGuard, // <-- 1. Musi być tutaj, żeby moduł wiedział, jak go zbudować
+    JwtAuthGuard
   ],
 
   exports: [
     JwtModule,
     PassportModule,
-    JwtAuthGuard, // <-- 2. Musisz go wyeksportować, żeby inne moduły mogły z niego korzystać!
+    JwtAuthGuard
   ],
 })
 export class AuthModule {}
